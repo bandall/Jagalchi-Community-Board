@@ -1,0 +1,12 @@
+/
+
+[로그인,]
+/join
+/login
+/logout
+/edit
+/chagePassword
+/userinfo/:id
+
+[출석체크]
+/attendance
