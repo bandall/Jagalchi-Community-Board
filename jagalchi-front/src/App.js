@@ -3,7 +3,7 @@ import Home from "./Home.js";
 import Login from "./Login.js";
 import Join from "./Join.js";
 import Logout from './Logout.js';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (
     <Routes>
@@ -11,6 +11,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="*" element={<Logout />} />
     </Routes>
   )
 }

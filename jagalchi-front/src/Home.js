@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "./components/navbar/Navbar1";
 function Home() {
     const [loggedIn, setLoggedin] = useState(false);
     
@@ -10,6 +11,7 @@ function Home() {
     }, []);
     return(
         <div>
+            <Navbar />
             <h1>Home Page</h1>
             <Link to={`/login`}>Login</Link>
             <br/>
