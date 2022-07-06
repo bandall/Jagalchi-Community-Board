@@ -3,9 +3,10 @@ import axios from "axios"
 import { SERVER_URL } from "../../gobal";
 import { useNavigate } from "react-router-dom";
 import Navbar1 from "../navbar/Navbar1";
+import Waveback from "../Waveback/Waveback"
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
-import coverImg from "../../assets/bg-sign-in-basic.jpeg";
+import coverImg from "../../assets/bg-coworking.jpeg";
 function Login() {
     const navigate = useNavigate();
     const [show, setShow] = useState(true);
@@ -41,28 +42,30 @@ function Login() {
         }
     }
     return(
-        <div className={s.Background} style={{backgroundImage: `url(${coverImg})`}}>
+        // <div className={s.Background} style={{backgroundImage: `url(${coverImg})`}}>
+        <div>
             <Navbar1/>
-            {!show ? <Alert variant="danger" onClose={() => setShow(false)} dismissible>
-            <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
-                <p>
-                    Change this and that and try again. Duis mollis, est non commodo
-                    luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                    Cras mattis consectetur purus sit amet fermentum.
-                </p>
-            </Alert> : null}
+            <Waveback />
             <div className={s.Auth_form_container}>
+                <ul>
+                {show ? <Alert className={s.Alert} style={{position: "fixed"}} variant="danger" onClose={() => setShow(false)} dismissible>
+                <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                    <p>
+                        Change this and that and try again. Duis mollis, est non commodo
+                        luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
+                        Cras mattis consectetur purus sit amet fermentum.
+                    </p>
+                </Alert> : null}
                 <form className={s.Auth_form}>
                     <div className={s.Auth_form_content}>
                     <h3 className={s.Auth_form_title}>Log In</h3>
                     <div className="text-center">
                         Not registered yet?{" "}
                         <a href="/join" className="link-primary">
-                            Sign Up
+                            Sign Up{String.fromCharCode(8594)}
                         </a>
                     </div>
                     <div className="form-group mt-3">
-                        {/* <label>Email address</label> */}
                         <Form.Floating className="mb-3">
                         <Form.Control
                             id="floatingInputCustom"
@@ -93,6 +96,7 @@ function Login() {
                     </p>
                     </div>
                 </form>
+                </ul>
             </div>
             {/* <form method="POST">
                 <input name="id" onChange={idChange} placeholder="아이디" type="text" required/>

@@ -22,7 +22,7 @@ function Navbar1(params) {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="me-auto">
-                            <Nav.Link href="#features" style={{color: "red"}}>Home</Nav.Link>
+                            <Nav.Link href="/" style={{color: "red"}}>Alpha v0.1.0</Nav.Link>
                         </Nav>
                         <Nav>
                             <NavDropdown title="Pages" id="collasible-nav-dropdown">

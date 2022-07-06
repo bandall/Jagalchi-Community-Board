@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import Home from "./Home.js";
+import Home from "./components/Home/Home.js";
 import Login from "./components/login/Login.js";
-import Join from "./Join.js";
+import Join from "./components/Join/Join.js";
 import Logout from './Logout.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
