@@ -18,7 +18,7 @@ function Logout() {
     }
     useEffect(() => {
         tryLogout();
-    }, []);
+    });
 }
 
 export default Logout;

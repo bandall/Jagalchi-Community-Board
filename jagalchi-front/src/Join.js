@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { SERVER_URL } from "./gobal";
 import { useNavigate } from "react-router-dom";
-
+import Navbar1 from "./components/navbar/Navbar1";
 function Join() {
     const navigate = useNavigate();
     const [username, setUserName] = useState("");
@@ -58,6 +58,7 @@ function Join() {
     
     return(
         <div>
+            <Navbar1 />
             <h1>Join</h1>
             <form method="POST">
                 <input name="userName" onChange={nameChange} placeholder="유저이름" type="text" required/>
