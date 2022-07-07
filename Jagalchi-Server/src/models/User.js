@@ -3,10 +3,10 @@ import bycript from "bcrypt";
 
 const userSchema = mongoose.Schema({
     username: { type:String, required:true, unique:true },
-    userID: { type:String, required:true, unique:true },
     email: { type:String, required:true, unique:true },
+    birthDate: { type:Date },
     password: { type:String, required:true },
-    lastLoggin: { type:Date },
+    loginDates: [{ type:Date }],
     points: { type:Number, default: 0 },
     avatarUrl: { type:String }
 });

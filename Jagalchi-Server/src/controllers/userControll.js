@@ -5,21 +5,23 @@ export const getJoin = (req, res) => {
 }
 
 export const postJoin = async (req, res) => {
-    const { username, email, id, password, password_confirm } = req.body;
-    console.log(username, email, id, password, password_confirm);
-    const exist = await User.exists({$or: [{id}, {email}]});
+    const { username, email, birthDate, password, password_confirm } = req.body;
+    console.log(username, email, birthDate, password, password_confirm);
+    const exist = await User.exists({$or: [{username}, {email}]});
+    //check validation
     if(exist) {
-        return res.status(409).send({ isCreated: false, errMsg: "중복된 아이디 또는 이메일입니다." });
+        return res.status(409).send({ isCreated: false, errMsg: "중복된 이름 또는 이메일입니다." });
     }
-    if(password != password_confirm) {
+    if(password !== password_confirm) {
         return res.status(409).send({ isCreated: false, errMsg: "비밀번호를 확인하여 주십시오." });
     }
     try {
         await User.create({
             username: username,
-            userID: id,
             email: email,
-            password: password
+            birthDate: birthDate,
+            password: password,
+            points: 0
         });
     } catch(error) {
         console.log(error);
@@ -45,21 +47,26 @@ export const getLogin = (req, res) => {
 } 
 
 export const postLogin = async (req, res) => {
-    const { id, password } = req.body;
-    console.log(id + " " + password);
-    const user = await User.findOne({ userID: id });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email: email });
     if(!user) {
-        return res.status(400).send({ errMsg: "존재하지 않는 아이디입니다." });
+        return res.status(400).send({ errMsg: "존재하지 않는 이메일입니다." });
     }
     const check = await bycript.compare(password, user.password);
     if(!check) {
         return res.status(400).send({ errMsg: "비밀번호를 잘못입력했습니다." });
     }
+
+    try {
+        user.loginDates.push(new Date());
+        await user.save();
+    } catch (error) {
+        console.log();
+    }
     req.session.loggedIn = true;
     req.session.user = user;
     const body = {
         username: user.username,
-        userID: id,
         point: user.points
     }
     return res.status(200).send(body);

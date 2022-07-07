@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import Navbar from "../navbar/Navbar1";
 import Backimg from "../Waveback/Waveback"
 import { Alert } from "react-bootstrap";
-import coverImg from "../../assets/bg-coworking.jpeg";
+import TableMain from "../Table/TableMain"
+
 function Home() {
     const [loggedIn, setLoggedin] = useState(false);
     
@@ -20,13 +21,7 @@ function Home() {
             <Alert key={"danger"} variant={"danger"}>
                 This is a {"danger"} alert—check it out!
             </Alert>
-            {/* <Link to={`/login`}>Login</Link>
-            <br/>
-            <Link to={`/join`}>Create Account</Link>
-            <br/>
-            <Link to={`/logout`}>Logout</Link>
-            {loggedIn === null ? null : (<p>{sessionStorage.getItem("username")}</p>)} */}
-
+            <TableMain />
         </div>
     )
 }

@@ -7,8 +7,8 @@ function Logout() {
     const navigate = useNavigate();
     const tryLogout = async() => {
         try {
-            const url = SERVER_URL + "/logout";
-            await axios.get(url);
+            const url = SERVER_URL + "/user/logout";
+            await axios.post(url);
             sessionStorage.clear();
             navigate('/');
         } catch (error) {

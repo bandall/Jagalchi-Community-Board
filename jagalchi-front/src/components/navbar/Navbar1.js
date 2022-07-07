@@ -10,6 +10,9 @@ function Navbar1(params) {
             console.log(l);
             setLoggedin(true);
         }
+        else {
+            setLoggedin(false);
+        }
     }, []);
 
     return (

@@ -6,10 +6,9 @@ import Navbar1 from "../navbar/Navbar1";
 import Waveback from "../Waveback/Waveback"
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
-import coverImg from "../../assets/bg-coworking.jpeg";
 function Login() {
     const navigate = useNavigate();
-    const [show, setShow] = useState(true);
+    const [show, setShow] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const emailChange = (event) => {
@@ -21,8 +20,7 @@ function Login() {
     const onSubmit = async (event) => {
         event.preventDefault();
         if(email === "" || password === "") {
-            //console.log(id + password);
-            alert("아이디와 비밀번호를 입력해주세요.");
+            alert("이메일과 비밀번호를 입력해주세요.");
         }
         else {
             const body = {
@@ -36,33 +34,30 @@ function Login() {
                 console.log(res);
                 navigate('/');
             } catch (error) {
-                console.log(error);
-                alert("아이디 또는 비밀번호가 다릅니다.");
+                console.log(error.response.data.errMsg);
+                alert(error.response.data.errMsg);
             }
         }
     }
     return(
-        // <div className={s.Background} style={{backgroundImage: `url(${coverImg})`}}>
         <div>
             <Navbar1/>
             <Waveback />
             <div className={s.Auth_form_container}>
                 <ul>
                 {show ? <Alert className={s.Alert} style={{position: "fixed"}} variant="danger" onClose={() => setShow(false)} dismissible>
-                <Alert.Heading>Oh snap! You got an error!</Alert.Heading>
+                <Alert.Heading>Error Header</Alert.Heading>
                     <p>
-                        Change this and that and try again. Duis mollis, est non commodo
-                        luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
-                        Cras mattis consectetur purus sit amet fermentum.
+                        {"ErrMsg"}
                     </p>
                 </Alert> : null}
                 <form className={s.Auth_form}>
                     <div className={s.Auth_form_content}>
-                    <h3 className={s.Auth_form_title}>Log In</h3>
+                    <h3 className={s.Auth_form_title}>로그인</h3>
                     <div className="text-center">
-                        Not registered yet?{" "}
+                        아직 계정이 없으신가요?{" "}
                         <a href="/join" className="link-primary">
-                            Sign Up{String.fromCharCode(8594)}
+                            가입하기{String.fromCharCode(8594)}
                         </a>
                     </div>
                     <div className="form-group mt-3">
@@ -70,9 +65,11 @@ function Login() {
                         <Form.Control
                             id="floatingInputCustom"
                             type="email"
+                            onChange={emailChange}
                             placeholder="name@example.com"
+                            required
                             />
-                            <label htmlFor="floatingInputCustom">Email address</label>
+                            <label htmlFor="floatingInputCustom">이메일</label>
                         </Form.Floating>
                     </div>
                     <div className="form-group mt-3">
@@ -81,28 +78,25 @@ function Login() {
                             <Form.Control
                             id="floatingPasswordCustom"
                             type="password"
+                            onChange={pwdChange}
                             placeholder="Password"
+                            required
                             />
-                        <label htmlFor="floatingPasswordCustom">Password</label>
+                        <label htmlFor="floatingPasswordCustom">비밀번호</label>
                         </Form.Floating>
                     </div>
                     <div className="d-grid gap-2 mt-3">
-                        <button type="submit" className="btn btn-primary">
-                        Submit
+                        <button type="submit" onClick={onSubmit} className="btn btn-primary">
+                            Submit
                         </button>
                     </div>
                     <p className="forgot-password text-right mt-2">
-                        Forgot <a href="#">password?</a>
+                        Forgot <a href="/">password?</a>
                     </p>
                     </div>
                 </form>
                 </ul>
             </div>
-            {/* <form method="POST">
-                <input name="id" onChange={idChange} placeholder="아이디" type="text" required/>
-                <input name="password" onChange={pwdChange} placeholder="비밀번호" type="password" required/>
-                <button onClick={onSubmit} type="submit">Login</button>
-            </form> */}
         </div>
     )
 }
