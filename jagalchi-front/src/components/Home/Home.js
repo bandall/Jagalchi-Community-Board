@@ -18,9 +18,9 @@ function Home() {
         <div>
             <Navbar />
             <Backimg />
-            <Alert key={"danger"} variant={"danger"}>
+            {/* <Alert key={"danger"} variant={"danger"}>
                 This is a {"danger"} alert—check it out!
-            </Alert>
+            </Alert> */}
             <TableMain />
         </div>
     )

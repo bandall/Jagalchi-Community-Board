@@ -1,5 +1,42 @@
 .wrap_inner {
     position: relative;
-    width: 1450px;
+    width: 1250px;
     margin: 0 auto;
+    padding-top: 60px;
+}
+
+.table_header {
+    text-decoration: none;
+}
+
+.table {
+    text-align: center;
+}
+
+.table_number {
+    width: 80px;
+}
+
+.table_title {
+    width: 700px;
+}
+
+.table_author {
+    width: 200px;
+}
+
+.table_date {
+    width: 100px;
+}
+
+.table_view {
+    width: 100px;
+}
+
+.table_suggest {
+    width: 100px;
+}
+
+.title_text {
+    text-align: left;
 }
