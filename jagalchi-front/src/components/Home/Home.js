@@ -13,6 +13,7 @@ function Home() {
             setLoggedin(true);
         }
     }, []);
+    
     return(
         // <div style={{backgroundImage: `url(${coverImg})`, backgroundSize: "cover", height: "100vh", width: "100vw"}}>
         <div>

@@ -3,6 +3,7 @@
     width: 1250px;
     margin: 0 auto;
     padding-top: 60px;
+    color: green;
 }
 
 .table_header {
@@ -19,6 +20,7 @@
 
 .table_title {
     width: 700px;
+    
 }
 
 .table_author {
@@ -26,7 +28,7 @@
 }
 
 .table_date {
-    width: 100px;
+    width: 120px;
 }
 
 .table_view {
@@ -39,4 +41,19 @@
 
 .title_text {
     text-align: left;
+}
+
+.text {
+    text-decoration: none;
+    color:black;
+}
+
+.paginationbar {
+    margin: auto;
+    
+}
+
+.search_bar {
+    margin: auto;
+    display: flex;
 }

@@ -1,0 +1,28 @@
+.wrap_inner {
+    position: relative;
+    width: 1250px;
+    margin: 0 auto;
+    padding-top: 60px;
+    color: green;
+}
+
+.card_stlye {
+    margin: auto;
+    padding: 10px;
+    height: 660px;
+    overflow: auto;
+}
+
+.wrapper_class{
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 4rem;
+    padding-top: 60px;
+    position: relative;
+}
+.editor {
+    height: 700px !important;
+    border: 1px solid #f1f1f1 !important;
+    padding: 5px !important;
+    border-radius: 2px !important;
+}
