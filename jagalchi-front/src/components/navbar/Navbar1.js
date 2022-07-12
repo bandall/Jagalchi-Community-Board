@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import logo from "../../assets/logo.png";
+import { isLoggedIn } from '../functions/loginCheck';
 function Navbar1(params) {
     const [loggedIn, setLoggedin] = useState(false);
     

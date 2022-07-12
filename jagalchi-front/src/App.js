@@ -6,7 +6,18 @@ import ViewPost from "./components/ViewPost/ViewPost"
 import Logout from './Logout.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
+import { useEffect } from 'react';
+import { getUserInfo } from './components/functions/loginCheck.js';
 function App() {
+  useEffect(()=> {
+      if(getUserInfo()){
+        sessionStorage.setItem("loggedIn", "true");
+      }
+      else {
+        sessionStorage.setItem("loggedIn", "false");
+      }
+    }, []);
+    
   return (
     <Routes>
         <Route path="/" element={<Home />} />
@@ -16,7 +27,7 @@ function App() {
         <Route path="/search" element={<Home />} />
         <Route path="/writeboard" element={<EditorForm />} />
         <Route path="/board/:id" element={<ViewPost/>} />
-        <Route path="*" element={<Logout />} />
+        <Route path="*" element={<Home />} />
     </Routes>
   )
 }

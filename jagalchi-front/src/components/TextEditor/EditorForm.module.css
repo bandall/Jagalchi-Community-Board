@@ -1,15 +1,16 @@
 .wrap_inner {
     position: relative;
     width: 1250px;
+   
     margin: 0 auto;
     padding-top: 60px;
-    color: green;
+    overflow: auto;
 }
 
 .card_stlye {
     margin: auto;
+    height: 400px;
     padding: 10px;
-    height: 660px;
     overflow: auto;
 }
 
@@ -19,6 +20,7 @@
     margin-bottom: 4rem;
     padding-top: 60px;
     position: relative;
+    overflow: auto;
 }
 .editor {
     height: 700px !important;

@@ -84,7 +84,17 @@ export const postChangePassword = (req, res) => {
     res.send("Post ChagePassword");
 } 
 
-export const userInfo = (req, res) => {
-    const { id } = req.params;
-    res.send("User : " + id);
+export const postUserInfo = (req, res) => {
+    console.log();
+    if(!req.session.loggedIn) {
+        res.sendStatus(403);
+    } else {
+        const user = req.session.loggedIn;
+        const body = {
+            username: user.username,
+            birthDate: user.birthDate,
+            points: user.points
+        }
+        res.send(body);
+    }
 }

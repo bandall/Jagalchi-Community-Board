@@ -8,7 +8,13 @@ const userSchema = mongoose.Schema({
     password: { type:String, required:true },
     loginDates: [{ type:Date }],
     points: { type:Number, default: 0 },
-    avatarUrl: { type:String }
+    avatarUrl: { type:String },
+    posts: [
+        { type:mongoose.Schema.Types.ObjectId, required: true, ref:"Post" }
+    ],
+    comments: [
+        { type:mongoose.Schema.Types.ObjectId, required: true, ref:"Comment" }
+    ],
 });
 
 userSchema.pre("save", async function() {

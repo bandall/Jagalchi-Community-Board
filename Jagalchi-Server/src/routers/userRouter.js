@@ -5,13 +5,15 @@ import {
     postEdit, 
     getChangePassword, 
     postChangePassword,
-    userInfo
+    postUserInfo
  } from "../controllers/userControll";
+import { loginOnlyMiddleWare, publicOnlyMiddleWare } from "../middlewares";
 const userRouter = express.Router();
 
-userRouter.post("/logout", logout);
-userRouter.route("/edit").get(getEdit).post(postEdit);
-userRouter.route("/change-password").get(getChangePassword).post(postChangePassword);
-userRouter.get("/:id", userInfo);
+userRouter.route("/logout").all(loginOnlyMiddleWare).post(logout);
+userRouter.route("/edit").all(loginOnlyMiddleWare).get(getEdit).post(postEdit);
+userRouter.route("/change-password").all(loginOnlyMiddleWare).get(getChangePassword).post(postChangePassword);
+//userRouter.route("/info/:id").get();
+userRouter.post("/info", postUserInfo);
 
 export default userRouter;

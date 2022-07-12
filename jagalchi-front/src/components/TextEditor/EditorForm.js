@@ -73,18 +73,17 @@ const EditorForm = () => {
         <div>
             <Navbar />
             <Backimg />
-            <div className={s.wrapper_class}>
+            <div className={s.wrap_inner}>
                 <Form.Control type="title" placeholder="제목" value={title} onChange={onChange}/>
                 <Card className={s.card_stlye} >
                 <ReactQuill 
-                    style={{height: "600px"}} 
+                    style={{height: "300px"}}
                     theme="snow" 
                     modules={modules} 
                     formats={formats} 
                     value={value || ""} 
                     onChange={onEdit}
-                     />
-                
+                />
                 </Card>
                 <Button variant="primary" onClick={onClick}>
                         제출
