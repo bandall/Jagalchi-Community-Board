@@ -14,6 +14,6 @@ userRouter.route("/logout").all(loginOnlyMiddleWare).post(logout);
 userRouter.route("/edit").all(loginOnlyMiddleWare).get(getEdit).post(postEdit);
 userRouter.route("/change-password").all(loginOnlyMiddleWare).get(getChangePassword).post(postChangePassword);
 //userRouter.route("/info/:id").get();
-userRouter.post("/info", postUserInfo);
+
 
 export default userRouter;

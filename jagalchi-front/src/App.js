@@ -6,16 +6,28 @@ import ViewPost from "./components/ViewPost/ViewPost"
 import Logout from './Logout.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
 function App() {
-  useEffect(()=> {
-      if(getUserInfo()){
-        sessionStorage.setItem("loggedIn", "true");
-      }
-      else {
-        sessionStorage.setItem("loggedIn", "false");
-      }
+    const [loggedIn, setLoggedIn] = useState(false);
+    const isLoggedIn = async () => {
+        const userData = await getUserInfo();
+        if(userData === null) {
+            setLoggedIn(false);
+            sessionStorage.setItem("loggedIn", "false");
+        }
+        console.log("isLoggedIn: " + userData.data.loggedIn);
+        if(userData.data.loggedIn) {
+            setLoggedIn(true);
+            sessionStorage.setItem("loggedIn", "true");
+        } else {
+            setLoggedIn(false);
+            sessionStorage.setItem("loggedIn", "false");
+        }
+    } 
+
+    useEffect(()=> {
+        isLoggedIn();
     }, []);
     
   return (

@@ -6,9 +6,8 @@ function Navbar1(params) {
     const [loggedIn, setLoggedin] = useState(false);
     
     useEffect(()=> {
+        console.log(sessionStorage.getItem("loggedIn"));
         if(sessionStorage.getItem("loggedIn") === "true"){
-            const l = sessionStorage.getItem("loggedIn");
-            console.log(l);
             setLoggedin(true);
         }
         else {

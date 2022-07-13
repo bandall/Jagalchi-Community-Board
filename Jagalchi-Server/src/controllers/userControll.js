@@ -1,19 +1,18 @@
 import User from "../models/User";
 import bycript from "bcrypt";
 export const getJoin = (req, res) => {
-    //res.sendFile(process.env.ASSET_PATH + "/index.html");
+   
 }
 
 export const postJoin = async (req, res) => {
     const { username, email, birthDate, password, password_confirm } = req.body;
-    console.log(username, email, birthDate, password, password_confirm);
     const exist = await User.exists({$or: [{username}, {email}]});
     //check validation
     if(exist) {
-        return res.status(409).send({ isCreated: false, errMsg: "중복된 이름 또는 이메일입니다." });
+        return res.status(409).send({ errMsg: "중복된 이름 또는 이메일입니다." });
     }
     if(password !== password_confirm) {
-        return res.status(409).send({ isCreated: false, errMsg: "비밀번호를 확인하여 주십시오." });
+        return res.status(409).send({ errMsg: "비밀번호를 확인하여 주십시오." });
     }
     try {
         await User.create({
@@ -25,20 +24,48 @@ export const postJoin = async (req, res) => {
         });
     } catch(error) {
         console.log(error);
-        return res.status(409).send({ isCreated: false, errMsg: "계정 생성중 오류가 발생했습니다." });
+        return res.status(409).send({ errMsg: "계정 생성중 오류가 발생했습니다." });
     }
     
-    return res.status(200).send({ isCreated: true });
+    return res.sendStatus(200);
 }
 
-export const getEdit = (req, res) => {
-    res.send("Get Edit");
+export const getEdit = async (req, res) => {
+    
+} 
+
+export const postEdit = async (req, res) => {
+    const {
+        session: {
+            user: { _id, avatarUrl }
+        },
+        body: { username, newAvatarUrl }
+    } = req;
+    const exist = User.exist({ username });
+    if(exist) {
+        return res.status(409).send({ errMsg: "이미 존재하는 닉네임입니다." });
+    }
+    const user = User.findById(_id);
+    if(!user) {
+        return res.status(400).send({ errMsg: "존재하지 않는 유저입니다." });
+    }
+    //remove past image
+    const updatedUser = await User.findByIdAndUpdate(
+        _id,
+        {
+            username: username,
+            avatarUrl: newAvatarUrl
+        },
+        { new: true }
+    );
+    req.session.user = updatedUser;
+    return res.redirect("/user/edit");
 } 
 
 export const logout = (req, res) => {
     req.session.destroy();
-    console.log(req.session);
-    return res.sendStatus(200);
+    //console.log(req.session);
+    return res.redirect("/");
 }
 
 export const getLogin = (req, res) => {
@@ -72,29 +99,26 @@ export const postLogin = async (req, res) => {
     return res.status(200).send(body);
 } 
 
-export const postEdit = (req, res) => {
-    res.send("Post Edit");
-} 
-
 export const getChangePassword = (req, res) => {
     res.send("Get ChagePassword");
 } 
 
-export const postChangePassword = (req, res) => {
-    res.send("Post ChagePassword");
-} 
-
-export const postUserInfo = (req, res) => {
-    console.log();
-    if(!req.session.loggedIn) {
-        res.sendStatus(403);
-    } else {
-        const user = req.session.loggedIn;
-        const body = {
-            username: user.username,
-            birthDate: user.birthDate,
-            points: user.points
-        }
-        res.send(body);
+export const postChangePassword = async (req, res) => {
+    const {
+        session: { 
+            user: { _id }
+          },
+        body: { oldPassword ,newPassword, newPasswordConfirm }
+    } = req;
+    if(newPassword !== newPasswordConfirm) {
+        return res.status(400).send({ errMsg: "새 비밀번호 확인에 실패하였습니다." });
     }
-}
+    const user = await User.findById(_id);
+    const valid = await bycript.compare(user.password, oldPassword);
+    if(!valid) {
+        return res.status(400).send({ errMsg: "기존 비밀번호 확인에 실패하였습니다." });
+    }
+    user.password = newPassword;
+    user.save();
+    return res.redirect("/user/logout");
+} 

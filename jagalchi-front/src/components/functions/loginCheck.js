@@ -1,13 +1,16 @@
 import axios from "axios"
 import { SERVER_URL } from "../../gobal";
 export const getUserInfo = async () => {
+    let res;
     try {
-        const url = SERVER_URL + "/user/info";
-        const res = await axios.post(url);
+        const url = SERVER_URL + "/api/userinfo";
+        res = await axios.get(url);
         console.log(res);
-        return true;
+        return res;
+        
     } catch (error) {
-        console.log(error);
-        return false;
+        return null;
     }
 }
+
+
