@@ -3,7 +3,7 @@ import morgan from "morgan";
 import "dotenv/config";
 import "./db";
 import "./models/User";
-import session, { Cookie } from "express-session";
+import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
 import rootRouter from "./routers/rootRouter";

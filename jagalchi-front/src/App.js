@@ -14,15 +14,11 @@ function App() {
         const userData = await getUserInfo();
         if(userData === null) {
             setLoggedIn(false);
-            sessionStorage.setItem("loggedIn", "false");
         }
-        console.log("isLoggedIn: " + userData.data.loggedIn);
         if(userData.data.loggedIn) {
             setLoggedIn(true);
-            sessionStorage.setItem("loggedIn", "true");
         } else {
             setLoggedIn(false);
-            sessionStorage.setItem("loggedIn", "false");
         }
     } 
 
@@ -32,10 +28,10 @@ function App() {
     
   return (
     <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/" element={<Home loggedIn={loggedIn}/> } />
+        <Route path="/login" element={<Login loggedIn={loggedIn}/>} />
         <Route path="/join" element={<Join />} />
-        <Route path="/logout" element={<Logout />} />
+        <Route path="/logout" element={<Logout/>} />
         <Route path="/search" element={<Home />} />
         <Route path="/writeboard" element={<EditorForm />} />
         <Route path="/board/:id" element={<ViewPost/>} />

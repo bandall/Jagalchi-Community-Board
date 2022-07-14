@@ -62,10 +62,12 @@ export const postEdit = async (req, res) => {
     return res.redirect("/user/edit");
 } 
 
-export const logout = (req, res) => {
-    req.session.destroy();
-    //console.log(req.session);
-    return res.redirect("/");
+export const logout = async (req, res) => {
+    await req.session.destroy(() => {
+        res.clearCookie('connect.sid');
+        res.redirect("/");
+    });
+    console.log(req.session);
 }
 
 export const getLogin = (req, res) => {
@@ -91,7 +93,6 @@ export const postLogin = async (req, res) => {
         console.log();
     }
     
-
     req.session.loggedIn = true;
     req.session.user = user;
     const body = {

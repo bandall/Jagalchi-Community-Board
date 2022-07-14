@@ -6,7 +6,7 @@ import Navbar1 from "../navbar/Navbar1";
 import Waveback from "../Waveback/Waveback"
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
-function Login() {
+function Login({loggedIn}) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState("");
@@ -42,7 +42,7 @@ function Login() {
     }
     return(
         <div>
-            <Navbar1/>
+            <Navbar1 loggedIn={loggedIn}/>
             <Waveback />
             <div className={s.Auth_form_container}>
                 <ul>

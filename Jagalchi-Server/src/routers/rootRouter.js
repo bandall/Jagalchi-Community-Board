@@ -8,7 +8,7 @@ rootRouter.get("/", home);
 rootRouter.route("/test").all(loginOnlyMiddleWare).get((req, res)=> res.send("YES"));
 rootRouter.route("/join").all(publicOnlyMiddleWare).post(postJoin);
 rootRouter.route("/login").all(publicOnlyMiddleWare).post(postLogin);
-rootRouter.route("/attendance").all(publicOnlyMiddleWare).get(attendance);
+rootRouter.route("/attendance").all(loginOnlyMiddleWare).get(attendance);
 
 
 export default rootRouter;

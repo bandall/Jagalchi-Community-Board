@@ -1,4 +1,5 @@
 export const getUserInfo = (req, res) => {
+    console.log(req.session);
     let body;
     if(!req.session.loggedIn) {
         body = {
