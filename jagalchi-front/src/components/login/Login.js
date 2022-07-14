@@ -28,6 +28,7 @@ function Login() {
                 password: password
             }
             try {
+                axios.defaults.withCredentials = true;
                 const url = SERVER_URL + "/login";
                 const res = await axios.post(url, body);
                 sessionStorage.setItem("loggedIn", "true");

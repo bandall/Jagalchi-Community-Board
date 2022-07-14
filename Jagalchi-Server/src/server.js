@@ -32,12 +32,17 @@ app.use((req, res, next) => {
     })
 });
 
-app.use((req, res, next) => {
-    res.header("Cross-Origin-Opener-Policy","same-origin");
-    res.header("Cross-Origin-Embedder-Policy", "require-corp");
-    next();
-});
-app.use(cors({ origin: 'http://localhost:3000'}));
+// app.use((req, res, next) => {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Credentials", true);
+//     res.header("Cross-Origin-Opener-Policy","same-origin");
+//     res.header("Cross-Origin-Embedder-Policy", "require-corp");
+//     next();
+// });
+app.use(cors({ 
+    origin: ['http://localhost:3000'],
+    credentials: true,
+}));
 
 //app.use(express.static(path.join(__dirname, 'react-project/build')));
 app.use("/static", express.static("assets"));

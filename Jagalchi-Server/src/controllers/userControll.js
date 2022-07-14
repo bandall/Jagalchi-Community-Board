@@ -90,6 +90,8 @@ export const postLogin = async (req, res) => {
     } catch (error) {
         console.log();
     }
+    
+
     req.session.loggedIn = true;
     req.session.user = user;
     const body = {
