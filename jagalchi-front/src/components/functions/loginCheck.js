@@ -6,7 +6,6 @@ export const getUserInfo = async () => {
         axios.defaults.withCredentials = true;
         const url = SERVER_URL + "/api/userinfo";
         res = await axios.get(url);
-        console.log(res);
         return res;
         
     } catch (error) {

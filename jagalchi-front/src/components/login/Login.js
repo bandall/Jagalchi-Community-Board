@@ -32,7 +32,6 @@ function Login({loggedIn}) {
                 const url = SERVER_URL + "/login";
                 const res = await axios.post(url, body);
                 sessionStorage.setItem("loggedIn", "true");
-                console.log(res);
                 navigate('/');
             } catch (error) {
                 console.log(error.response.data.errMsg);

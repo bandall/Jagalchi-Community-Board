@@ -9,27 +9,31 @@ import EditorForm from './components/TextEditor/EditorForm.js';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
 function App() {
-    const [loggedIn, setLoggedIn] = useState(false);
+    //const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {
         const userData = await getUserInfo();
         if(userData === null) {
-            setLoggedIn(false);
+            //setLoggedIn(false);
+            sessionStorage.setItem("loggedIn", "false");
         }
         if(userData.data.loggedIn) {
-            setLoggedIn(true);
+            //setLoggedIn(true);
+            sessionStorage.setItem("loggedIn", "true");
         } else {
-            setLoggedIn(false);
+            //setLoggedIn(false);
+            sessionStorage.setItem("loggedIn", "false");
         }
     } 
 
     useEffect(()=> {
         isLoggedIn();
     }, []);
+
     
   return (
     <Routes>
-        <Route path="/" element={<Home loggedIn={loggedIn}/> } />
-        <Route path="/login" element={<Login loggedIn={loggedIn}/>} />
+        <Route path="/" element={<Home /> } />
+        <Route path="/login" element={<Login />} />
         <Route path="/join" element={<Join />} />
         <Route path="/logout" element={<Logout/>} />
         <Route path="/search" element={<Home />} />

@@ -10,10 +10,10 @@ function TableMain() {
     const [key, setKey] = useState('all');
 
     useEffect(() => {
-        if(key === "all")
-            console.log("Send all request");
-        if(key === "hot")
-            console.log("Send hot request");
+        // if(key === "all")
+        //     console.log("Send all request");
+        // if(key === "hot")
+        //     console.log("Send hot request");
     }, [key])
 
     const date = new Date().toISOString().substring(0, 10);

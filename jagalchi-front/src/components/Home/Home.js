@@ -5,18 +5,10 @@ import Backimg from "../Waveback/Waveback"
 import { Alert } from "react-bootstrap";
 import TableMain from "../Table/TableMain"
 
-function Home({loggedIn}) {
-    // const [loggedIn, setLoggedin] = useState(false);
-    
-    // useEffect(()=> {
-    //     if(sessionStorage.getItem("loggedIn") === "true"){
-    //         setLoggedin(true);
-    //     }
-    // }, []);
+function Home() {
     return(
-        // <div style={{backgroundImage: `url(${coverImg})`, backgroundSize: "cover", height: "100vh", width: "100vw"}}>
         <div>
-            <Navbar loggedIn={loggedIn}/>
+            <Navbar />
             <Backimg />
             <TableMain />
         </div>
