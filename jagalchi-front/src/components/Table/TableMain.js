@@ -21,7 +21,13 @@ function TableMain() {
     const fakeData = [
         { index : 1, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
         { index : 2, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 3, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" }
+        { index : 3, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
+        { index : 4, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
+        { index : 5, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
+        { index : 6, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
+        { index : 7, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
+        { index : 8, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
+        { index : 9, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
     ];
     
     return (
@@ -38,7 +44,7 @@ function TableMain() {
                 <Tab eventKey="all" title="최신순" />
                 <Tab eventKey="hot" title="인기순" />
             </Tabs>
-            <Card>
+            <div className={s.wrap_table}>
                 <Table hover className={s.table}>
                 <thead>
                     <tr>
@@ -84,7 +90,7 @@ function TableMain() {
                 <div className={s.paginationbar}>
                     <Paginationbar />
                 </div>
-            </Card>
+            </div>
         </div>
     )
 }
