@@ -3,7 +3,7 @@ import Home from "./components/Home/Home.js";
 import Login from "./components/login/Login.js";
 import Join from "./components/Join/Join.js";
 import ViewPost from "./components/ViewPost/ViewPost"
-import Logout from './Logout.js';
+import Logout from './components/Logout/Logout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
 import { useEffect, useState } from 'react';
@@ -37,7 +37,7 @@ function App() {
         <Route path="/join" element={<Join />} />
         <Route path="/logout" element={<Logout/>} />
         <Route path="/search" element={<Home />} />
-        <Route path="/writeboard" element={<EditorForm />} />
+        <Route path="/post/writeboard" element={<EditorForm />} />
         <Route path="/board/:id" element={<ViewPost/>} />
         <Route path="*" element={<Home />} />
     </Routes>

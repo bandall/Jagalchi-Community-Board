@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SERVER_URL } from "./gobal";
+import { SERVER_URL } from "../../gobal";
 
 function Logout() {
     const navigate = useNavigate();

@@ -1,4 +1,5 @@
 import User from "../models/User";
+import fs from "fs";
 import bycript from "bcrypt";
 export const getJoin = (req, res) => {
    
@@ -63,11 +64,25 @@ export const postEdit = async (req, res) => {
 } 
 
 export const logout = async (req, res) => {
+    const { _id } = req.session.user;
+    const user = await User.findById(_id);
+    try {
+        user.loginDates.unshift(new Date());
+        const tmpList = user.tmpFiles;
+        tmpList.forEach(tmpFile => {
+            fs.unlink(tmpFile, (err) => {
+                if(err) console.log(tmpFile + "삭제 실패");
+            })
+        });
+        user.tmpFiles = [];
+        await user.save();
+    } catch (error) {
+
+    }
     await req.session.destroy(() => {
         res.clearCookie('connect.sid');
         res.redirect("/");
     });
-    console.log(req.session);
 }
 
 export const getLogin = (req, res) => {
@@ -87,10 +102,17 @@ export const postLogin = async (req, res) => {
     }
 
     try {
-        user.loginDates.push(new Date());
+        user.loginDates.unshift(new Date());
+        const tmpList = user.tmpFiles;
+        tmpList.forEach(tmpFile => {
+            fs.unlink(tmpFile, (err) => {
+                if(err) console.log(tmpFile + "삭제 실패");
+            })
+        });
+        user.tmpFiles = [];
         await user.save();
     } catch (error) {
-        console.log();
+
     }
     
     req.session.loggedIn = true;

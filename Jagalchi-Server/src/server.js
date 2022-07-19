@@ -10,6 +10,7 @@ import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
 import apiRouter from "./routers/apiRouter";
 import uploadRouter from "./routers/uploadRouter";
+import postRouter from "./routers/postRouter";
 
 const app = express();
 const PORT = 4000;
@@ -53,6 +54,7 @@ app.use("/", rootRouter);
 app.use("/user", userRouter);
 app.use("/api", apiRouter);
 app.use("/upload", uploadRouter);
+app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
 
 app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));

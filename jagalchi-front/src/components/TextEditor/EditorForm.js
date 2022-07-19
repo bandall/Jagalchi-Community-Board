@@ -8,28 +8,42 @@ import ReactQuill, { Quill } from 'react-quill';
 import ImageResize from "quill-image-resize-module-react";
 import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const EditorForm = () => {
+	const navigate = useNavigate();
     const [value, setValue] = useState("");
-    const [title, setTitle] = useState("");
-    const quillRef = useRef();
-    let text = "";
-    Quill.register("modules/imageResize", ImageResize);
+	const [titleValue, setTitle] = useState("");
+    let title = "";
+	const addFileList = [];
+	const quillRef = useRef();
+	Quill.register("modules/imageResize", ImageResize);
+	let text = "";
     const onEdit = async (content, delta, source, editor) => {
         text = await editor.getHTML();
     }
 
     const onChange = (event) => {
-      setTitle(event.target.value);
+		title = event.target.value;
     }
 
-    const onClick = () => {
+    const onClick = async () => {
         const data = {
           title: title,
-          date: new Date(),
           text: text,
+		  fileList: addFileList
         }
         console.log(data);
+		try {
+			axios.defaults.withCredentials = true;
+			const url = SERVER_URL + "/post/writeboard";
+        	await axios.post(url, data);
+			navigate("/");
+		} catch (error) {
+			console.log(error);
+			alert("글쓰기 오류 발생");
+		}
+		
     }
 	
     const imageHandler = () => {
@@ -45,8 +59,8 @@ const EditorForm = () => {
 			
 			try {
 				const result = await axios.post(SERVER_URL + "/upload/image", formData);
-				const IMG_URL = SERVER_URL + "/" +result.data.url;
-
+				const IMG_URL = SERVER_URL + "/" + result.data.url;
+				addFileList.push(result.data.url);
 				const editor = quillRef.current.getEditor();
 				const range = editor.getSelection();
 				editor.insertEmbed(range.index, "image", IMG_URL);
@@ -55,6 +69,29 @@ const EditorForm = () => {
 			}
 		})
     }
+
+	const videoHandler = () => {
+		const input = document.createElement("input");
+		input.setAttribute("type", "file");
+		input.setAttribute("accept", "video/*");
+		input.click();
+
+		input.addEventListener("change", async () => {
+			const file = input.files[0];
+			const formData = new FormData();
+			formData.append("video", file);
+			try {
+				const result = await axios.post(SERVER_URL + "/upload/video", formData);
+				const VIDEO_URL = SERVER_URL + "/" + result.data.url;
+				addFileList.push(result.data.url);
+				const editor = quillRef.current.getEditor();
+				const range = editor.getSelection();
+				editor.insertEmbed(range.index, "video", VIDEO_URL);
+			} catch (error) {
+				console.log(error);
+			}
+		})
+	}
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
@@ -75,6 +112,7 @@ const EditorForm = () => {
           container: toolbarOptions,
           handlers: {
             image: imageHandler,
+			video: videoHandler
           }
         },
 		imageResize: {
@@ -89,7 +127,7 @@ const EditorForm = () => {
             <Navbar />
             <Backimg />
             <div className={s.wrap_inner}>
-                <Form.Control type="title" placeholder="제목" value={title} onChange={onChange}/>
+                <Form.Control type="title" placeholder="제목" onChange={onChange}/>
                 <ReactQuill 
 					ref={quillRef}
 					className={s.editor}

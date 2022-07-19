@@ -83,7 +83,7 @@ function TableMain() {
                     </div>
                     <div>
                         <Button variant="primary">
-                            <a href="/writeboard" style={{color: "white", textDecoration: "none"}}>글쓰기</a>
+                            <a href="/post/writeboard" style={{color: "white", textDecoration: "none"}}>글쓰기</a>
                         </Button>{' '}
                     </div>
                 </div>
