@@ -2,10 +2,11 @@ import Post from "../models/Post"
 import User from "../models/User";
 export const submitPost = async (req, res) => {
     const { title, text, fileList } = req.body;
-    const { _id } = req.session.user;
+    const { _id, username } = req.session.user;
     try {
         const newPost = await Post.create({
             owner: _id,
+            ownerName: username,
             title,
             textHTML: text,
             attachedFile: fileList,
@@ -31,8 +32,9 @@ export const submitPost = async (req, res) => {
 }
 
 export const getPost = async (req, res) => {
-    let { page, offset } = req.body;
-    if(offset < 10 || offset > 20 || page === null || page === undefined) {
+    let { page, offset } = req.query;
+    console.log(page, offset);
+    if(offset < 1 || offset > 20 || offset === null || offset === undefined) {
         offset = 10;
     }
     const postCount = await Post.countDocuments();
@@ -41,14 +43,14 @@ export const getPost = async (req, res) => {
     if(page < 1 || page > maxPage || page === null || page === undefined) {
         page = 1;
     }
-    const curPagePost = await Post.find({}).skip((page - 1)*offset).limit(offset);
+    const curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
     const data = {
         maxPage: maxPage,
         curPage: page,
-        posts: curPagePost
+        posts: curPagePost,
+        startNum: postCount - (page - 1) * offset
     }
-
-    console.log(maxPage, page);
+    console.log(postCount, page, maxPage);
     return res.send(data);
 }
 

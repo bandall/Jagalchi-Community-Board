@@ -4,17 +4,32 @@ import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
 import s from "./TableMain.module.css";
 import writing from "./TableWritng";
+import { getPosts } from "../functions/postAPI";
 
 function TableMain() {
     const [writings, setWritings] = useState({});
     const [key, setKey] = useState('all');
+    const [page, setPage] = useState(1);
+    const [posts, setPosts] = useState([]);
+    const [startNum, setStartNum] = useState(0);
+    const [maxPage, setMaxPage] = useState(1);
+
+    const getPost = async () => {
+        const json = await getPosts(1, 10);
+        console.log(json);
+        if(json === null) {
+            alert("게시글을 불러오지 못 했습니다.");
+            return;
+        }
+        setPage(json.data.curPage);
+        setPosts(json.data.posts);
+        setMaxPage(json.data.maxPage);
+        setStartNum(json.data.startNum);
+    }
 
     useEffect(() => {
-        // if(key === "all")
-        //     console.log("Send all request");
-        // if(key === "hot")
-        //     console.log("Send hot request");
-    }, [key])
+        getPost();
+    }, [key, page])
 
     const date = new Date().toISOString().substring(0, 10);
     
@@ -57,17 +72,17 @@ function TableMain() {
                     </tr>
                 </thead>
                 <tbody>
-                    {fakeData.map((data) => {
+                    {posts.map((post, index) => {
                         return (
                             <TableWritings 
-                                key={data.index}
-                                index={data.index}
-                                title={data.title}
-                                author={data.author}
-                                date={data.date}
-                                view={data.view}
-                                recommand={data.recommand}
-                                link={data.link}
+                                key={index}
+                                index={startNum - index}
+                                title={post.title}
+                                author={post.ownerName}
+                                date={post.createdAt.substring(0, 10)}
+                                view={post.views}
+                                recommand={post.recommand}
+                                link={post.link}
                                 style={{"border-collapse":"inherit"}}
                             />
                         )
