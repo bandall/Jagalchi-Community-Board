@@ -82,7 +82,7 @@ function TableMain() {
                                 date={post.createdAt.substring(0, 10)}
                                 view={post.views}
                                 recommand={post.recommand}
-                                link={post.link}
+                                link={"post/" + post._id}
                                 style={{"border-collapse":"inherit"}}
                             />
                         )

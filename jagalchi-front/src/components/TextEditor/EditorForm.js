@@ -11,9 +11,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const EditorForm = () => {
-	const navigate = useNavigate();
+    const navigate = useNavigate();
     const [value, setValue] = useState("");
-	const [titleValue, setTitle] = useState("");
+    const [titleValue, setTitle] = useState("");
     let title = "";
 	const addFileList = [];
 	const quillRef = useRef();
@@ -92,6 +92,7 @@ const EditorForm = () => {
 			}
 		})
 	}
+    
     const toolbarOptions = [
         ["link", "image", "video"],
         [{ header: [1, 2, 3, false] }],
