@@ -1,0 +1,10 @@
+.wrap_post {
+    margin: auto;
+    align-items: center;
+    width: 80%;
+    height: 100%;
+    padding-top: 2px;
+    background-color: white;
+    position: relative;
+    overflow: auto;
+}

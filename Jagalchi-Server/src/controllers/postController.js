@@ -44,10 +44,13 @@ export const getPostList = async (req, res) => {
         page = 1;
     }
     const curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
-    
+    const retPage = [];
     for(let i = 0; i < curPagePost.length; i++) {
         curPagePost[i].owner = undefined;
         curPagePost[i].remmandUsers = undefined;
+        curPagePost[i].comment = undefined;
+        curPagePost[i].textHTML = undefined;
+        curPagePost[i].attachedFile = undefined;
     }
 
     const data = {
@@ -65,9 +68,20 @@ export const getPost = async (req, res) => {
     try {
         const post = await Post.findById(postID);
         post.views = post.views + 1;
+        const postData = {
+            ownerName: post.ownerName,
+            title: post.title,
+            textHTML: post.textHTML,
+            comment: post.comment,
+            view: post.views,
+            recommand: post.recommand,
+            attachedFile: post.attachedFile
+        }
+
         const json = {
             modify: false,
-            recommanded: false
+            recommanded: false,
+            postData
         }
         
         if(req.session.loggedIn) {

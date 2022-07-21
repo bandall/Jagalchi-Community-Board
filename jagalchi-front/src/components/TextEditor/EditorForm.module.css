@@ -1,19 +1,12 @@
 .wrap_inner {
     position: relative;
     width: 80%;
-    
+    height: 60%;
     margin: 0 auto;
     padding-top: 60px;
     padding-bottom: 30%;
     background-color: white;
     background-clip: content-box;
-    overflow: auto;
-}
-
-.card_stlye {
-    margin: auto;
-    height: 400px;
-    padding: 10px;
     overflow: auto;
 }
 
@@ -26,6 +19,12 @@
     overflow: auto;
 }
 .editor {
-    height: 100%;
-    
+    overflow: auto;
+    max-height: 50em;
+    height: 40em;
 }
+/* quill 수정방법
+https://reference-m1.tistory.com/361 */
+/* overflow: auto;
+  max-height: 50em;
+  height: 50em; */

@@ -13,3 +13,14 @@ export const getPosts = async (page, offset) => {
         return null;
     }
 }
+
+export const getPost = async (postID) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/post/" + postID;
+    try {
+        const page = await axios.get(url);
+        return page;
+    } catch(error) {
+        return null;
+    }
+}
