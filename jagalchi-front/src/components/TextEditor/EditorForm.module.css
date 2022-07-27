@@ -1,12 +1,12 @@
 .wrap_inner {
     position: relative;
     width: 80%;
-    height: 60%;
+    height: 80.52vh;
     margin: 0 auto;
-    padding-top: 60px;
-    padding-bottom: 30%;
-    background-color: white;
+    padding-top: 3%;
     background-clip: content-box;
+    background-color: white;
+    align-items: center;
     overflow: auto;
 }
 
@@ -18,10 +18,34 @@
     position: relative;
     overflow: auto;
 }
+
 .editor {
     overflow: auto;
-    max-height: 50em;
-    height: 40em;
+    max-height: 70vh;
+    max-height: 70vh;
+    height: 70vh;
+
+}
+
+.submit {
+    position: relative;
+    margin: 0 auto;
+    padding-top: 1vh;
+    margin-right: 5vw;
+}
+
+.cancel {
+    position: relative;
+    margin: 0 auto;
+    margin-left: 80vw;
+}
+.ql-toolbar {
+    position: sticky;
+}
+  
+.ql-container {
+    overflow-x:auto;
+    height: 300px; /* whatever you what */
 }
 /* quill 수정방법
 https://reference-m1.tistory.com/361 */

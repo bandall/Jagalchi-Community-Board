@@ -48,7 +48,7 @@ export const getPostList = async (req, res) => {
         curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
     }
     if(key === "hot") {
-        curPagePost = await Post.find({}).sort({ views: -1 }).skip((page - 1)*offset).limit(offset);
+        curPagePost = await Post.find({}).sort({ views: -1, _id: -1 }).skip((page - 1)*offset).limit(offset);
     }
     const retPage = [];
     for(let i = 0; i < curPagePost.length; i++) {

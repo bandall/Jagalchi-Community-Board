@@ -98,11 +98,7 @@ function TableMain() {
                     }
                 </div>
                 <div className={s.paginationbar}>
-<<<<<<< HEAD
                     <Paginationbar setPage={setPage} maxPage={maxPage} curPage={page}/>
-=======
-                    <Paginationbar maxPage={maxPage} curPage={page}/>
->>>>>>> master
                 </div>
             </div>
         </div>

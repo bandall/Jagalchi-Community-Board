@@ -1,9 +1,9 @@
 import Navbar from "../navbar/Navbar1";
 import Backimg from "../Waveback/Waveback"
-import { Card, Button, Form } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { SERVER_URL } from "../../gobal";
 import s from "./EditorForm.module.css";
-import React, { Component, useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
 import ImageResize from "quill-image-resize-module-react";
 import 'react-quill/dist/quill.snow.css';
@@ -46,6 +46,12 @@ const EditorForm = () => {
 		
     }
 	
+	const cancelPost = () =>{
+		if(window.confirm("글 작성을 취소하시겠습니까?")) {
+			navigate("/");
+		}
+	}
+
     const imageHandler = () => {
 		const input = document.createElement("input");
 		input.setAttribute("type", "file");
@@ -120,28 +126,36 @@ const EditorForm = () => {
 			parchment: Quill.import("parchment"),
 			modules: ["Resize", "DisplaySize", "Toolbar"],
 		  },
+		  
       };
       
       
     return (
         <div>
+			<Backimg />
             <Navbar />
-            <Backimg />
             <div className={s.wrap_inner}>
                 <Form.Control type="title" placeholder="제목" onChange={onChange}/>
-                <ReactQuill 
-					ref={quillRef}
-					className={s.editor}
-                    theme="snow" 
-                    modules={modules} 
-                    formats={formats} 
-                    value={value || ""} 
-                    onChange={onEdit}
-                />
-                <Button variant="primary" onClick={onClick}>
+                <div>
+					<ReactQuill 
+						ref={quillRef}
+						className={s.editor}
+						theme="snow" 
+						modules={modules} 
+						formats={formats} 
+						value={value || ""} 
+						onChange={onEdit}
+					/>
+				</div>
+            </div>
+			<div className={s.submit}>
+				<Button variant="secondary" onClick={cancelPost} className={s.cancel} size="lg">
+                        취소
+                </Button>{' '}
+				<Button variant="primary" onClick={onClick} className={s.submit} size="lg">
                         제출
                 </Button>{' '}
-            </div>
+			</div>
         </div>
     );
   };
