@@ -30,7 +30,7 @@ function TableMain() {
     useEffect(() => {
         getPost();
     }, [key, page])
-
+    
     const date = new Date().toISOString().substring(0, 10);
     
     const fakeData = [
@@ -103,7 +103,7 @@ function TableMain() {
                     </div>
                 </div>
                 <div className={s.paginationbar}>
-                    <Paginationbar />
+                    <Paginationbar maxPage={maxPage} curPage={page}/>
                 </div>
             </div>
         </div>
