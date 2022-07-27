@@ -1,27 +1,33 @@
 import { useEffect, useState } from "react";
-import { Card, Table, Tabs, Tab, Button } from "react-bootstrap"
+import { Table, Tabs, Tab, Button } from "react-bootstrap"
 import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
 import s from "./TableMain.module.css";
-import writing from "./TableWritng";
 import { getPosts } from "../functions/postAPI";
 
 function TableMain() {
-    const [writings, setWritings] = useState({});
     const [key, setKey] = useState('all');
     const [page, setPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [startNum, setStartNum] = useState(0);
     const [maxPage, setMaxPage] = useState(1);
-
+    const [loggedIn, setLoggedin] = useState(false);
+    
+    useEffect(()=> {
+        if(sessionStorage.getItem("loggedIn") === "true"){
+            setLoggedin(true);
+        }
+        else {
+            setLoggedin(false);
+        }
+    }, []);
     const getPost = async () => {
-        const json = await getPosts(1, 10);
+        const json = await getPosts(page, 10, key);
         console.log(json);
         if(json === null) {
             alert("게시글을 불러오지 못 했습니다.");
             return;
         }
-        setPage(json.data.curPage);
         setPosts(json.data.posts);
         setMaxPage(json.data.maxPage);
         setStartNum(json.data.startNum);
@@ -30,20 +36,6 @@ function TableMain() {
     useEffect(() => {
         getPost();
     }, [key, page])
-
-    const date = new Date().toISOString().substring(0, 10);
-    
-    const fakeData = [
-        { index : 1, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
-        { index : 2, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 3, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 4, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
-        { index : 5, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 6, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 7, title: "Fake Data", author: "Bandall", date: date, view: 100, recommand: 20, link: "www.naver.com" },
-        { index : 8, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-        { index : 9, title: "Fake Data2", author: "Bandall77", date: date, view: 200, recommand: 30, link: "www.naver.com" },
-    ];
     
     return (
         <div className={s.wrap_inner}>
@@ -96,14 +88,17 @@ function TableMain() {
                             <a href="/search" style={{color: "white", textDecoration: "none"}}>검색</a>
                         </Button>{' '}
                     </div>
+                    {loggedIn ? 
                     <div>
                         <Button variant="primary">
                             <a href="/post/writeboard" style={{color: "white", textDecoration: "none"}}>글쓰기</a>
                         </Button>{' '}
                     </div>
+                    : null
+                    }
                 </div>
                 <div className={s.paginationbar}>
-                    <Paginationbar />
+                    <Paginationbar setPage={setPage} maxPage={maxPage} curPage={page}/>
                 </div>
             </div>
         </div>

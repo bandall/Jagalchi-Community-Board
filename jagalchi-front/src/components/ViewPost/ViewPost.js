@@ -13,9 +13,7 @@ function ViewPost() {
     const { id } = useParams();
 
     const setData = async () => {
-        console.log(id);
         const json = (await getPost(id)).data;
-        console.log(json);
         setModify(json.modify);
         setRecommand(json.recommand);
         setPostData(json.postData);
@@ -39,7 +37,6 @@ function ViewPost() {
                     theme={"bubble"}
                     style={s.editor}
                 />
-                {postData.textHTML}
             </div>
         </div>
     )

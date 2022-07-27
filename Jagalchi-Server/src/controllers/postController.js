@@ -32,7 +32,7 @@ export const submitPost = async (req, res) => {
 }
 
 export const getPostList = async (req, res) => {
-    let { page, offset } = req.query;
+    let { page, offset, key } = req.query;
     if(offset < 1 || offset > 20 || offset === null || offset === undefined) {
         offset = 10;
     }
@@ -43,7 +43,13 @@ export const getPostList = async (req, res) => {
     if(page < 1 || page > maxPage || page === null || page === undefined) {
         page = 1;
     }
-    const curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
+    let curPagePost;
+    if(key === "all") {
+        curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
+    }
+    if(key === "hot") {
+        curPagePost = await Post.find({}).sort({ views: -1 }).skip((page - 1)*offset).limit(offset);
+    }
     const retPage = [];
     for(let i = 0; i < curPagePost.length; i++) {
         curPagePost[i].owner = undefined;

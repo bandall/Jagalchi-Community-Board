@@ -1,7 +1,6 @@
 import s from "./TableMain.module.css";
 function TableWritings({index, title, author, date, view, recommand, link}) {
     return (
-        
             <tr>
                 <td>{index}</td>
                 <td className={s.title_text}>

@@ -1,17 +1,17 @@
 .wrap_inner {
     position: relative;
     width: 80%;
+    height: 80vh;
     margin: 0 auto;
     padding-top: 3%;
-    background-color: white;
     background-clip: content-box;
     align-items: center;
     border-radius: 10px;
+    overflow: auto;
 }
 
 .wrap_table {
     width: auto;
-    height: 80%;
     min-height: 60%;
     background-color: aliceblue;
 }

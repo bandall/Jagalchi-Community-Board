@@ -1,12 +1,12 @@
 import axios from "axios"
 import { SERVER_URL } from "../../gobal";
 
-export const getPosts = async (page, offset) => {
+export const getPosts = async (page, offset, key) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/post";
     try {
         const pageInfo = await axios.get(url, 
-            {params: {page:page, offset:offset}}
+            {params: {page:page, offset:offset, key:key}}
         );
         return pageInfo;
     } catch (error) {

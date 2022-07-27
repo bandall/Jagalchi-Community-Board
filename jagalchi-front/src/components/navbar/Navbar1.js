@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import logo from "../../assets/logo.png";
-import { isLoggedIn } from '../functions/loginCheck';
 function Navbar1() {
     const [loggedIn, setLoggedin] = useState(false);
     
     useEffect(()=> {
-        console.log(sessionStorage.getItem("loggedIn"));
         if(sessionStorage.getItem("loggedIn") === "true"){
             setLoggedin(true);
         }

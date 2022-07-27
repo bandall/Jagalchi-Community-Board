@@ -6,7 +6,7 @@ import ViewPost from "./components/ViewPost/ViewPost"
 import Logout from './components/Logout/Logout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
 function App() {
     //const [loggedIn, setLoggedIn] = useState(false);
