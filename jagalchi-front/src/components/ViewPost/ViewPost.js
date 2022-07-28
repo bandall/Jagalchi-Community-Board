@@ -7,11 +7,12 @@ import 'react-quill/dist/quill.bubble.css'
 import Navbar from "../navbar/Navbar1";
 import Backimg from "../Waveback/Waveback";
 import ReactQuill from "react-quill";
-import { getPost } from "../functions/postAPI";
+import { getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
 
 function ViewPost() {
     const [modify, setModify] = useState(false);
+    const [recommandCnt, setRecomCnt] = useState(0);
     const [recommanded, setRecommand] = useState(false);
     const [postData, setPostData] = useState({});
     const { id } = useParams();
@@ -22,6 +23,7 @@ function ViewPost() {
         setModify(json.modify);
         setRecommand(json.recommand);
         setPostData(json.postData);
+        setRecomCnt(json.postData.recommand);
     }
     useEffect(() => {
         setData();
@@ -39,7 +41,7 @@ function ViewPost() {
         }
     }
 
-    const postRecommand = () => {
+    const onRecommand = () => {
         if(sessionStorage.getItem("loggedIn") !== "true") {
             alert("로그인 해주세요.");
             return;
@@ -48,6 +50,9 @@ function ViewPost() {
             alert("이미 추천한 게시물입니다.");
             return;
         }
+        postRecommand();
+        setRecommand(true);
+        setRecomCnt(recommandCnt + 1);
     }
 
     return(
@@ -79,7 +84,7 @@ function ViewPost() {
                     </div>
                     <div style={{display:"flex"}}>
                         <div className={s.count}>
-                            {postData.view}
+                            {recommandCnt}
                         </div>
                         <div className={s.count} >
                             링크 복사

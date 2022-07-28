@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios from "axios";
 import { SERVER_URL } from "../../gobal";
 
 export const getPosts = async (page, offset, key) => {
@@ -22,5 +22,17 @@ export const getPost = async (postID) => {
         return page;
     } catch(error) {
         return null;
+    }
+}
+
+export const postRecommand = async (postID) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/" + postID + "/recommand";
+    try {
+        await axios.post(url);
+        return;
+    } catch(error) {
+        alert("추천에 실패했습니다.");
+        return;
     }
 }
