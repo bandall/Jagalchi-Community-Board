@@ -6,5 +6,5 @@ const apiRouter = express.Router();
 
 apiRouter.route("/userinfo").get(getUserInfo);
 apiRouter.route("/post/:postID([0-9a-f]{24})").get(getPost);
-apiRouter.route("/post/:postID([0-9a-f]{24})/recommand").all(loginOnlyMiddleWare).post(recommandPost);
+apiRouter.route("/post/recommand/:postID([0-9a-f]{24})").all(loginOnlyMiddleWare).post(recommandPost);
 export default apiRouter;

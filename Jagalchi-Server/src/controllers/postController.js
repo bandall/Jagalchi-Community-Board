@@ -117,20 +117,22 @@ export const getPost = async (req, res) => {
     }
 }
 
-export const recommandPost = async () => {
-    const { postID } = req.query;
+export const recommandPost = async (req, res) => {
+    const { postID } = req.params;
     const userID = req.session.user._id;
     try {
         const post = await Post.findById(postID);
         for(let i = 0; i < post.recommand; i++) {
-            if(String(post.recommandUsers[i]) === String(userID))
-                throw new Error("이미 등록된 유저입니다.");
+            if(String(post.recommandUsers[i]) === String(userID)) {
+                throw new Error("이미 추천한 게시물입니다.");
+            }
         }
+        
         post.recommandUsers.unshift(userID);
         post.recommand = post.recommand + 1;
         await post.save();
         return res.sendStatus(200);
     } catch (error) {
-        return res.status(400).send({errMsg : error.value});
+        return res.status(400).send({errMsg : error.message});
     }
 }

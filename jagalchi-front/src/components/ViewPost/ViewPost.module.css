@@ -47,3 +47,17 @@
     margin: auto;
     color: #104A9B;
 }
+
+.editBtn {
+    position: relative;
+    margin: 0 auto;
+    margin-left: 88.5%;
+    margin-top: 1vh;
+
+}
+
+.deleteBtn {
+    position: relative;
+    margin-top: 1vh;
+    margin-right: 1%;
+}

@@ -9,6 +9,7 @@ import Backimg from "../Waveback/Waveback";
 import ReactQuill from "react-quill";
 import { getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
+import { Button } from "react-bootstrap";
 
 function ViewPost() {
     const [modify, setModify] = useState(false);
@@ -21,7 +22,7 @@ function ViewPost() {
         const json = (await getPost(id)).data;
         json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 20);
         setModify(json.modify);
-        setRecommand(json.recommand);
+        setRecommand(json.recommanded);
         setPostData(json.postData);
         setRecomCnt(json.postData.recommand);
     }
@@ -41,7 +42,7 @@ function ViewPost() {
         }
     }
 
-    const onRecommand = () => {
+    const onRecommand = async () => {
         if(sessionStorage.getItem("loggedIn") !== "true") {
             alert("로그인 해주세요.");
             return;
@@ -50,7 +51,11 @@ function ViewPost() {
             alert("이미 추천한 게시물입니다.");
             return;
         }
-        postRecommand();
+        const result = await postRecommand(id);
+        if(!result) {
+            alert("추천하지 못 했습니다.");
+            return;
+        }
         setRecommand(true);
         setRecomCnt(recommandCnt + 1);
     }
@@ -79,7 +84,7 @@ function ViewPost() {
                 <br/>
                 <div className={s.recommand_box}>
                     <div style={{display:"flex"}}>
-                        <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={postRecommand}/></div>
+                        <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand}/></div>
                         <div className={s.icon}><FontAwesomeIcon icon={faLink} onClick={copyLink} size="4x"/></div>
                     </div>
                     <div style={{display:"flex"}}>
@@ -91,6 +96,14 @@ function ViewPost() {
                         </div>
                     </div>
                 </div>
+                {modify ? <div style={{display:"flex"}}>
+                    <Button variant="primary" className={s.editBtn} size="lg">
+                            수정
+                    </Button>{' '}
+                    <Button variant="danger" className={s.deleteBtn} size="lg">
+                            삭제
+                    </Button>{' '}
+                </div> : null}
                 <hr/>
                 <div>
                     Comment
