@@ -1,11 +1,49 @@
 .wrap_post {
     position: relative;
     width: 80%;
-    height: 80.52vh;
+    height: 87.82vh;
     margin: 0 auto;
-    padding-top: 3%;
+    margin-top: 3%;
     background-clip: content-box;
     background-color: white;
     align-items: center;
     overflow: auto;
+}
+
+.header {
+    margin-top: 20px;
+    margin-left: 20px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.description_left {
+    margin-left: 10px;
+}
+
+.description_rigth {
+    margin-left: auto;
+    margin-right: 20px;
+}
+
+.recommand_box {
+    margin: 0 auto;
+    display: block;
+    width: 16%;
+    border: 1px solid black;
+    border-radius: 4px;
+}
+
+.icon {
+    margin: auto;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.count {
+    display: block;
+    font-size: 20px;
+    padding-left: 10%;
+    margin: auto;
+    color: #104A9B;
 }

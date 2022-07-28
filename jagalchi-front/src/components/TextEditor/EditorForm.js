@@ -33,7 +33,6 @@ const EditorForm = () => {
           text: text,
 		  fileList: addFileList
         }
-        console.log(data);
 		try {
 			axios.defaults.withCredentials = true;
 			const url = SERVER_URL + "/post/writeboard";

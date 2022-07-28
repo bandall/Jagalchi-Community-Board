@@ -21,6 +21,7 @@ function TableMain() {
             setLoggedin(false);
         }
     }, []);
+
     const getPost = async () => {
         const json = await getPosts(page, 10, key);
         console.log(json);
@@ -42,12 +43,12 @@ function TableMain() {
             <a href="/" className={s.table_header}>
                 <h2>자갈치 갤러리</h2>
             </a>
-            <Tabs
-                activeKey={key}
-                onSelect={(k) => setKey(k)}
-                id="uncontrolled-tab-example"
-                className="mb-3"
-            >
+                <Tabs
+                    activeKey={key}
+                    onSelect={(k) => setKey(k)}
+                    id="uncontrolled-tab-example"
+                    className="mb-3"
+                >
                 <Tab eventKey="all" title="최신순" />
                 <Tab eventKey="hot" title="인기순" />
             </Tabs>
@@ -71,7 +72,8 @@ function TableMain() {
                                 index={startNum - index}
                                 title={post.title}
                                 author={post.ownerName}
-                                date={post.createdAt.substring(0, 10)}
+                                commentNum={post.commentNum}
+                                date={post.createdAt.toLocaleString("kr").substring(0, 10)}
                                 view={post.views}
                                 recommand={post.recommand}
                                 link={"post/" + post._id}

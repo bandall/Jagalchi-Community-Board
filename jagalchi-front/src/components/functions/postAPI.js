@@ -16,7 +16,7 @@ export const getPosts = async (page, offset, key) => {
 
 export const getPost = async (postID) => {
     axios.defaults.withCredentials = true;
-    const url = SERVER_URL + "/post/" + postID;
+    const url = SERVER_URL + "/api/post/" + postID;
     try {
         const page = await axios.get(url);
         return page;

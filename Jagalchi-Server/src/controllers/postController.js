@@ -44,26 +44,30 @@ export const getPostList = async (req, res) => {
         page = 1;
     }
     let curPagePost;
+    if(key === undefined) {
+        res.redirect("/");
+        return;
+    }
     if(key === "all") {
         curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
     }
     if(key === "hot") {
         curPagePost = await Post.find({}).sort({ views: -1, _id: -1 }).skip((page - 1)*offset).limit(offset);
     }
-    const retPage = [];
+
     for(let i = 0; i < curPagePost.length; i++) {
         curPagePost[i].owner = undefined;
-        curPagePost[i].remmandUsers = undefined;
+        curPagePost[i].__v = undefined;
+        curPagePost[i].recommandUsers = undefined;
         curPagePost[i].comment = undefined;
         curPagePost[i].textHTML = undefined;
         curPagePost[i].attachedFile = undefined;
     }
-
     const data = {
         maxPage: maxPage,
         curPage: page,
+        startNum: postCount - (page - 1) * offset,
         posts: curPagePost,
-        startNum: postCount - (page - 1) * offset
     }
 
     return res.send(data);
@@ -77,6 +81,7 @@ export const getPost = async (req, res) => {
         const postData = {
             ownerName: post.ownerName,
             title: post.title,
+            date: post.createdAt,
             textHTML: post.textHTML,
             comment: post.comment,
             view: post.views,
