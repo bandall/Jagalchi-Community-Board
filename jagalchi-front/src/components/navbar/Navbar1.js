@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import logo from "../../assets/logo.png";
-function Navbar1() {
-    const [loggedIn, setLoggedin] = useState(false);
+function Navbar1(props) {
+    const [loggedIn, setLoggedin] = useState(props.loggedIn);
     
     useEffect(()=> {
         if(sessionStorage.getItem("loggedIn") === "true") {
@@ -11,7 +11,7 @@ function Navbar1() {
         else {
             setLoggedin(false);
         }
-    }, []);
+    }, [props.loggedIn]);
     
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
@@ -34,10 +34,10 @@ function Navbar1() {
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
                             {!loggedIn ? 
-                                 <>
+                                <Nav>
                                     <Nav.Link href="/join">Create Account</Nav.Link>
                                     <a href='/login'><Button variant="primary" style={{}}> Sign In </Button>{' '}</a>
-                                </>
+                                </Nav>
                                 :
                                 <Nav>
                                     <Nav.Link href="/user/:id">My Account</Nav.Link>

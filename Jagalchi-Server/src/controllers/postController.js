@@ -136,3 +136,30 @@ export const recommandPost = async (req, res) => {
         return res.status(400).send({errMsg : error.message});
     }
 }
+
+export const deletePost = async (req, res) => {
+    const { postID } = req.params;
+    const userID = req.session.user._id;
+    const resData = {
+        code: false,
+        errMsg: "",
+    };
+    try {
+        const post = await Post.findById(postID);
+        const user = await Post.findById(userID);
+        if(!post) {
+            resData.errMsg = "존재하지 않는 게시물입니다.";
+            return res.send(resData);
+        }
+        if(!user) {
+            resData.errMsg = "존재하지 않는 유저입니다.";
+            return res.send(resData);
+        }
+        if(String(post.owner) !== String(userID)) {
+            resData.errMsg = "파일 삭제 권한이 없습니다.";
+            return res.send(resData);
+        }
+
+
+    } 
+}

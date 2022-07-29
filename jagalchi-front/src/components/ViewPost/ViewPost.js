@@ -60,6 +60,10 @@ function ViewPost() {
         setRecomCnt(recommandCnt + 1);
     }
 
+    const deletePost = () => {
+        
+    }
+
     return(
         <div>
             <Navbar />
@@ -69,7 +73,7 @@ function ViewPost() {
                     <h1 className={s.post_title}>{postData.title}</h1>
                     <div style={{display: "flex"}}>
                         <p className={s.description_left}>{postData.ownerName} | {postData.date}</p>
-                        <p className={s.description_rigth}>조회 : {postData.view} | 추천 : {postData.recommand} | 댓글 : {postData.comment ? postData.comment.length : 0}</p>
+                        <p className={s.description_rigth}>조회 : {postData.view} | 추천 : {recommandCnt} | 댓글 : {postData.comment ? postData.comment.length : 0}</p>
                     </div>
                 </div>
                 <hr/>

@@ -2,11 +2,11 @@ import Navbar from "../navbar/Navbar1";
 import Backimg from "../Waveback/Waveback"
 import TableMain from "../Table/TableMain"
 
-function Home() {
+function Home({loggedIn}) {
     return(
         <div>
             <Backimg />
-            <Navbar />
+            <Navbar loggedIn={loggedIn}/>
             <TableMain />
         </div>
     )
