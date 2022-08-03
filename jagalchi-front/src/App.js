@@ -39,6 +39,7 @@ function App() {
         <Route path="/search" element={<Home />} />
         <Route path="/post/writeboard" element={<EditorForm />} />
         <Route path="/post/:id" element={<ViewPost/>} />
+        <Route path="/post/search" element={<ViewPost/>} />
         <Route path="*" element={<Home loggedIn={loggedIn}/>} />
     </Routes>
   )

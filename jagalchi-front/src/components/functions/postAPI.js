@@ -35,3 +35,32 @@ export const postRecommand = async (postID) => {
         return false;
     }
 }
+
+export const deletePost = async (postID) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/delete/" + postID;
+    try {
+        const result = await axios.post(url);
+        return result;
+    } catch (error) {
+        return false;
+    }
+}
+
+export const editPost = async (postID) => {
+    axios.defaults.withCredentials = true;
+    
+}
+
+export const searchPost = async (keyword) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/search";
+    try {
+        const pageInfo = await axios.get(url,
+            {params: {keyword:keyword}}
+        );
+        return pageInfo;
+    } catch (error) {
+        return null;
+    }
+} 

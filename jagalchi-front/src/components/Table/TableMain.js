@@ -3,16 +3,19 @@ import { Table, Tabs, Tab, Button } from "react-bootstrap"
 import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
 import s from "./TableMain.module.css";
-import { getPosts } from "../functions/postAPI";
+import { getPosts, searchPost } from "../functions/postAPI";
+import { useNavigate } from "react-router-dom";
 
 function TableMain() {
+    const navigate = useNavigate()
     const [key, setKey] = useState('all');
     const [page, setPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [startNum, setStartNum] = useState(0);
     const [maxPage, setMaxPage] = useState(1);
     const [loggedIn, setLoggedin] = useState(false);
-    
+    const [searchKey, setSearchKey] = useState("");
+
     useEffect(()=> {
         if(sessionStorage.getItem("loggedIn") === "true"){
             setLoggedin(true);
@@ -21,6 +24,10 @@ function TableMain() {
             setLoggedin(false);
         }
     }, []);
+
+    useEffect(() => {
+        getPost();
+    }, [key, page])
 
     const getPost = async () => {
         const json = await getPosts(page, 10, key);
@@ -34,9 +41,11 @@ function TableMain() {
         setStartNum(json.data.startNum);
     }
 
-    useEffect(() => {
-        getPost();
-    }, [key, page])
+    const onSearch = async () => {
+        navigate("/post/search?keyword=" + searchKey);
+        console.log(await searchPost(searchKey));
+    }
+
     
     return (
         <div className={s.wrap_inner}>
@@ -66,6 +75,14 @@ function TableMain() {
                 </thead>
                 <tbody>
                     {posts.map((post, index) => {
+                        const curDate = new Date().toLocaleString("ko").substring(0, 11);
+                        let createDate = new Date(post.createdAt).toLocaleString("kr").substring(0, 11);
+                        if(curDate === createDate) {
+                            createDate = new Date(post.createdAt).toLocaleString("kr").substring(12, 20);
+                        }
+                        else if(curDate.substring(0, 4) === createDate.substring(0, 4)) {
+                            createDate = new Date(post.createdAt).toLocaleString("kr").substring(6, 11);
+                        }
                         return (
                             <TableWritings 
                                 key={index}
@@ -73,7 +90,7 @@ function TableMain() {
                                 title={post.title}
                                 author={post.ownerName}
                                 commentNum={post.commentNum}
-                                date={post.createdAt.toLocaleString("kr").substring(0, 10)}
+                                date={createDate}
                                 view={post.views}
                                 recommand={post.recommand}
                                 link={"post/" + post._id}
@@ -83,15 +100,15 @@ function TableMain() {
                     })}
                 </tbody>
                 </Table>
-                <div className={s.search_bar}>
-                    <div>
-                        <input placeholder="검색" name="search"></input>
-                        <Button variant="primary">
-                            <a href="/search" style={{color: "white", textDecoration: "none"}}>검색</a>
+                <div className={s.bottom_bar}>
+                    <div className={s.search_bar}>
+                        <input placeholder="검색" name="search" className={s.search_input} onChange={(e)=>setSearchKey(e.target.value)}></input>
+                        <Button variant="primary" onClick={onSearch}>
+                            검색
                         </Button>{' '}
                     </div>
                     {loggedIn ? 
-                    <div>
+                    <div className={s.write_btn}>
                         <Button variant="primary">
                             <a href="/post/writeboard" style={{color: "white", textDecoration: "none"}}>글쓰기</a>
                         </Button>{' '}

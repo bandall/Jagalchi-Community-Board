@@ -64,9 +64,23 @@
     justify-content: center;
 }
 
-.search_bar {
-    margin: auto;
+.bottom_bar {
     display: flex;
-    justify-content: center;
     padding-bottom: 15px;
+}
+
+.search_bar {
+    display: flex;
+    position: relative;
+    margin-left: 33%;
+    
+}
+
+.search_input {
+    width: 23vw;
+    margin-right: 5px;
+}
+.write_btn {
+    position: relative;
+    margin-left: 27%;
 }
