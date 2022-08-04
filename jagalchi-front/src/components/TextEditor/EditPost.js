@@ -1,24 +1,29 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { getPost } from "../functions/postAPI";
 import Navbar from "../navbar/Navbar1";
-import Backimg from "../Waveback/Waveback"
+import Backimg from "../Waveback/Waveback";
+import ReactQuill, { Quill } from "react-quill";
 import { Button, Form } from "react-bootstrap";
-import { SERVER_URL } from "../../gobal";
 import s from "./EditorForm.module.css";
-import React, { useRef, useState } from 'react';
-import ReactQuill, { Quill } from 'react-quill';
 import ImageResize from "quill-image-resize-module-react";
-import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { SERVER_URL } from "../../gobal";
 
-const EditorForm = () => {
+function EditPost(params) {
+    Quill.register("modules/imageResize", ImageResize);
     const navigate = useNavigate();
+    const [titleValue, setTitleValue] = useState("");
     const [value, setValue] = useState("");
-    const [titleValue, setTitle] = useState("");
+    const [loaded, setLoaded] = useState(false);
+    const { id } = useParams();
     let title = "";
+    let text = "";
 	const addFileList = [];
 	const quillRef = useRef();
-	Quill.register("modules/imageResize", ImageResize);
-	let text = "";
+	
+	
+
     const onEdit = async (content, delta, source, editor) => {
         text = await editor.getHTML();
     }
@@ -26,6 +31,29 @@ const EditorForm = () => {
     const onChange = (event) => {
 		title = event.target.value;
     }
+
+
+    const setData = async () => {
+        const json = (await getPost(id)).data;
+        json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 20);
+        if(json.modify === false) {
+            alert("게시글 수정 권한이 없습니다.");
+            navigate("/");
+        }
+        text = json.postData.textHTML;
+        title = json.postData.title;
+        json.postData.attachedFile.forEach(file => {
+            addFileList.push(file);
+        });
+        setValue(json.postData.textHTML);
+        setTitleValue(json.postData.title);
+        setLoaded(true);
+        console.log("loaded");
+    }
+
+    useEffect(() => {
+        setData();
+    }, [id])
 
     const onSubmit = async () => {
         const data = {
@@ -43,8 +71,8 @@ const EditorForm = () => {
 			alert("글쓰기 오류 발생");
 		}
     }
-	
-	const cancelPost = () =>{
+
+    const cancelPost = () =>{
 		if(window.confirm("글 작성을 취소하시겠습니까?")) {
 			navigate("/");
 		}
@@ -126,36 +154,43 @@ const EditorForm = () => {
 		  },
 		  
       };
-      
-      
-    return (
+
+
+
+      return (
         <div>
 			<Backimg />
             <Navbar />
-            <div className={s.wrap_inner}>
-                <Form.Control type="title" placeholder="제목" onChange={onChange}/>
+            {loaded ? 
                 <div>
-					<ReactQuill 
-						ref={quillRef}
-						className={s.editor}
-						theme="snow" 
-						modules={modules} 
-						formats={formats} 
-						value={value || ""} 
-						onChange={onEdit}
-					/>
-				</div>
-            </div>
-			<div className={s.submit}>
-				<Button variant="secondary" onClick={cancelPost} className={s.cancel} size="lg">
-                        취소
-                </Button>{' '}
-				<Button variant="primary" onClick={onSubmit} className={s.submit} size="lg">
-                        제출
-                </Button>{' '}
-			</div>
+                    <div className={s.wrap_inner}>
+                    <Form.Control type="title" value={title} placeholder="제목" onChange={onChange}/>
+                    <div>
+                        <ReactQuill 
+                            ref={quillRef}
+                            className={s.editor}
+                            theme="snow" 
+                            modules={modules} 
+                            formats={formats} 
+                            value={value || ""} 
+                            onChange={onEdit}
+                        />
+                        </div>
+                    </div>
+                    <div className={s.submit}>
+                        <Button variant="secondary" onClick={cancelPost} className={s.cancel} size="lg">
+                                취소
+                        </Button>{' '}
+                        <Button variant="primary" onClick={onSubmit} className={s.submit} size="lg">
+                                수정
+                        </Button>{' '}
+                    </div>
+                </div>
+                : null
+            }
         </div>
     );
-  };
+}
 
-export default EditorForm;
+
+export default EditPost;

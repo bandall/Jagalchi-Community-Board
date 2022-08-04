@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Navigate, useHref, useNavigate, useParams } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFishFins, faLink } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ import s from "./ViewPost.module.css";
 import { Button } from "react-bootstrap";
 
 function ViewPost() {
+    const navigate = useNavigate();
     const [modify, setModify] = useState(false);
     const [recommandCnt, setRecomCnt] = useState(0);
     const [recommanded, setRecommand] = useState(false);
@@ -64,6 +65,10 @@ function ViewPost() {
         
     }
 
+    const onEdit = () => {
+        navigate('/post/edit/' + id);
+    }
+
     return(
         <div>
             <Navbar />
@@ -101,7 +106,7 @@ function ViewPost() {
                     </div>
                 </div>
                 {modify ? <div style={{display:"flex"}}>
-                    <Button variant="primary" className={s.editBtn} size="lg">
+                    <Button variant="primary" className={s.editBtn} onClick={onEdit} size="lg">
                             수정
                     </Button>{' '}
                     <Button variant="danger" className={s.deleteBtn} size="lg">
