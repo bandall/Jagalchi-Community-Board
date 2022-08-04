@@ -4,9 +4,7 @@ import Pagination from 'react-bootstrap/Pagination';
 function Paginationbar({maxPage, curPage, setPage}) {
     const [start, setStart] = useState(1);
     const [end, setEnd] = useState(10);
-    useEffect(() => {
 
-    })
     const changePage = (nextPage) => {
         if(nextPage < 1 || nextPage > maxPage)
             return;

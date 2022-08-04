@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
+import SearchTable from './components/Table/SearchTable.js';
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {
@@ -41,6 +42,7 @@ function App() {
         <Route path="/post/writeboard" element={<EditorForm />} />
         <Route path="/post/:id" element={<ViewPost/>} />
         <Route path="/post/edit/:id" element={<EditPost/>} />
+        <Route path="/post/search" element={<SearchTable/>} />
         <Route path="*" element={<Home loggedIn={loggedIn}/>} />
     </Routes>
   )

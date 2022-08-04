@@ -1,5 +1,6 @@
 import Post from "../models/Post"
 import User from "../models/User";
+import fs from "fs";
 export const submitPost = async (req, res) => {
     const { title, text, fileList } = req.body;
     const { _id, username } = req.session.user;
@@ -162,7 +163,59 @@ export const editPost = async (req, res) => {
 //             resData.errMsg = "파일 삭제 권한이 없습니다.";
 //             return res.send(resData);
 //         }
+export const deletePost = async (req, res) => {
+    const { postID } = req.params;
+    const userID = req.session.user._id;
+    const resData = {
+        code: false,
+        errMsg: "",
+    };
+    try {
+        const post = await Post.findById(postID);
+        const user = await User.findById(userID);
+        if(!post) {
+            resData.errMsg = "존재하지 않는 게시물입니다.";
+            return res.send(resData);
+        }
+        if(!user) {
+            resData.errMsg = "존재하지 않는 유저입니다.";
+            return res.send(resData);
+        }
+        if(String(post.owner) !== String(userID)) {
+            resData.errMsg = "파일 삭제 권한이 없습니다.";
+            return res.send(resData);
+        }
+        //post, comment 기록을 삭제하는 것이 맞는 행동인가?
+        // const userPostIdx = user.posts.findIndex((post) => {
+        //     if(String(post) === String(postID)) return true;
+        //     else return false;
+        // });
+        // if(userPostIdx) {
+        //     user.post.splice(userPostIdx, 1);
+        // }
+        for(let i = 0; i < post.comment.length; i++) {
+            await Comment.findOneAndDelete(String(post.comment[i]));
+        }
+        post.attachedFile.forEach(file => {
+            fs.unlink(file, (err)=> {
+                if(err) console.log(file + " 삭제 실패");
+            })
+        });
+        await user.save();
+        await Post.findByIdAndDelete(postID);
 
+    } catch(error) {
+        console.log(error);
+        resData.errMsg = "파일 삭제 중 오류가 발생했습니다.";
+        return res.send(resData);
+    }
+    resData.code = true;
+    return res.send(resData);
+}
 
-//     } 
-// }
+export const getSearch = async (req, res) => {
+    const { keyword } = req.query;
+    console.log(keyword);
+    
+    return res.send("asdf");
+}

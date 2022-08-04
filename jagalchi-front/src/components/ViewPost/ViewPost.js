@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { Navigate, useHref, useNavigate, useParams } from "react-router-dom";
 import ReactDOM from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFishFins, faLink } from "@fortawesome/free-solid-svg-icons";
+import { faFishFins, faLink, faPersonWalkingDashedLineArrowRight } from "@fortawesome/free-solid-svg-icons";
 import 'react-quill/dist/quill.bubble.css'
 import Navbar from "../navbar/Navbar1";
 import Backimg from "../Waveback/Waveback";
 import ReactQuill from "react-quill";
-import { getPost, postRecommand } from "../functions/postAPI";
+import { deletePost, getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
 import { Button } from "react-bootstrap";
 
@@ -61,8 +61,22 @@ function ViewPost() {
         setRecomCnt(recommandCnt + 1);
     }
 
-    const deletePost = () => {
-        
+    const onDelete = async () => {
+        if(!window.confirm("정말 게시글을 삭제하시겠습니까?")) {
+			return;
+		}
+        const result = await deletePost(id);
+        console.log(result);
+        if(!result) {
+            alert("게시글을 삭제하지 못 했습니다.");
+            return;
+        } 
+        if(result.data.code === false) {
+            alert(result.data.errMsg);
+            return;
+        }
+        alert("게시글을 삭제했습니다.");
+        navigator('/');
     }
 
     const onEdit = () => {
@@ -109,7 +123,7 @@ function ViewPost() {
                     <Button variant="primary" className={s.editBtn} onClick={onEdit} size="lg">
                             수정
                     </Button>{' '}
-                    <Button variant="danger" className={s.deleteBtn} size="lg">
+                    <Button variant="danger" className={s.deleteBtn} onClick={onDelete} size="lg">
                             삭제
                     </Button>{' '}
                 </div> : null}

@@ -16,7 +16,6 @@ const userSchema = mongoose.Schema({
     comments: [
         { type:mongoose.Schema.Types.ObjectId, required: true, ref:"Comment" }
     ],
-    
 });
 
 userSchema.pre("save", async function() {

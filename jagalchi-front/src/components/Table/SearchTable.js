@@ -4,9 +4,9 @@ import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
 import s from "./TableMain.module.css";
 import { getPosts, searchPost } from "../functions/postAPI";
-import { useNavigate } from "react-router-dom";
-
-function TableMain() {
+import { useNavigate, useParams } from "react-router-dom";
+import qs from "qs";
+function SearchTable() {
     const navigate = useNavigate()
     const [key, setKey] = useState('all');
     const [page, setPage] = useState(1);
@@ -15,51 +15,26 @@ function TableMain() {
     const [maxPage, setMaxPage] = useState(1);
     const [loggedIn, setLoggedin] = useState(false);
     const [searchKey, setSearchKey] = useState("");
-
-    useEffect(()=> {
-        if(sessionStorage.getItem("loggedIn") === "true"){
-            setLoggedin(true);
-        }
-        else {
-            setLoggedin(false);
-        }
-    }, []);
-
-    useEffect(() => {
-        getPost();
-    }, [key, page])
-
-    const getPost = async () => {
-        const json = await getPosts(page, 10, key);
-        console.log(json);
-        if(json === null) {
-            alert("게시글을 불러오지 못 했습니다.");
-            return;
-        }
-        setPosts(json.data.posts);
-        setMaxPage(json.data.maxPage);
-        setStartNum(json.data.startNum);
-    }
-
+    
+    const query = qs.parse(window.location.search, {ignoreQueryPrefix: true});
+    console.log(query);
+    
     const onSearch = async () => {
         navigate("/post/search?keyword=" + searchKey);
         console.log(await searchPost(searchKey));
     }
-
-    
     return (
         <div className={s.wrap_inner}>
             <a href="/" className={s.table_header}>
                 <h2>자갈치 갤러리</h2>
             </a>
-                <Tabs
-                    activeKey={key}
-                    onSelect={(k) => setKey(k)}
-                    id="uncontrolled-tab-example"
-                    className="mb-3"
-                >
-                <Tab eventKey="all" title="최신순" />
-                <Tab eventKey="hot" title="인기순" />
+            <Tabs
+                activeKey={key}
+                onSelect={(k) => setKey(k)}
+                id="uncontrolled-tab-example"
+                className="mb-3"
+            >
+                <Tab eventKey="all" title="검색 결과" />
             </Tabs>
             <div className={s.wrap_table}>
                 <Table hover className={s.table}>
@@ -124,4 +99,4 @@ function TableMain() {
     )
 }
 
-export default TableMain;
+export default SearchTable;
