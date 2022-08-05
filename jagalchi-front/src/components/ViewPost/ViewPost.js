@@ -76,7 +76,7 @@ function ViewPost() {
             return;
         }
         alert("게시글을 삭제했습니다.");
-        navigator('/');
+        navigate('/');
     }
 
     const onEdit = () => {

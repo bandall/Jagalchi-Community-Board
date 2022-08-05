@@ -28,8 +28,10 @@ function EditPost(params) {
         text = await editor.getHTML();
     }
 
-    const onChange = (event) => {
+    const onChangeTitle = (event) => {
+        event.preventDefault();
 		title = event.target.value;
+        titleValue(event.target.value);
     }
 
 
@@ -164,7 +166,7 @@ function EditPost(params) {
             {loaded ? 
                 <div>
                     <div className={s.wrap_inner}>
-                    <Form.Control type="title" value={title} placeholder="제목" onChange={onChange}/>
+                    <Form.Control type="title" value={titleValue} placeholder="제목" onChange={onChangeTitle}/>
                     <div>
                         <ReactQuill 
                             ref={quillRef}
