@@ -29,9 +29,9 @@ function EditPost(params) {
     }
 
     const onChangeTitle = (event) => {
-        event.preventDefault();
+        console.log(event.target.value);
 		title = event.target.value;
-        titleValue(event.target.value);
+        //setTitleValue(event.target.value);
     }
 
 
@@ -53,6 +53,8 @@ function EditPost(params) {
         console.log("loaded");
     }
 
+
+
     useEffect(() => {
         setData();
     }, [id])
@@ -63,15 +65,17 @@ function EditPost(params) {
           text: text,
 		  fileList: addFileList
         }
-		try {
-			axios.defaults.withCredentials = true;
-			const url = SERVER_URL + "/post/writeboard";
-        	await axios.post(url, data);
-			navigate("/");
-		} catch (error) {
-			console.log(error);
-			alert("글쓰기 오류 발생");
-		}
+        //edit post 작업 수행
+        //서버에서는 파일 목록 확인하고 사라진 파일 삭제
+		// try {
+		// 	axios.defaults.withCredentials = true;
+		// 	const url = SERVER_URL + "/post/writeboard";
+        // 	await axios.post(url, data);
+		// 	navigate("/");
+		// } catch (error) {
+		// 	console.log(error);
+		// 	alert("글쓰기 오류 발생");
+		// }
     }
 
     const cancelPost = () =>{
@@ -166,7 +170,7 @@ function EditPost(params) {
             {loaded ? 
                 <div>
                     <div className={s.wrap_inner}>
-                    <Form.Control type="title" value={titleValue} placeholder="제목" onChange={onChangeTitle}/>
+                    <Form.Control type="title" defaultValue={titleValue} placeholder="제목" onChange={onChangeTitle}/>
                     <div>
                         <ReactQuill 
                             ref={quillRef}
