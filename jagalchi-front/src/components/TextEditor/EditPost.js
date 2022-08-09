@@ -16,10 +16,11 @@ function EditPost(params) {
     const [titleValue, setTitleValue] = useState("");
     const [value, setValue] = useState("");
     const [loaded, setLoaded] = useState(false);
+    const [tmpAddFileList, setAddFile] = useState([]);
     const { id } = useParams();
     let title = "";
     let text = "";
-	const addFileList = [];
+	let addFileList = [];
 	const quillRef = useRef();
 	
 	
@@ -29,7 +30,6 @@ function EditPost(params) {
     }
 
     const onChangeTitle = (event) => {
-        console.log(event.target.value);
 		title = event.target.value;
         //setTitleValue(event.target.value);
     }
@@ -42,18 +42,23 @@ function EditPost(params) {
             alert("게시글 수정 권한이 없습니다.");
             navigate("/");
         }
-        text = json.postData.textHTML;
-        title = json.postData.title;
+        
         json.postData.attachedFile.forEach(file => {
             addFileList.push(file);
         });
+        text = json.postData.textHTML;
+        title = json.postData.title;
+        setAddFile(addFileList);
         setValue(json.postData.textHTML);
         setTitleValue(json.postData.title);
         setLoaded(true);
-        console.log("loaded");
     }
 
-
+    useEffect(() => {
+        text = value;
+        title = titleValue;
+        addFileList = tmpAddFileList;
+    }, [loaded]);
 
     useEffect(() => {
         setData();
@@ -65,17 +70,18 @@ function EditPost(params) {
           text: text,
 		  fileList: addFileList
         }
+        console.log(data);
         //edit post 작업 수행
         //서버에서는 파일 목록 확인하고 사라진 파일 삭제
-		// try {
-		// 	axios.defaults.withCredentials = true;
-		// 	const url = SERVER_URL + "/post/writeboard";
-        // 	await axios.post(url, data);
-		// 	navigate("/");
-		// } catch (error) {
-		// 	console.log(error);
-		// 	alert("글쓰기 오류 발생");
-		// }
+		try {
+			axios.defaults.withCredentials = true;
+			const url = SERVER_URL + "/api/post/edit/" + id;
+        	await axios.post(url, data);
+			//navigate("/");
+		} catch (error) {
+			console.log(error);
+			alert("글쓰기 오류 발생");
+		}
     }
 
     const cancelPost = () =>{

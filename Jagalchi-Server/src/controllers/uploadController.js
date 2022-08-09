@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import User from "../models/User";
 import fs from "fs";
+import crypto from "crypto";
 const imageFilter = (req, file, cb) => {
     if(file.mimetype === "image/jpg" || file.mimetype === "image/png" || file.mimetype === "image/jpeg" || file.mimetype === "image/gif") {
         cb(null, true);
@@ -31,7 +32,8 @@ export const uploadImage = multer({
             // 확장자 추출
             const ext = path.extname(file.originalname);
             // 이름설정 (basename:확장자제외 파일명) + 현재시간 + 확장자
-            cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + Math.round(Math.random() * 10000000) + ext);
+            
+            cb(null, crypto.createHash('md5').update(path.basename(file.originalname, ext)).digest('hex') + new Date().valueOf() + Math.round(Math.random() * 10000000) + ext);
        },
    }),
     limits: { fileSize: 30*1024*1024 },
@@ -45,7 +47,7 @@ export const uploadVideo = multer({
         },
         filename(req, file, cb){
             const ext = path.extname(file.originalname);
-            cb(null, path.basename(file.originalname, ext) + new Date().valueOf() + Math.round(Math.random() * 10000000) + ext);
+            cb(null, crypto.createHash('md5').update(path.basename(file.originalname, ext)).digest('hex') + new Date().valueOf() + Math.round(Math.random() * 10000000) + ext);
         }
     }),
     limits: { fileSize: 50*1024*1024 },

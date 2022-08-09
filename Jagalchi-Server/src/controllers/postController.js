@@ -138,9 +138,6 @@ export const recommandPost = async (req, res) => {
     }
 }
 
-export const editPost = async (req, res) => {
-    
-}
 // export const deletePost = async (req, res) => {
 //     const { postID } = req.params;
 //     const userID = req.session.user._id;
@@ -211,6 +208,23 @@ export const deletePost = async (req, res) => {
     }
     resData.code = true;
     return res.send(resData);
+}
+
+export const editPost = async (req, res) => {
+    const { title, text, fileList } = req.body;
+    const { _id, username } = req.session.user;
+    const imgRex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/g;
+    const images = text.match(imgRex);
+    console.log(fileList);
+    console.log(images);
+    
+    fileList.forEach(file => {
+        for(let i = 0; i < images.length; i++) {
+            console.log(file + images[i].includes(file));
+        }
+    });
+
+    return res.send("");
 }
 
 export const getSearch = async (req, res) => {
