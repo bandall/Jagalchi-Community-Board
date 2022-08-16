@@ -1,6 +1,7 @@
 import Post from "../models/Post"
 import User from "../models/User";
 import fs from "fs";
+//게시물 등록
 export const submitPost = async (req, res) => {
     const { title, text, fileList } = req.body;
     const { _id, username } = req.session.user;
@@ -19,7 +20,7 @@ export const submitPost = async (req, res) => {
         const user = await User.findById(_id);
         const tmpFiles = user.tmpFiles;
         user.posts.unshift(newPost);
-        //찾아서 파일 삭제하고 DB에서도 지우고
+        //사용자 DB에 저장된 임시 파일들 삭제
         fileList.forEach(file => {
             const idx = tmpFiles.find(path => path === file);
             if(idx) {
@@ -33,7 +34,7 @@ export const submitPost = async (req, res) => {
     }
     return res.sendStatus(200);
 }
-
+//게시글을 JSON으로 반환 (page: 현재 페이지, offset: 페이지당 개시물 수, key: 정렬기준)
 export const getPostList = async (req, res) => {
     let { page, offset, key } = req.query;
     if(offset < 1 || offset > 20 || offset === null || offset === undefined) {
@@ -47,15 +48,14 @@ export const getPostList = async (req, res) => {
         page = 1;
     }
     let curPagePost;
-    if(key === undefined) {
-        res.redirect("/");
-        return;
-    }
     if(key === "all") {
         curPagePost = await Post.find({}).sort({ _id: -1 }).skip((page - 1)*offset).limit(offset);
     }
-    if(key === "hot") {
+    else if(key === "hot") {
         curPagePost = await Post.find({}).sort({ views: -1, _id: -1 }).skip((page - 1)*offset).limit(offset);
+    }
+    else {
+        return res.redirect("/");
     }
 
     for(let i = 0; i < curPagePost.length; i++) {
@@ -66,16 +66,16 @@ export const getPostList = async (req, res) => {
         curPagePost[i].textHTML = undefined;
         curPagePost[i].attachedFile = undefined;
     }
-    const data = {
+    const retJSON = {
         maxPage: maxPage,
         curPage: page,
         startNum: postCount - (page - 1) * offset,
         posts: curPagePost,
     }
 
-    return res.send(data);
+    return res.send(retJSON);
 }
-
+//게시글 불러오기
 export const getPost = async (req, res) => {
     const { postID } = req.params;
     try {
@@ -92,34 +92,34 @@ export const getPost = async (req, res) => {
             attachedFile: post.attachedFile
         }
 
-        const json = {
+        const retJSON = {
             modify: false,
             recommanded: false,
             postData
         }
-        
+        //게시글 수정 권한 및 추천 여부 확인
         if(req.session.loggedIn) {
             const user = req.session.user;
             if(user._id == post.owner) 
-                json.modify = true;
+                retJSON.modify = true;
             post.recommandUsers.forEach((list) => {
                 if(list == user._id) {
-                    json.recommanded = true;
+                    retJSON.recommanded = true;
                 }
             })
         }
         
         await post.save();
-        return res.send(json);
+        return res.send(retJSON);
     } catch(error) {
-        const json = {
+        const retJSON = {
             errMsg: "게시물을 불러오지 못 했습니다."
         }
         console.log(error);
-        return res.send(json);
+        return res.send(retJSON);
     }
 }
-
+//게시글 추천
 export const recommandPost = async (req, res) => {
     const { postID } = req.params;
     const userID = req.session.user._id;
@@ -139,11 +139,11 @@ export const recommandPost = async (req, res) => {
         return res.status(400).send({errMsg : error.message});
     }
 }
-
+//게시글 삭제
 export const deletePost = async (req, res) => {
     const { postID } = req.params;
     const userID = req.session.user._id;
-    const resData = {
+    const retJSON = {
         code: false,
         errMsg: "",
     };
@@ -151,16 +151,16 @@ export const deletePost = async (req, res) => {
         const post = await Post.findById(postID);
         const user = await User.findById(userID);
         if(!post) {
-            resData.errMsg = "존재하지 않는 게시물입니다.";
-            return res.send(resData);
+            retJSON.errMsg = "존재하지 않는 게시물입니다.";
+            return res.send(retJSON);
         }
         if(!user) {
-            resData.errMsg = "존재하지 않는 유저입니다.";
-            return res.send(resData);
+            retJSON.errMsg = "존재하지 않는 유저입니다.";
+            return res.send(retJSON);
         }
         if(String(post.owner) !== String(userID)) {
-            resData.errMsg = "파일 삭제 권한이 없습니다.";
-            return res.send(resData);
+            retJSON.errMsg = "파일 삭제 권한이 없습니다.";
+            return res.send(retJSON);
         }
         //post, comment 기록을 삭제하는 것이 맞는 행동인가?
         // const userPostIdx = user.posts.findIndex((post) => {
@@ -180,15 +180,16 @@ export const deletePost = async (req, res) => {
         });
         await user.save();
         await Post.findByIdAndDelete(postID);
+        retJSON.code = true;
+        return res.send(retJSON);
 
     } catch(error) {
         console.log(error);
-        resData.errMsg = "파일 삭제 중 오류가 발생했습니다.";
-        return res.send(resData);
+        retJSON.errMsg = "파일 삭제 중 오류가 발생했습니다.";
+        return res.send(retJSON);
     }
-    resData.code = true;
-    return res.send(resData);
 }
+
 //src에 존재하지 않는 파일을 삭제하고 최종 저장된 파일 목록 반환
 const deleteLeavedFiles = async (HTMLText, fileList) => {
     const srcRex = /src=[\"']?([^>\"']+)[\"']?[^>]*/g;
@@ -211,6 +212,7 @@ const deleteLeavedFiles = async (HTMLText, fileList) => {
     });
     return finalFiles;
 }
+
 //html에 존재하는 파일과 attachedFile에 존재하는 파일을 비교
 //수정중 삭제된 파일을 찾아 삭제
 export const editPost = async (req, res) => {

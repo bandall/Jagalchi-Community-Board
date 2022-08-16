@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Navigate, useHref, useNavigate, useParams } from "react-router-dom";
-import ReactDOM from 'react-dom';
+import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFishFins, faLink, faPersonWalkingDashedLineArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { faFishFins, faLink } from "@fortawesome/free-solid-svg-icons";
 import 'react-quill/dist/quill.bubble.css'
-import Navbar from "../navbar/Navbar1";
-import Backimg from "../Waveback/Waveback";
+import Navbar from "../Navbar/CustomNavbar";
+import Backimg from "../BackImage/Waveback";
 import ReactQuill from "react-quill";
 import { deletePost, getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
@@ -24,7 +23,6 @@ function ViewPost() {
         const json = (await getPost(id)).data;
         const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
         json.postData.date = createdTime.toLocaleDateString() + " " + createdTime.toLocaleTimeString();
-        //json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 21);
         setModify(json.modify);
         setRecommand(json.recommanded);
         setPostData(json.postData);

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Table, Tabs, Tab, Button } from "react-bootstrap"
 import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
-import s from "./TableMain.module.css";
+import s from "./MainTable.module.css";
 import { getPosts, searchPost } from "../functions/postAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import qs from "qs";

@@ -1,6 +1,5 @@
 import s from "./Waveback.module.css"
 
-
 function Waveback() {
     return (
         <div className={s.ocean}>

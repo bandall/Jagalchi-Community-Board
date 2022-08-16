@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios"
 import { SERVER_URL } from "../../gobal";
 import { useNavigate } from "react-router-dom";
-import Navbar1 from "../navbar/Navbar1";
-import Waveback from "../Waveback/Waveback"
+import Navbar1 from "../Navbar/CustomNavbar";
+import Waveback from "../BackImage/Waveback"
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
 function Login({loggedIn}) {

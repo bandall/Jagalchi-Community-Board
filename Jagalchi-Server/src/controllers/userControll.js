@@ -76,7 +76,7 @@ export const logout = async (req, res) => {
         user.tmpFiles = [];
         await user.save();
     } catch (error) {
-
+        console.log(error);
     }
     await req.session.destroy(() => {
         res.clearCookie('connect.sid');
@@ -111,16 +111,16 @@ export const postLogin = async (req, res) => {
         user.tmpFiles = [];
         await user.save();
     } catch (error) {
-
+        console.log(error);
     }
     
     req.session.loggedIn = true;
     req.session.user = user;
-    const body = {
+    const retJSON = {
         username: user.username,
         point: user.points
     }
-    return res.status(200).send(body);
+    return res.status(200).send(retJSON);
 } 
 
 export const getChangePassword = (req, res) => {

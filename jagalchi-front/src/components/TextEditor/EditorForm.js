@@ -1,5 +1,5 @@
-import Navbar from "../navbar/Navbar1";
-import Backimg from "../Waveback/Waveback"
+import Navbar from "../Navbar/CustomNavbar";
+import Backimg from "../BackImage/Waveback"
 import { Button, Form } from "react-bootstrap";
 import { SERVER_URL } from "../../gobal";
 import s from "./EditorForm.module.css";

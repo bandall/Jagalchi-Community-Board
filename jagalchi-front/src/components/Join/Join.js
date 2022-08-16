@@ -2,8 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { SERVER_URL } from "../../gobal.js";
 import { useNavigate } from "react-router-dom";
-import Navbar1 from "../navbar/Navbar1";
-import Waveback from "../Waveback/Waveback.js";
+import Navbar1 from "../Navbar/CustomNavbar";
+import Waveback from "../BackImage/Waveback.js";
 import s from "./Join.module.css"
 import { Form } from "react-bootstrap";
 function Join() {

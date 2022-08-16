@@ -1,13 +1,13 @@
-import Navbar from "../navbar/Navbar1";
-import Backimg from "../Waveback/Waveback"
-import TableMain from "../Table/TableMain"
+import Navbar from "../Navbar/CustomNavbar";
+import Backimg from "../BackImage/Waveback"
+import MainTable from "../Table/MainTable"
 
 function Home({loggedIn}) {
     return(
         <div>
             <Backimg />
             <Navbar loggedIn={loggedIn}/>
-            <TableMain />
+            <MainTable />
         </div>
     )
 }

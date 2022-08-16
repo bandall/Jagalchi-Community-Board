@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getPost } from "../functions/postAPI";
-import Navbar from "../navbar/Navbar1";
-import Backimg from "../Waveback/Waveback";
+import Navbar from "../Navbar/CustomNavbar";
+import Backimg from "../BackImage/Waveback";
 import ReactQuill, { Quill } from "react-quill";
 import { Button, Form } from "react-bootstrap";
 import s from "./EditorForm.module.css";
@@ -23,8 +23,6 @@ function EditPost(params) {
 	let addFileList = [];
 	const quillRef = useRef();
 	
-	
-
     const onEdit = async (content, delta, source, editor) => {
         text = await editor.getHTML();
     }
@@ -34,10 +32,10 @@ function EditPost(params) {
         //setTitleValue(event.target.value);
     }
 
-
     const setData = async () => {
         const json = (await getPost(id)).data;
-        json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 20);
+        const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
+        json.postData.date = createdTime.toLocaleDateString() + " " + createdTime.toLocaleTimeString();
         if(json.modify === false) {
             alert("게시글 수정 권한이 없습니다.");
             navigate("/");
@@ -87,7 +85,7 @@ function EditPost(params) {
     }
 
     const cancelPost = () =>{
-		if(window.confirm("글 작성을 취소하시겠습니까?")) {
+		if(window.confirm("글 수정을 취소하시겠습니까?")) {
 			navigate("/");
 		}
 	}

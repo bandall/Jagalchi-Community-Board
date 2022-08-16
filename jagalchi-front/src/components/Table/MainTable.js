@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { Table, Tabs, Tab, Button } from "react-bootstrap"
 import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
-import s from "./TableMain.module.css";
+import s from "./MainTable.module.css";
 import { getPosts, searchPost } from "../functions/postAPI";
 import { useNavigate } from "react-router-dom";
 
-function TableMain() {
+function MainTable() {
     const navigate = useNavigate()
     const [key, setKey] = useState('all');
     const [page, setPage] = useState(1);
@@ -77,7 +77,6 @@ function TableMain() {
                     {posts.map((post, index) => {
                         const curDate = new Date(new Date().toLocaleDateString());
                         const createDate = new Date(new Date(post.createdAt).toLocaleDateString());
-                        console.log((post.createdAt));
                         let date;
                         if(curDate.getTime() === createDate.getTime()) {
                             const createTime = new Date(new Date(post.createdAt).getTime() + 60 * 60 * 9);
@@ -138,4 +137,4 @@ function TableMain() {
     )
 }
 
-export default TableMain;
+export default MainTable;

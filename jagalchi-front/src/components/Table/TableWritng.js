@@ -1,4 +1,4 @@
-import s from "./TableMain.module.css";
+import s from "./MainTable.module.css";
 function TableWritings({index, title, author, date, view, recommand, link, commentNum}) {
     return (
             <tr>

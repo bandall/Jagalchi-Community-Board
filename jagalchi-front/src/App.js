@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from "./components/Home/Home.js";
-import Login from "./components/login/Login.js";
+import Login from "./components/Login/Login.js";
 import Join from "./components/Join/Join.js";
 import ViewPost from "./components/ViewPost/ViewPost"
 import Logout from './components/Logout/Logout';
@@ -26,26 +26,25 @@ function App() {
             sessionStorage.setItem("loggedIn", "false");
         }
     } 
-
+    
     useEffect(()=> {
         isLoggedIn();
     }, []);
 
-    
-  return (
-    <Routes>
-        <Route path="/" element={<Home loggedIn={loggedIn}/> } />
-        <Route path="/login" element={<Login />} />
-        <Route path="/join" element={<Join />} />
-        <Route path="/logout" element={<Logout/>} />
-        <Route path="/search" element={<Home />} />
-        <Route path="/post/writeboard" element={<EditorForm />} />
-        <Route path="/post/:id" element={<ViewPost/>} />
-        <Route path="/post/edit/:id" element={<EditPost/>} />
-        <Route path="/post/search" element={<SearchTable/>} />
-        <Route path="*" element={<Home loggedIn={loggedIn}/>} />
-    </Routes>
-  )
+    return (
+        <Routes>
+            <Route path="/" element={<Home loggedIn={loggedIn}/> } />
+            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Join />} />
+            <Route path="/logout" element={<Logout/>} />
+            <Route path="/search" element={<Home />} />
+            <Route path="/post/writeboard" element={<EditorForm />} />
+            <Route path="/post/:id" element={<ViewPost/>} />
+            <Route path="/post/edit/:id" element={<EditPost/>} />
+            <Route path="/post/search" element={<SearchTable/>} />
+            <Route path="*" element={<Home loggedIn={loggedIn}/>} />
+        </Routes>
+    )
 }
 
 export default App;
