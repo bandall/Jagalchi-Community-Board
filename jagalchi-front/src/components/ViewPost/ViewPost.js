@@ -17,15 +17,19 @@ function ViewPost() {
     const [recommandCnt, setRecomCnt] = useState(0);
     const [recommanded, setRecommand] = useState(false);
     const [postData, setPostData] = useState({});
+    const [loaded, setLoaded] = useState(false);
     const { id } = useParams();
 
     const setData = async () => {
         const json = (await getPost(id)).data;
-        json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 20);
+        const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
+        json.postData.date = createdTime.toLocaleDateString() + " " + createdTime.toLocaleTimeString();
+        //json.postData.date = new Date(json.postData.date).toLocaleString("ko").substring(0, 21);
         setModify(json.modify);
         setRecommand(json.recommanded);
         setPostData(json.postData);
         setRecomCnt(json.postData.recommand);
+        setLoaded(true);
     }
     useEffect(() => {
         setData();
@@ -87,6 +91,7 @@ function ViewPost() {
         <div>
             <Navbar />
             <Backimg />
+            {!loaded ? null :
             <div className={s.wrap_post}>
                 <div className={s.header}>
                     <h1 className={s.post_title}>{postData.title}</h1>
@@ -98,7 +103,7 @@ function ViewPost() {
                 <hr/>
                 <div className={s.post_text}>
                     <ReactQuill
-                        value={postData.textHTML}
+                        value={postData.textHTML || ""}
                         readOnly={true}
                         theme={"bubble"}
                         style={s.editor}
@@ -132,6 +137,8 @@ function ViewPost() {
                     Comment
                 </div>
             </div>
+
+            }
         </div>
     )
 }

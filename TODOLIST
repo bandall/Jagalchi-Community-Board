@@ -28,3 +28,11 @@ build시
 읽음
 /post/view/:id
 
+
+버그 목록
+로그인 유지시 글쓰기 안보임
+글 작성 중 파일 삭제 시 서버측에서 파일 제거 안됨
+
+npm uninstall quill-image-resize-module-react
+npm i quill-blot-formatter --force 
+

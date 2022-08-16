@@ -4,13 +4,15 @@ import fs from "fs";
 export const submitPost = async (req, res) => {
     const { title, text, fileList } = req.body;
     const { _id, username } = req.session.user;
+    
     try {
+        const finalFiles = await deleteLeavedFiles(text, fileList);
         const newPost = await Post.create({
             owner: _id,
             ownerName: username,
             title,
             textHTML: text,
-            attachedFile: fileList,
+            attachedFile: finalFiles,
             comment: [],
         });
 
@@ -138,28 +140,6 @@ export const recommandPost = async (req, res) => {
     }
 }
 
-// export const deletePost = async (req, res) => {
-//     const { postID } = req.params;
-//     const userID = req.session.user._id;
-//     const resData = {
-//         code: false,
-//         errMsg: "",
-//     };
-//     try {
-//         const post = await Post.findById(postID);
-//         const user = await Post.findById(userID);
-//         if(!post) {
-//             resData.errMsg = "존재하지 않는 게시물입니다.";
-//             return res.send(resData);
-//         }
-//         if(!user) {
-//             resData.errMsg = "존재하지 않는 유저입니다.";
-//             return res.send(resData);
-//         }
-//         if(String(post.owner) !== String(userID)) {
-//             resData.errMsg = "파일 삭제 권한이 없습니다.";
-//             return res.send(resData);
-//         }
 export const deletePost = async (req, res) => {
     const { postID } = req.params;
     const userID = req.session.user._id;
@@ -209,22 +189,73 @@ export const deletePost = async (req, res) => {
     resData.code = true;
     return res.send(resData);
 }
-
-export const editPost = async (req, res) => {
-    const { title, text, fileList } = req.body;
-    const { _id, username } = req.session.user;
-    const imgRex = /<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>/g;
-    const images = text.match(imgRex);
-    console.log(fileList);
-    console.log(images);
+//src에 존재하지 않는 파일을 삭제하고 최종 저장된 파일 목록 반환
+const deleteLeavedFiles = async (HTMLText, fileList) => {
+    const srcRex = /src=[\"']?([^>\"']+)[\"']?[^>]*/g;
+    const srcFiles = HTMLText.match(srcRex) || [];
+    const deletedFiles = [];
+    const finalFiles = [];
     
     fileList.forEach(file => {
-        for(let i = 0; i < images.length; i++) {
-            console.log(file + images[i].includes(file));
+        let deleted = true;
+        for(let i = 0; i < srcFiles.length; i++) {
+            if(srcFiles[i].includes(file)) deleted = false;
         }
+        if(deleted) deletedFiles.push(file);
+        else finalFiles.push(file);
     });
+    deletedFiles.forEach(file => {
+        fs.unlink(file, (err)=> {
+            if(err) console.log(file + " 삭제 실패");
+        })
+    });
+    return finalFiles;
+}
+//html에 존재하는 파일과 attachedFile에 존재하는 파일을 비교
+//수정중 삭제된 파일을 찾아 삭제
+export const editPost = async (req, res) => {
+    const { title, text, fileList, postID } = req.body;
+    const { _id } = req.session.user;
+    const retJSON = {
+        status: false,
+        errMsg: ""
+    }
+    try {
+        const post = await Post.findById(postID);
+        const user = await User.findById(_id);
+        if(post === null) {
+            retJSON.errMsg = "게시글이 존재하지 않습니다.";
+            return res.send(retJSON);
+        }
+        
+        //유저검사
+        if(String(_id) !== String(post.owner)) {
+            retJSON.errMsg = "게시글 수젇 권한이 없습니다.";
+            return res.send(retJSON);
+        }
+        
+        const finalFiles = await deleteLeavedFiles(text, fileList);
+        const tmpFiles = user.tmpFiles;
+        fileList.forEach(file => {
+            const idx = tmpFiles.find(path => path === file);
+            if(idx) {
+                tmpFiles.splice(idx, 1);
+            }
+        });
+        post.title = title;
+        post.textHTML = text;
+        post.attachedFile = finalFiles;
+        user.tmpFiles = tmpFiles;
+        await post.save();
+        await user.save();
 
-    return res.send("");
+        retJSON.status = true;
+        return res.send(retJSON);
+    } catch (error) {
+        retJSON.errMsg = "게시글을 수정하지 못 했습니다.";
+        return res.send(retJSON);
+    }
+    
 }
 
 export const getSearch = async (req, res) => {

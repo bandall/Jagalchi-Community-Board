@@ -67,7 +67,6 @@ export const logout = async (req, res) => {
     const { _id } = req.session.user;
     const user = await User.findById(_id);
     try {
-        user.loginDates.unshift(new Date());
         const tmpList = user.tmpFiles;
         tmpList.forEach(tmpFile => {
             fs.unlink(tmpFile, (err) => {

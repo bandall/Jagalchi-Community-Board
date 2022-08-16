@@ -6,12 +6,12 @@ import Backimg from "../Waveback/Waveback";
 import ReactQuill, { Quill } from "react-quill";
 import { Button, Form } from "react-bootstrap";
 import s from "./EditorForm.module.css";
-import ImageResize from "quill-image-resize-module-react";
+import BlotFormatter from 'quill-blot-formatter';
 import axios from "axios";
 import { SERVER_URL } from "../../gobal";
 
 function EditPost(params) {
-    Quill.register("modules/imageResize", ImageResize);
+    Quill.register('modules/blotFormatter', BlotFormatter);
     const navigate = useNavigate();
     const [titleValue, setTitleValue] = useState("");
     const [value, setValue] = useState("");
@@ -68,7 +68,8 @@ function EditPost(params) {
         const data = {
           title: title,
           text: text,
-		  fileList: addFileList
+		  fileList: addFileList,
+          postID: id
         }
         console.log(data);
         //edit post 작업 수행
@@ -76,8 +77,9 @@ function EditPost(params) {
 		try {
 			axios.defaults.withCredentials = true;
 			const url = SERVER_URL + "/api/post/edit/" + id;
-        	await axios.post(url, data);
-			//navigate("/");
+        	const ret = await axios.post(url, data);
+            console.log(ret);
+			navigate("/post/" + id);
 		} catch (error) {
 			console.log(error);
 			alert("글쓰기 오류 발생");
@@ -160,11 +162,7 @@ function EditPost(params) {
 			video: videoHandler
           }
         },
-		imageResize: {
-			parchment: Quill.import("parchment"),
-			modules: ["Resize", "DisplaySize", "Toolbar"],
-		  },
-		  
+        blotFormatter: {}
       };
 
 

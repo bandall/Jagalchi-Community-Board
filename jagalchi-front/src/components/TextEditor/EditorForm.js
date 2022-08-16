@@ -5,7 +5,8 @@ import { SERVER_URL } from "../../gobal";
 import s from "./EditorForm.module.css";
 import React, { useRef, useState } from 'react';
 import ReactQuill, { Quill } from 'react-quill';
-import ImageResize from "quill-image-resize-module-react";
+//import ImageResize from "quill-image-resize-module-react";
+import BlotFormatter from 'quill-blot-formatter';
 import 'react-quill/dist/quill.snow.css';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +18,8 @@ const EditorForm = () => {
     let title = "";
 	const addFileList = [];
 	const quillRef = useRef();
-	Quill.register("modules/imageResize", ImageResize);
+	//Quill.register("modules/imageResize", ImageResize);
+	Quill.register('modules/blotFormatter', BlotFormatter);
 	let text = "";
     const onEdit = async (content, delta, source, editor) => {
         text = await editor.getHTML();
@@ -120,10 +122,11 @@ const EditorForm = () => {
 			video: videoHandler
           }
         },
-		imageResize: {
-			parchment: Quill.import("parchment"),
-			modules: ["Resize", "DisplaySize", "Toolbar"],
-		  },
+		// imageResize: {
+		// 	parchment: Quill.import("parchment"),
+		// 	modules: ["Resize", "DisplaySize", "Toolbar"],
+		//   },
+		blotFormatter: {}
 		  
       };
       

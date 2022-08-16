@@ -75,13 +75,27 @@ function TableMain() {
                 </thead>
                 <tbody>
                     {posts.map((post, index) => {
-                        const curDate = new Date().toLocaleString("ko").substring(0, 11);
-                        let createDate = new Date(post.createdAt).toLocaleString("kr").substring(0, 11);
-                        if(curDate === createDate) {
-                            createDate = new Date(post.createdAt).toLocaleString("kr").substring(12, 20);
+                        const curDate = new Date(new Date().toLocaleDateString());
+                        const createDate = new Date(new Date(post.createdAt).toLocaleDateString());
+                        console.log((post.createdAt));
+                        let date;
+                        if(curDate.getTime() === createDate.getTime()) {
+                            const createTime = new Date(new Date(post.createdAt).getTime() + 60 * 60 * 9);
+                            if(createTime.getHours() < 12) {
+                                date = "오전 " + createTime.getHours() + "시 " + createTime.getMinutes() + "분";
+                            }
+                            else if(createTime.getHours() === 12) {
+                                date = "오후 " + createTime.getHours() + "시 " + createTime.getMinutes() + "분";
+                            }
+                            else {
+                                date = "오후 " + (createTime.getHours() - 12) + "시 " + createTime.getMinutes() + "분";
+                            }
                         }
-                        else if(curDate.substring(0, 4) === createDate.substring(0, 4)) {
-                            createDate = new Date(post.createdAt).toLocaleString("kr").substring(6, 11);
+                        else if(curDate.getFullYear() === createDate.getFullYear()) {
+                            date = createDate.getMonth() + "월 " +  createDate.getDate() + "일";
+                        }
+                        else {
+                            date = createDate.getFullYear() + "년 " + createDate.getMonth() + "월 " +  createDate.getDate() + "일";
                         }
                         return (
                             <TableWritings 
@@ -90,7 +104,7 @@ function TableMain() {
                                 title={post.title}
                                 author={post.ownerName}
                                 commentNum={post.commentNum}
-                                date={createDate}
+                                date={date}
                                 view={post.views}
                                 recommand={post.recommand}
                                 link={"post/" + post._id}
