@@ -6,7 +6,7 @@ import { SERVER_URL } from "../../gobal";
 function Logout() {
     const navigate = useNavigate();
     const setLogin = async () => {
-        sessionStorage.clear();
+        localStorage.clear();
     }
     const tryLogout = async () => {
         try {

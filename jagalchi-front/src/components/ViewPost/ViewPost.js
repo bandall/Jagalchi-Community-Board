@@ -46,7 +46,7 @@ function ViewPost() {
     }
 
     const onRecommand = async () => {
-        if(sessionStorage.getItem("loggedIn") !== "true") {
+        if(localStorage.getItem("loggedIn") !== "true") {
             alert("로그인 해주세요.");
             return;
         }
@@ -132,7 +132,7 @@ function ViewPost() {
                 </div> : null}
                 <hr/>
                 <div>
-                    Comment
+                    <input placeholder="댓글" name="comment" className={s.comment_input}></input>
                 </div>
             </div>
 

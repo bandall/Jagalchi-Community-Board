@@ -61,3 +61,10 @@
     margin-top: 1vh;
     margin-right: 1%;
 }
+
+.comment_input {
+    position: relative;
+    width: 80%;
+    height: 30%;
+    margin: 20px;
+}

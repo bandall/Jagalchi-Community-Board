@@ -17,12 +17,13 @@ function MainTable() {
     const [searchKey, setSearchKey] = useState("");
 
     useEffect(()=> {
-        if(sessionStorage.getItem("loggedIn") === "true"){
+        if(localStorage.getItem("loggedIn") === "true"){
             setLoggedin(true);
         }
         else {
             setLoggedin(false);
         }
+        console.log("Main : " + loggedIn);
     }, []);
 
     useEffect(() => {
@@ -31,7 +32,6 @@ function MainTable() {
 
     const getPost = async () => {
         const json = await getPosts(page, 10, key);
-        console.log(json);
         if(json === null) {
             alert("게시글을 불러오지 못 했습니다.");
             return;
@@ -42,6 +42,10 @@ function MainTable() {
     }
 
     const onSearch = async () => {
+        if(searchKey === "") {
+            alert("검색어를 입력해주세요.");
+            return;
+        }
         navigate("/post/search?keyword=" + searchKey);
         console.log(await searchPost(searchKey));
     }

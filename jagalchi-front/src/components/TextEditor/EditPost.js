@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPost } from "../functions/postAPI";
+import { editPost, getPost } from "../functions/postAPI";
 import Navbar from "../Navbar/CustomNavbar";
 import Backimg from "../BackImage/Waveback";
 import ReactQuill, { Quill } from "react-quill";
@@ -69,19 +69,14 @@ function EditPost(params) {
 		  fileList: addFileList,
           postID: id
         }
-        console.log(data);
         //edit post 작업 수행
         //서버에서는 파일 목록 확인하고 사라진 파일 삭제
-		try {
-			axios.defaults.withCredentials = true;
-			const url = SERVER_URL + "/api/post/edit/" + id;
-        	const ret = await axios.post(url, data);
-            console.log(ret);
-			navigate("/post/" + id);
-		} catch (error) {
-			console.log(error);
-			alert("글쓰기 오류 발생");
-		}
+        if(await editPost(id, data)) {
+            navigate("/post/" + id);
+        }
+        else {
+            alert("글쓰기 오류 발생");
+        }
     }
 
     const cancelPost = () =>{

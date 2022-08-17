@@ -261,8 +261,46 @@ export const editPost = async (req, res) => {
 }
 
 export const getSearch = async (req, res) => {
-    const { keyword } = req.query;
-    console.log(keyword);
-    
-    return res.send("asdf");
+    let { page, offset, keyword } = req.query;
+    if(offset < 1 || offset > 20 || offset === null || offset === undefined) {
+        offset = 10;
+    }
+
+    const searchPosts = await Post.find({
+        $or: [
+            {
+                title: {
+                    $regex: new RegExp(`${keyword}`, "i")
+                }
+            },
+            {
+                textHTML: {
+                    $regex: new RegExp(`${keyword}`, "i")
+                }
+            },
+        ]
+    }).sort({ _id: -1 });
+    const postCount = searchPosts.length;
+    const maxPage = Math.ceil(postCount / offset);
+
+    if(page < 1 || page > maxPage || page === null || page === undefined) {
+        page = 1;
+    }
+    const slicedPosts = searchPosts.slice((page - 1)*offset, (page - 1)*offset + offset);
+    for(let i = 0; i < slicedPosts.length; i++) {
+        slicedPosts[i].owner = undefined;
+        slicedPosts[i].__v = undefined;
+        slicedPosts[i].recommandUsers = undefined;
+        slicedPosts[i].comment = undefined;
+        slicedPosts[i].textHTML = undefined;
+        slicedPosts[i].attachedFile = undefined;
+    }
+    const retJSON = {
+        posts: slicedPosts,
+        maxPage: maxPage,
+        curPage: page,
+        startNum: postCount - (page - 1) * offset,
+    }
+
+    return res.send(retJSON);
 }

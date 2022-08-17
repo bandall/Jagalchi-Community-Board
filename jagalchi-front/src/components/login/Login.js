@@ -31,7 +31,7 @@ function Login({loggedIn}) {
                 axios.defaults.withCredentials = true;
                 const url = SERVER_URL + "/login";
                 const res = await axios.post(url, body);
-                sessionStorage.setItem("loggedIn", "true");
+                localStorage.setItem("loggedIn", "true");
                 navigate('/');
             } catch (error) {
                 console.log(error.response.data.errMsg);

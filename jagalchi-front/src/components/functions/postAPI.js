@@ -47,17 +47,24 @@ export const deletePost = async (postID) => {
     }
 }
 
-export const editPost = async (postID) => {
-    axios.defaults.withCredentials = true;
-    
+export const editPost = async (postID, data) => {
+    try {
+        axios.defaults.withCredentials = true;
+        const url = SERVER_URL + "/api/post/edit/" + postID;
+        await axios.post(url, data);
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }
 
-export const searchPost = async (keyword) => {
+export const searchPost = async (keyword, page) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/api/post/search";
     try {
         const pageInfo = await axios.get(url,
-            {params: {keyword:keyword}}
+            {params: {keyword:keyword, page:page}}
         );
         return pageInfo;
     } catch (error) {

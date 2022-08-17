@@ -2,11 +2,11 @@ import Navbar from "../Navbar/CustomNavbar";
 import Backimg from "../BackImage/Waveback"
 import MainTable from "../Table/MainTable"
 
-function Home({loggedIn}) {
+function Home() {
     return(
         <div>
             <Backimg />
-            <Navbar loggedIn={loggedIn}/>
+            <Navbar/>
             <MainTable />
         </div>
     )

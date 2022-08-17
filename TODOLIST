@@ -33,6 +33,11 @@ build시
 로그인 유지시 글쓰기 안보임
 글 작성 중 파일 삭제 시 서버측에서 파일 제거 안됨
 
+추가 구현 목록
+게시글 작성 삭제 시 창 종료 확인 추가
+search 정규 표현식 <p></p>사이로 설정
+댓글 기능 추가
+
 npm uninstall quill-image-resize-module-react
 npm i quill-blot-formatter --force 
 
