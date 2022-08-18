@@ -1,9 +1,9 @@
 .wrap_post {
     position: relative;
-    width: 80%;
-    height: 87.82vh;
+    width: 90%;
+    height: 90.84vh;
     margin: 0 auto;
-    margin-top: 3%;
+    margin-top: 1.5%;
     background-clip: content-box;
     background-color: white;
     align-items: center;
@@ -11,10 +11,11 @@
 }
 
 .header {
-    margin-top: 20px;
-    margin-left: 20px;
+    width: 90%;
+    padding-top: 20px;
+    margin: 0 auto;
     display: block;
-    margin-bottom: 10px;
+    border-bottom: 2px solid #3b4890;
 }
 
 .description_left {
@@ -62,9 +63,7 @@
     margin-right: 1%;
 }
 
-.comment_input {
-    position: relative;
-    width: 80%;
-    height: 30%;
-    margin: 20px;
+.post_text {
+    width: 90%;
+    margin: 0 auto;
 }

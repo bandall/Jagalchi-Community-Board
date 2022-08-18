@@ -7,7 +7,7 @@ const postSchema = mongoose.Schema({
     views: { type:Number, default: 0, required:true },
     recommand: { type:Number, default: 0, required:true },
     recommandUsers: [{ type:mongoose.Schema.Types.ObjectId, required: true, ref:"User" }],
-    comment: [{ type:mongoose.Schema.Types.ObjectId, required: true, ref:"Comment" }],
+    comments: [{ type:mongoose.Schema.Types.ObjectId, required: true, ref:"Comment" }],
     textHTML: { type: String, required: true },
     attachedFile: [
         { type: String, required: true },

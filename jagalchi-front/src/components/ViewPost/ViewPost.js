@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.bubble.css'
 import Navbar from "../Navbar/CustomNavbar";
 import Backimg from "../BackImage/Waveback";
 import ReactQuill from "react-quill";
+import Comment from "./CommentList";
 import { deletePost, getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
 import { Button } from "react-bootstrap";
@@ -18,7 +19,7 @@ function ViewPost() {
     const [postData, setPostData] = useState({});
     const [loaded, setLoaded] = useState(false);
     const { id } = useParams();
-
+    const dummyComment = ["123", "1234", "12345"];
     const setData = async () => {
         const json = (await getPost(id)).data;
         const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
@@ -90,52 +91,49 @@ function ViewPost() {
             <Navbar />
             <Backimg />
             {!loaded ? null :
-            <div className={s.wrap_post}>
-                <div className={s.header}>
-                    <h1 className={s.post_title}>{postData.title}</h1>
-                    <div style={{display: "flex"}}>
-                        <p className={s.description_left}>{postData.ownerName} | {postData.date}</p>
-                        <p className={s.description_rigth}>조회 : {postData.view} | 추천 : {recommandCnt} | 댓글 : {postData.comment ? postData.comment.length : 0}</p>
-                    </div>
-                </div>
-                <hr/>
-                <div className={s.post_text}>
-                    <ReactQuill
-                        value={postData.textHTML || ""}
-                        readOnly={true}
-                        theme={"bubble"}
-                        style={s.editor}
-                    />
-                </div>
-                <br/>
-                <div className={s.recommand_box}>
-                    <div style={{display:"flex"}}>
-                        <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand}/></div>
-                        <div className={s.icon}><FontAwesomeIcon icon={faLink} onClick={copyLink} size="4x"/></div>
-                    </div>
-                    <div style={{display:"flex"}}>
-                        <div className={s.count}>
-                            {recommandCnt}
-                        </div>
-                        <div className={s.count} >
-                            링크 복사
+                <div className={s.wrap_post}>
+                    <div className={s.header}>
+                        <h1 className={s.post_title}>{postData.title}</h1>
+                        <div style={{display: "flex"}}>
+                            <p className={s.description_left}>{postData.ownerName} | {postData.date}</p>
+                            <p className={s.description_rigth}>조회 : {postData.view} | 추천 : {recommandCnt} | 댓글 : {postData.comment ? postData.comment.length : 0}</p>
                         </div>
                     </div>
+                    <div className={s.post_text}>
+                        <ReactQuill
+                            value={postData.textHTML || ""}
+                            readOnly={true}
+                            theme={"bubble"}
+                            style={s.editor}
+                        />
+                    </div>
+                    <br/>
+                    <div className={s.recommand_box}>
+                        <div style={{display:"flex"}}>
+                            <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand}/></div>
+                            <div className={s.icon}><FontAwesomeIcon icon={faLink} onClick={copyLink} size="4x"/></div>
+                        </div>
+                        <div style={{display:"flex"}}>
+                            <div className={s.count}>
+                                {recommandCnt}
+                            </div>
+                            <div className={s.count} >
+                                링크 복사
+                            </div>
+                        </div>
+                    </div>
+                    {modify ? <div style={{display:"flex"}}>
+                        <Button variant="primary" className={s.editBtn} onClick={onEdit} size="lg">
+                                수정
+                        </Button>{' '}
+                        <Button variant="danger" className={s.deleteBtn} onClick={onDelete} size="lg">
+                                삭제
+                        </Button>{' '}
+                    </div> : null}
+                    <div>
+                        <Comment comment={dummyComment}/>
+                    </div>
                 </div>
-                {modify ? <div style={{display:"flex"}}>
-                    <Button variant="primary" className={s.editBtn} onClick={onEdit} size="lg">
-                            수정
-                    </Button>{' '}
-                    <Button variant="danger" className={s.deleteBtn} onClick={onDelete} size="lg">
-                            삭제
-                    </Button>{' '}
-                </div> : null}
-                <hr/>
-                <div>
-                    <input placeholder="댓글" name="comment" className={s.comment_input}></input>
-                </div>
-            </div>
-
             }
         </div>
     )

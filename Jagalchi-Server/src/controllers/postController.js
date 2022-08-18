@@ -304,3 +304,9 @@ export const getSearch = async (req, res) => {
 
     return res.send(retJSON);
 }
+
+export const submitComment = async (req, res) => {
+    const { postID, commentText, parentComment } = req.body;
+    const { _id } = req.session.user;
+    
+}
