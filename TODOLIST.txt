@@ -34,6 +34,7 @@ build시
 글 작성 중 파일 삭제 시 서버측에서 파일 제거 안됨
 
 [추가 세부 구현 목표]
+게시글 작성 후 게시글로 이동
 게시글 작성 삭제 시 창 종료 확인 추가
 search 정규 표현식 <p></p>사이로 설정
 댓글 기능 추가
@@ -52,6 +53,10 @@ search 정규 표현식 <p></p>사이로 설정
 - 계정 차단
 - 공지 기능
 - 서버 통계 페이지
+
+[구현 고민]
+유저가 게시글, 댓글 등을 삭제했을 때 db에 계속 저장하고 있어야하는지...
+일단 저장하지 않는 방향으로 구현
 
 npm uninstall quill-image-resize-module-react
 npm i quill-blot-formatter --force 

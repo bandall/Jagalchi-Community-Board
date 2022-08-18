@@ -71,3 +71,44 @@ export const searchPost = async (keyword, page) => {
         return null;
     }
 } 
+
+export const submitComment = async (postID, commentText, parentComment) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/comment/submit";
+    try {
+        const data = {
+            postID:postID, 
+            commentText:commentText, 
+            parentComment:parentComment
+        };
+        const retJSON = await axios.post(url, data);
+        return retJSON.data;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const getComment = async (postID) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/comment/" + postID;
+    try {
+        const comments = await axios.get(url);
+        return comments;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
+export const deleteComment = async (commentID) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/post/comment/delete/" + commentID;
+    try {
+        const retJSON = await axios.post(url);
+        return retJSON.data;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}

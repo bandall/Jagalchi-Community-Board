@@ -1,5 +1,6 @@
 import Post from "../models/Post"
 import User from "../models/User";
+import Comment from "../models/Comment";
 import fs from "fs";
 //게시물 등록
 export const submitPost = async (req, res) => {
@@ -31,6 +32,7 @@ export const submitPost = async (req, res) => {
         user.save();
     } catch(error) {
         console.log(error);
+        return res.sendStatus(400);
     }
     return res.sendStatus(200);
 }
@@ -86,7 +88,7 @@ export const getPost = async (req, res) => {
             title: post.title,
             date: post.createdAt,
             textHTML: post.textHTML,
-            comment: post.comment,
+            comment: post.comments,
             view: post.views,
             recommand: post.recommand,
             attachedFile: post.attachedFile
@@ -170,8 +172,8 @@ export const deletePost = async (req, res) => {
         // if(userPostIdx) {
         //     user.post.splice(userPostIdx, 1);
         // }
-        for(let i = 0; i < post.comment.length; i++) {
-            await Comment.findOneAndDelete(String(post.comment[i]));
+        for(let i = 0; i < post.comments.length; i++) {
+            await Comment.findOneAndDelete(String(post.comments[i]));
         }
         post.attachedFile.forEach(file => {
             fs.unlink(file, (err)=> {
@@ -307,6 +309,97 @@ export const getSearch = async (req, res) => {
 
 export const submitComment = async (req, res) => {
     const { postID, commentText, parentComment } = req.body;
+    const { _id, username } = req.session.user;
+    const retJSON = {
+        username: username,
+        _id: "tmpComment",
+    }
+
+    try {
+        const user = await User.findById(_id);
+        const post = await Post.findById(postID);
+        if(!user || !post) return res.sendStatus(400);
+        let newComment;
+        if(!parentComment) {
+            newComment = await Comment.create({
+                owner: _id,
+                ownerName: username,
+                commentText: commentText,
+                post: postID,
+                parentComment: null
+            });
+            post.comments.push(newComment);
+        }
+        else {
+            //순서 찾아서 댓글을 배열에 삽입
+            const parent = await Comment.findById(parentComment)
+            if(!parentComment || parent.parentComment) return res.sendStatus(400);
+            newComment = await Comment.create({
+                owner: _id,
+                ownerName: username,
+                commentText: commentText,
+                post: postID,
+                parentComment: parentComment
+            });
+            post.comments.push(newComment);
+        }
+        user.posts.unshift(newComment);
+        await user.save();
+        await post.save();
+        retJSON._id = String(newComment._id);
+        return res.send(retJSON);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+    return res.sendStatus(200);
+}
+
+export const getComment = async (req, res) => {
+    const { postID } = req.params;
+    try {
+        const post = await Post.findById(postID).populate("comments");
+        if(!post) return res.sendStatus(404);
+        res.send(post.comments);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(404);
+    }   
+}
+
+export const deleteComment = async (req, res) => {
+    const { commentID } = req.params;
     const { _id } = req.session.user;
-    
+    const retJSON = {
+        status: false,
+        errMsg: ""
+    }
+    try {
+        const comment = await Comment.findById(commentID);
+        if(!comment) {
+            retJSON.errMsg = "존재하지 않는 댓글입니다.";
+            return res.send(retJSON);
+        }
+        if(String(comment.owner) !== String(_id)) {
+            retJSON.errMsg = "댓글 삭제 권한이 없습니다.";
+            return res.send(retJSON);
+        }
+        
+        const post = await Post.findById(String(comment.post));
+        const deleteIdx = post.comments.findIndex((comment) => {
+            if(String(comment) === String(commentID)) return true;
+            else return false;
+        });
+        if(deleteIdx) {
+            post.comments.splice(deleteIdx, 1);
+        }
+        await Comment.findByIdAndDelete(commentID);
+        await post.save();
+        retJSON.status = true;
+        return res.send(retJSON);
+    } catch (error) {
+        console.log(error);
+        retJSON.errMsg = "댓글 삭제중 오류가 발생했습니다.";
+        return res.send(retJSON);
+    }
 }

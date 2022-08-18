@@ -7,7 +7,7 @@ import Navbar from "../Navbar/CustomNavbar";
 import Backimg from "../BackImage/Waveback";
 import ReactQuill from "react-quill";
 import Comment from "./CommentList";
-import { deletePost, getPost, postRecommand } from "../functions/postAPI";
+import { deletePost, getComment, getPost, postRecommand } from "../functions/postAPI";
 import s from "./ViewPost.module.css";
 import { Button } from "react-bootstrap";
 
@@ -17,26 +17,34 @@ function ViewPost() {
     const [recommandCnt, setRecomCnt] = useState(0);
     const [recommanded, setRecommand] = useState(false);
     const [postData, setPostData] = useState({});
+    const [comments, setComments] = useState([]);
     const [loaded, setLoaded] = useState(false);
     const { id } = useParams();
-    const dummyComment = ["123", "1234", "12345"];
+    
+
     const setData = async () => {
         const json = (await getPost(id)).data;
+        if(json === null) {
+            alert("게시글을 불러오지 못 했습니다.");
+            return;
+        }
         const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
         json.postData.date = createdTime.toLocaleDateString() + " " + createdTime.toLocaleTimeString();
         setModify(json.modify);
         setRecommand(json.recommanded);
         setPostData(json.postData);
         setRecomCnt(json.postData.recommand);
+        const commentJson = await getComment(id);
+        setComments(commentJson.data);
+        if(comments === null) {
+            alert("댓글을 불러오지 못 했습니다.");
+        }
         setLoaded(true);
     }
+
     useEffect(() => {
         setData();
     }, [id])
-
-    useEffect(()=> {
-
-    }, [modify, recommanded, postData]);
 
     const copyLink = async () => {
         try {
@@ -131,7 +139,7 @@ function ViewPost() {
                         </Button>{' '}
                     </div> : null}
                     <div>
-                        <Comment comment={dummyComment}/>
+                        <Comment postID={id} comments={comments} setComments={setComments}/>
                     </div>
                 </div>
             }

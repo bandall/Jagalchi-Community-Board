@@ -23,7 +23,6 @@ function MainTable() {
         else {
             setLoggedin(false);
         }
-        console.log("Main : " + loggedIn);
     }, []);
 
     useEffect(() => {
@@ -82,6 +81,7 @@ function MainTable() {
                         const curDate = new Date(new Date().toLocaleDateString());
                         const createDate = new Date(new Date(post.createdAt).toLocaleDateString());
                         let date;
+                        //같은 날일 경우
                         if(curDate.getTime() === createDate.getTime()) {
                             const createTime = new Date(new Date(post.createdAt).getTime() + 60 * 60 * 9);
                             if(createTime.getHours() < 12) {
@@ -95,10 +95,10 @@ function MainTable() {
                             }
                         }
                         else if(curDate.getFullYear() === createDate.getFullYear()) {
-                            date = createDate.getMonth() + "월 " +  createDate.getDate() + "일";
+                            date = (createDate.getMonth() + 1) + "월 " +  createDate.getDate() + "일";
                         }
                         else {
-                            date = createDate.getFullYear() + "년 " + createDate.getMonth() + "월 " +  createDate.getDate() + "일";
+                            date = createDate.getFullYear() + "년 " + (createDate.getMonth() + 1) + "월 " +  createDate.getDate() + "일";
                         }
                         return (
                             <TableWritings 

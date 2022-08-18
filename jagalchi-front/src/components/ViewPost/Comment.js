@@ -1,22 +1,48 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
 import s from "./Comment.module.css"
+import { useEffect, useState } from "react";
+import { deleteComment } from "../functions/postAPI";
 
-function Comment(params) {
+function Comment({data, comments, setComments}) {
+    const [time, setTime] = useState("");
+    useEffect(() => {
+        const createdTime = new Date(new Date(data.createdAt).getTime() + 60 * 60 * 9);
+        const now = new Date();
+        let displayTime;
+        if(now.getFullYear() === createdTime.getFullYear()) {
+            displayTime = (createdTime.getMonth() + 1) + "." + createdTime.getDate() + " ";
+        }
+        else {
+            displayTime = createdTime.getFullYear() + "." + (createdTime.getMonth() + 1) + "." + createdTime.getDate() + " ";
+        }
+        displayTime = displayTime + createdTime.getHours() + ":" + createdTime.getMinutes();
+        setTime(displayTime);
+    }, [])
+
+    const onDelete = async () => {
+        const retJSON = await deleteComment(data._id);
+        console.log(retJSON);
+        if(retJSON.status){
+            setComments(comments.filter((comment) => String(comment._id) !== String(data._id)));
+            alert("댓글을 삭제했습니다.");
+        } else {
+            alert(retJSON.errMsg);
+        }
+            
+    }
+
     return (
         <li className={s.comment}>
             <span className={s.cmt_nickbox}>
-                <em className={s.cmt_nickname}>반달곰</em>
+                <em className={s.cmt_nickname}>{data.ownerName}</em>
             </span>
             <div style={{"float":"left"}}>
-                <p className={s.cmt_text}>
-                이 댓글은 2022년 8월 18일에 작성되어 댓글 길이가 길때 CSS가 어떻게 망가지는지 확인하기 위해 작성되었다. 댓글 길이를 400자로 정도로 제한하는게 좋을 것 같다.
-                이 댓글은 2022년 8월 18일에 작성되어 댓글 길이가 길때 CSS가 어떻게 망가지는지 확인하기 위해 작성되었다. 댓글 길이를 400자로 정도로 제한하는게 좋을 것 같다.
-                </p>
+                <p className={s.cmt_text}>{data.commentText}</p>
             </div>
             <div className={s.cmt_fr}>
-                <span className={s.cmt_date}>8.8 12:00</span>
-                <FontAwesomeIcon icon={faSquareXmark} style={{color: "red"}}/>
+                <span className={s.cmt_date}>{time}</span>
+                <FontAwesomeIcon icon={faSquareXmark} style={{color: "red", cursor:"pointer"}} onClick={onDelete}/>
             </div>
         </li>
     )
