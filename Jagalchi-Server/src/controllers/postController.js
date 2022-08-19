@@ -6,19 +6,31 @@ import fs from "fs";
 export const submitPost = async (req, res) => {
     const { title, text, fileList } = req.body;
     const { _id, username } = req.session.user;
-    
+    const retJSON = {
+        status: false,
+        postID: null,
+        errMsg: ""
+    };
     try {
+        if(title === "" || text === "") {
+            retJSON.errMsg = "제목 또는 본문을 작성해주십시오.";
+            return res.send(retJSON);
+        }
+        const user = await User.findById(_id);
+        if(!user) {
+            retJSON.errMsg = "존재하지 않는 유저입니다.";
+            return res.send(retJSON);
+        }
         const finalFiles = await deleteLeavedFiles(text, fileList);
         const newPost = await Post.create({
             owner: _id,
             ownerName: username,
-            title,
+            title: title,
             textHTML: text,
             attachedFile: finalFiles,
             comment: [],
         });
 
-        const user = await User.findById(_id);
         const tmpFiles = user.tmpFiles;
         user.posts.unshift(newPost);
         //사용자 DB에 저장된 임시 파일들 삭제
@@ -30,11 +42,14 @@ export const submitPost = async (req, res) => {
         });
         user.tmpFiles = tmpFiles;
         user.save();
+        retJSON.status = true;
+        retJSON.postID = String(newPost._id);
+        return res.send(retJSON);
     } catch(error) {
         console.log(error);
-        return res.sendStatus(400);
+        retJSON.errMsg = "게시글 등록 중 오류가 발생했습니다.";
+        return res.send(retJSON);
     }
-    return res.sendStatus(200);
 }
 //게시글을 JSON으로 반환 (page: 현재 페이지, offset: 페이지당 개시물 수, key: 정렬기준)
 export const getPostList = async (req, res) => {
@@ -332,7 +347,7 @@ export const submitComment = async (req, res) => {
         }
         else {
             //순서 찾아서 댓글을 배열에 삽입
-            const parent = await Comment.findById(parentComment)
+            const parent = await Comment.findById(parentComment);
             if(!parentComment || parent.parentComment) return res.sendStatus(400);
             newComment = await Comment.create({
                 owner: _id,
@@ -341,7 +356,24 @@ export const submitComment = async (req, res) => {
                 post: postID,
                 parentComment: parentComment
             });
-            post.comments.push(newComment);
+            const idx = post.comments.findIndex((comment) => {
+                if(String(comment._id) === String(parentComment)) return true;
+                else return false;
+            });
+            //nested comment 마지막 idx 찾아서 배열에 삽입까지 구현하기 오류체크
+            // while(true) {
+            //     if(idx >= post.comments.length) break;
+            //     if(String(post.comments[i].parentComment) !== String(parentComment)) break;
+            //     idx++;
+            // }
+
+            // for(let i = idx + 1; i < post.comments.length; i++) {
+            //     if(String(post.comments[i].parentComment) !== String(parentComment)) {
+            //         idx = i;
+            //         break;
+            //     }
+            // }
+            post.comments.splice(idx + 1, 0, newComment);
         }
         user.posts.unshift(newComment);
         await user.save();
@@ -352,7 +384,6 @@ export const submitComment = async (req, res) => {
         console.log(error);
         return res.sendStatus(400);
     }
-    return res.sendStatus(200);
 }
 
 export const getComment = async (req, res) => {

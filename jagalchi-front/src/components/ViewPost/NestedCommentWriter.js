@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { submitComment } from "../functions/postAPI";
-import s from "./CommentWriter.module.css";
-function CommentWriter({postID, parentID, comments, setComments, description}) {
+import s from "./NestedCommentWriter.module.css";
+function NestedCommentWriter({postID, parentID, comments, setComments, description, setCommnetFocus}) {
     const [commentText, setText] = useState("");
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -24,11 +24,26 @@ function CommentWriter({postID, parentID, comments, setComments, description}) {
             const newComment = {
                 _id: newCommentData._id,
                 ownerName: newCommentData.username,
+                parentComment: parentID,
                 commentText,
                 createdAt: new Date()
             }
-            setComments([...comments, newComment]);
+            let nested = false;
+            for(let i = 0; i < comments.length; i++) {
+                if (String(comments[i]._id) === String(parentID)) {
+                    console.log("parent found: " + i);
+                    nested = true;
+                    continue;
+                }
+                //console.log(String(comments[i].parentComment) + " " +  String(parentID));
+                if (nested && String(comments[i].parentComment) !== String(parentID) && String(comments[i].parent) !== null) {
+                    comments.splice(i, 0, newComment);
+                    setComments(comments);
+                    break;
+                }
+            }
             setText("");
+            setCommnetFocus("");
         }
         else {
             alert("댓글을 등록하지 못 했습니다.");
@@ -56,4 +71,4 @@ function CommentWriter({postID, parentID, comments, setComments, description}) {
     )
 }
 
-export default CommentWriter;
+export default NestedCommentWriter;

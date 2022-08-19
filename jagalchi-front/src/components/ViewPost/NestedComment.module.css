@@ -1,0 +1,80 @@
+.view_comment {
+    display: block;
+    padding: 10px;
+    margin: 0 auto;
+    width: 91.23%;
+}
+
+.comment_wrap {
+    overflow: visible;
+    height: 100%;
+}
+
+.comment_box {
+    margin-top: 10px;
+    position: relative;
+    border-top: 2px solid #3b4890;
+}
+
+.cmt_nickbox {
+    float: left;
+    width: 5vw;
+    margin-right: 33px;
+    margin-top: 3px;
+    line-height: 13px;
+    position: relative;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.cmt_nickname {
+    font-size: 14px;
+    color: #777;
+    vertical-align: top;
+    display: inline-block;
+    padding-top: 8px;
+    max-width: 84px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.comment_list {
+    list-style: none;
+    display: block;
+}
+
+.comment {
+    vertical-align: baseline;
+    background: #fafafa;
+    font-style: normal;
+    border: 1px solid #eee;
+    border-width: 0 1px 1px 1px;
+    padding-top: 9px;
+    padding-left: 20px;
+    padding-right: 15px;
+    margin-left: 5vw;
+    width: 90%;
+    /* display:inline-block; */
+    float: left;
+}
+
+.cmt_text {
+    float: left;
+    word-break: break-all;
+    overflow: hidden;
+    width: 50vw;
+}
+
+.cmt_fr {
+    float: right;
+    margin-top: 6px;
+}
+
+.cmt_date {
+    float: left;
+    font-size: 12px;
+    color: #999;
+    vertical-align: top;
+    margin-top: 1px;
+    margin-right: 10px;
+}

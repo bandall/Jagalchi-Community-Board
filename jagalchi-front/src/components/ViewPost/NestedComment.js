@@ -1,11 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSquareXmark } from "@fortawesome/free-solid-svg-icons";
-import s from "./Comment.module.css"
+import s from "./NestedComment.module.css"
 import { useEffect, useState } from "react";
 import { deleteComment } from "../functions/postAPI";
-import NestedCommentWriter from "./NestedCommentWriter";
 
-function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) {
+function NestedComment({data, comments, setComments}) {
     const [time, setTime] = useState("");
 
     useEffect(() => {
@@ -22,13 +21,6 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
         setTime(displayTime);
     }, [])
 
-    const onClick = () => {
-        if(focus) {
-            setCommnetFocus("");
-        } else {
-            setCommnetFocus(data._id);
-        }
-    }
     const onDelete = async () => {
         const retJSON = await deleteComment(data._id);
         if(retJSON.status){
@@ -46,25 +38,15 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
                     <em className={s.cmt_nickname}>{data.ownerName}</em>
                 </span>
                 <div style={{"float":"left"}}>
-                    <p className={s.cmt_text} onClick={onClick}>{data.commentText}</p>
+                    <p className={s.cmt_text}>» {data.commentText}</p>
                 </div>
                 <div className={s.cmt_fr}>
                     <span className={s.cmt_date}>{time}</span>
                     <FontAwesomeIcon icon={faSquareXmark} style={{color: "red", cursor:"pointer"}} onClick={onDelete}/>
                 </div>
             </li>
-            {!focus ? null : 
-                    <NestedCommentWriter 
-                        postID={postID} 
-                        parentID={data._id}
-                        setComments={setComments} 
-                        comments={comments}
-                        setCommnetFocus={setCommnetFocus}
-                        description={"대댓글 달기"}
-                    />
-            }
         </div>
     )
 }
 
-export default Comment;
+export default NestedComment;

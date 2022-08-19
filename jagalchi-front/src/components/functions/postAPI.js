@@ -75,6 +75,7 @@ export const searchPost = async (keyword, page) => {
 export const submitComment = async (postID, commentText, parentComment) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/api/post/comment/submit";
+    console.log(parentComment);
     try {
         const data = {
             postID:postID, 

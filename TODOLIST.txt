@@ -57,6 +57,7 @@ search 정규 표현식 <p></p>사이로 설정
 [구현 고민]
 유저가 게시글, 댓글 등을 삭제했을 때 db에 계속 저장하고 있어야하는지...
 일단 저장하지 않는 방향으로 구현
+대댓글 서버 저장시 어캐 저장할지
 
 npm uninstall quill-image-resize-module-react
 npm i quill-blot-formatter --force 

@@ -35,14 +35,21 @@ const EditorForm = () => {
           text: text,
 		  fileList: addFileList
         }
+		if(title === "" || text === "") {
+			return alert("제목 또는 본문을 작성해주십시오.");
+		}
 		try {
 			axios.defaults.withCredentials = true;
 			const url = SERVER_URL + "/post/writeboard";
-        	await axios.post(url, data);
-			navigate("/");
+        	const retJSON = await axios.post(url, data);
+			if(retJSON.data.status) {
+				navigate("/post/" + retJSON.data.postID);
+			} else {
+				alert(retJSON.data.errMsg);
+			}
 		} catch (error) {
 			console.log(error);
-			alert("글쓰기 오류 발생");
+			alert("게시글 등록 중 오류가 발생했습니다.");
 		}
     }
 	

@@ -1,0 +1,32 @@
+.cmt_write_box {
+    padding: 20px 20px 25px;
+    border-top: 2px solid #3b4890;
+    border-bottom: 2px solid #3b4890;
+    background: #fafafa;
+}
+
+.cmt_title {
+    font-size: x-large;
+    margin-bottom: 10px;
+    color: blue;
+}
+
+.cmt_write {
+    position: relative;
+}
+
+.cmt_write textarea{
+    width: 67.5vw;
+    height: 15vh;
+    resize: none;
+    padding: 10px;
+}
+
+.cmt_write button{
+   position: absolute;
+   margin-left: 1vw;
+   padding: 0.5vw 2vw 0.5vw 2vw;
+   border-radius: 2px;
+   background-color: #3366ff;
+   color: white;
+}
