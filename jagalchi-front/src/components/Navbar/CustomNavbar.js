@@ -26,7 +26,7 @@ function CustomNavbar(props) {
                             <Nav.Link href="/" style={{color: "red"}}>Alpha v0.1.0</Nav.Link>
                         </Nav>
                         <Nav>
-                            <NavDropdown title="유저 메뉴" id="collasible-nav-dropdown">
+                            <NavDropdown title={"반갑습니다. " + localStorage.getItem("username")} id="collasible-nav-dropdown">
                                <NavDropdown.Item href="#action/3.1">계정 정보</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">계정 정보 수정</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.3">비밀번호 변경</NavDropdown.Item>

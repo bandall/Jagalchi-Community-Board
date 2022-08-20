@@ -30,13 +30,15 @@ export const submitPost = async (req, res) => {
             attachedFile: finalFiles,
             comment: [],
         });
-
+        /*
+        findIndex 오류 수정, editPost도 확인요망
+        */
         const tmpFiles = user.tmpFiles;
         user.posts.unshift(newPost);
         //사용자 DB에 저장된 임시 파일들 삭제
         fileList.forEach(file => {
-            const idx = tmpFiles.find(path => path === file);
-            if(idx) {
+            const idx = tmpFiles.findIndex(path => path === file);
+            if(idx !== -1) {
                 tmpFiles.splice(idx, 1);
             }
         });
@@ -256,11 +258,12 @@ export const editPost = async (req, res) => {
         const finalFiles = await deleteLeavedFiles(text, fileList);
         const tmpFiles = user.tmpFiles;
         fileList.forEach(file => {
-            const idx = tmpFiles.find(path => path === file);
-            if(idx) {
+            const idx = tmpFiles.findIndex(path => path === file);
+            if(idx !== -1) {
                 tmpFiles.splice(idx, 1);
             }
         });
+
         post.title = title;
         post.textHTML = text;
         post.attachedFile = finalFiles;
@@ -332,7 +335,7 @@ export const submitComment = async (req, res) => {
 
     try {
         const user = await User.findById(_id);
-        const post = await Post.findById(postID);
+        const post = await Post.findById(postID).populate("comments");
         if(!user || !post) return res.sendStatus(400);
         let newComment;
         if(!parentComment) {
@@ -341,7 +344,8 @@ export const submitComment = async (req, res) => {
                 ownerName: username,
                 commentText: commentText,
                 post: postID,
-                parentComment: null
+                parentComment: null,
+                isDeleted: false
             });
             post.comments.push(newComment);
         }
@@ -354,26 +358,22 @@ export const submitComment = async (req, res) => {
                 ownerName: username,
                 commentText: commentText,
                 post: postID,
-                parentComment: parentComment
+                parentComment: parentComment,
+                isDeleted: false
             });
             const idx = post.comments.findIndex((comment) => {
                 if(String(comment._id) === String(parentComment)) return true;
                 else return false;
             });
             //nested comment 마지막 idx 찾아서 배열에 삽입까지 구현하기 오류체크
-            // while(true) {
-            //     if(idx >= post.comments.length) break;
-            //     if(String(post.comments[i].parentComment) !== String(parentComment)) break;
-            //     idx++;
-            // }
-
-            // for(let i = idx + 1; i < post.comments.length; i++) {
-            //     if(String(post.comments[i].parentComment) !== String(parentComment)) {
-            //         idx = i;
-            //         break;
-            //     }
-            // }
-            post.comments.splice(idx + 1, 0, newComment);
+            let cnt = 0;
+            for(let i = idx + 1; i < post.comments.length; i++) {
+                if(String(post.comments[i].parentComment) !== String(parentComment)) {
+                    break;
+                }
+                cnt = cnt + 1;
+            }
+            post.comments.splice(idx + cnt + 1, 0, newComment);
         }
         user.posts.unshift(newComment);
         await user.save();
@@ -388,9 +388,34 @@ export const submitComment = async (req, res) => {
 
 export const getComment = async (req, res) => {
     const { postID } = req.params;
+    // const dummyComment = {
+    //     owner: null,
+    //     ownerName: "",
+    //     commentText: "삭제된 댓글입니다.",
+        
+    // }
     try {
         const post = await Post.findById(postID).populate("comments");
         if(!post) return res.sendStatus(404);
+        post.comments.forEach(comment => {
+            if(comment.isDeleted) {
+                comment.commentText = "삭제된 게시글입니다.";
+            }
+        });
+        //Nested Comment에 부모 댓글이 없으면 더미 데이터 추가
+        // const comments = [];
+        // const parentList = [];
+        // for(let i = 0; i < post.comments.length; i++) {
+        //     if(post.comments[i].parentComment === null) {
+        //         parentList.push(String(post.comments[i]._id));
+        //     }
+        //     else {
+        //         if(parentList.findIndex((parentID) => parentID === String(post.comments[i].parentComment))) {
+        //             comments.push()
+        //         }
+        //     }
+        //     comments.push(post.comments[i]);
+        // }
         res.send(post.comments);
     } catch (error) {
         console.log(error);
@@ -415,17 +440,19 @@ export const deleteComment = async (req, res) => {
             retJSON.errMsg = "댓글 삭제 권한이 없습니다.";
             return res.send(retJSON);
         }
-        
-        const post = await Post.findById(String(comment.post));
-        const deleteIdx = post.comments.findIndex((comment) => {
-            if(String(comment) === String(commentID)) return true;
-            else return false;
-        });
-        if(deleteIdx) {
-            post.comments.splice(deleteIdx, 1);
-        }
-        await Comment.findByIdAndDelete(commentID);
-        await post.save();
+        comment.isDeleted = true;
+        await comment.save();
+        // const post = await Post.findById(String(comment.post));
+        // const deleteIdx = post.comments.findIndex((comment) => {
+        //     if(String(comment) === String(commentID)) return true;
+        //     else return false;
+        // });
+
+        // if(deleteIdx !== -1) {
+        //     post.comments.splice(deleteIdx, 1);
+        // }
+        // await Comment.findByIdAndDelete(commentID);
+        // await post.save();
         retJSON.status = true;
         return res.send(retJSON);
     } catch (error) {

@@ -24,7 +24,12 @@ function NestedComment({data, comments, setComments}) {
     const onDelete = async () => {
         const retJSON = await deleteComment(data._id);
         if(retJSON.status){
-            setComments(comments.filter((comment) => String(comment._id) !== String(data._id)));
+            const delIdx = comments.findIndex((comment) => String(comment._id) === String(data._id));
+            if(delIdx !== -1) {
+                comments[delIdx].commentText = "삭제된 게시글입니다.";
+                comments[delIdx].isDeleted = true;
+            }
+            setComments([...comments]);
             alert("댓글을 삭제했습니다.");
         } else {
             alert(retJSON.errMsg);
@@ -42,7 +47,15 @@ function NestedComment({data, comments, setComments}) {
                 </div>
                 <div className={s.cmt_fr}>
                     <span className={s.cmt_date}>{time}</span>
-                    <FontAwesomeIcon icon={faSquareXmark} style={{color: "red", cursor:"pointer"}} onClick={onDelete}/>
+                    { localStorage.getItem("userID") === String(data.owner) && !data.isDeleted ? 
+                        <FontAwesomeIcon 
+                            icon={faSquareXmark} 
+                            style={{color: "red", cursor:"pointer"}} 
+                            onClick={onDelete}
+                        />
+                        :
+                        null
+                    }
                 </div>
             </li>
         </div>

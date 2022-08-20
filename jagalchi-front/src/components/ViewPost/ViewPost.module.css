@@ -30,7 +30,9 @@
 .recommand_box {
     margin: 0 auto;
     display: block;
-    width: 16%;
+    width: 18vw;
+    padding-bottom: 10px;
+    padding-top: 10px;
     border: 1px solid black;
     border-radius: 4px;
 }

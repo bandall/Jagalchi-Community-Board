@@ -118,6 +118,7 @@ export const postLogin = async (req, res) => {
     req.session.user = user;
     const retJSON = {
         username: user.username,
+        userID: user._id,
         point: user.points
     }
     return res.status(200).send(retJSON);

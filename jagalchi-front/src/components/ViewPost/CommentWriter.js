@@ -23,8 +23,10 @@ function CommentWriter({postID, parentID, comments, setComments, description}) {
         if(newCommentData !== null) {
             const newComment = {
                 _id: newCommentData._id,
+                owner: localStorage.getItem("userID"),
                 ownerName: newCommentData.username,
                 commentText,
+                isDeleted: false,
                 createdAt: new Date()
             }
             setComments([...comments, newComment]);

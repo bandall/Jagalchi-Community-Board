@@ -23,25 +23,26 @@ function NestedCommentWriter({postID, parentID, comments, setComments, descripti
         if(newCommentData !== null) {
             const newComment = {
                 _id: newCommentData._id,
+                owner: localStorage.getItem("userID"),
                 ownerName: newCommentData.username,
                 parentComment: parentID,
                 commentText,
+                isDeleted: false,
                 createdAt: new Date()
             }
-            let nested = false;
-            for(let i = 0; i < comments.length; i++) {
-                if (String(comments[i]._id) === String(parentID)) {
-                    console.log("parent found: " + i);
-                    nested = true;
-                    continue;
-                }
-                //console.log(String(comments[i].parentComment) + " " +  String(parentID));
-                if (nested && String(comments[i].parentComment) !== String(parentID) && String(comments[i].parent) !== null) {
-                    comments.splice(i, 0, newComment);
-                    setComments(comments);
+            const idx = comments.findIndex((comment) => {
+                if(String(comment._id) === String(parentID)) return true;
+                else return false;
+            })
+            let cnt = 0;
+            for(let i = idx + 1; i < comments.length; i++) {
+                if(String(comments[i].parentComment) !== String(parentID)) {
                     break;
                 }
+                cnt = cnt + 1;
             }
+            comments.splice(idx + cnt + 1, 0, newComment);
+            setComments(comments);
             setText("");
             setCommnetFocus("");
         }

@@ -16,14 +16,14 @@ function App() {
         const userData = await getUserInfo();
         if(userData === null) {
             setLoggedIn(false);
-            localStorage.setItem("loggedIn", "false");
+            localStorage.clear();
         }
         if(userData.data.loggedIn) {
             setLoggedIn(true);
             localStorage.setItem("loggedIn", "true");
         } else {
             setLoggedIn(false);
-            localStorage.setItem("loggedIn", "false");
+            localStorage.clear();
         }
     } 
     

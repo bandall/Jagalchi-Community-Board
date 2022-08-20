@@ -24,6 +24,7 @@ function ViewPost() {
 
     const setData = async () => {
         const json = (await getPost(id)).data;
+        console.log(json);
         if(json === null) {
             alert("게시글을 불러오지 못 했습니다.");
             return;
@@ -118,7 +119,11 @@ function ViewPost() {
                     <br/>
                     <div className={s.recommand_box}>
                         <div style={{display:"flex"}}>
-                            <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand}/></div>
+                            {recommanded ?
+                                <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand} style={{color:"#3366ff"}}/></div>
+                                :
+                                <div className={s.icon}><FontAwesomeIcon icon={faFishFins} size="4x" onClick={onRecommand}/></div>    
+                            }
                             <div className={s.icon}><FontAwesomeIcon icon={faLink} onClick={copyLink} size="4x"/></div>
                         </div>
                         <div style={{display:"flex"}}>

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const commentSchema = new mongoose.Schema({
     owner: { type:mongoose.Schema.Types.ObjectId, required: true, ref:"User" },
     ownerName: { type: String, required: true },
+    isDeleted: {type:Boolean, required: true, default:false},
     commentText: { type: String, required:true },
     post: { type:mongoose.Schema.Types.ObjectId, required: true, ref:"Comment" },
     parentComment: { type:mongoose.Schema.Types.ObjectId, ref:"Comment", default: null },

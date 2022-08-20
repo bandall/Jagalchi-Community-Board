@@ -47,6 +47,9 @@ function CommentList({postID, comments, setComments}) {
                                 }
                                 
                             })}
+                            <li className={s.warning_li}>
+                                타인을 향한 비방이나 욕설은 제제 대상이 될 수 있습니다.
+                            </li>
                         </ul>
                     }
                 </div>

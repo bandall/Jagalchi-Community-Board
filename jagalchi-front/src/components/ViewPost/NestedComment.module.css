@@ -59,6 +59,7 @@
 }
 
 .cmt_text {
+    padding-top: 6px;
     float: left;
     word-break: break-all;
     overflow: hidden;

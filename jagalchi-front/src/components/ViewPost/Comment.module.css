@@ -86,3 +86,9 @@
     margin-top: 1px;
     margin-right: 10px;
 }
+
+.warning_li {
+    color: #777;
+    display:inline-block; 
+    margin-top: 10px;
+}
