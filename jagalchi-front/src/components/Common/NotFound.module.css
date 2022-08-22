@@ -1,0 +1,23 @@
+.wrap {
+    width: 1200px;
+    height: 730px;
+    margin: 0 auto;
+    margin-top: 5vh;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 1px solid rgba(0,0,0,0.125);
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+
+.text {
+    color: #3b4890;
+    margin: 0 auto;
+    margin-top: 10px;
+}
+
+.img {
+    padding-top: 20px;
+    height: 580px;
+    width: 580px;
+    margin: 0 auto;
+}

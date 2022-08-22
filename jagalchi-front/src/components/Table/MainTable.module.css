@@ -13,7 +13,8 @@
 .wrap_table {
     width: auto;
     min-height: 60%;
-    background-color: aliceblue;
+    background-color: white;
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 25%);
 }
 
 .table_header {

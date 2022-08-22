@@ -27,6 +27,12 @@ function ViewPost() {
         console.log(json);
         if(json === null) {
             alert("게시글을 불러오지 못 했습니다.");
+            navigate("/404");
+            return;
+        }
+        if(json.status === false) {
+            alert(json.errMsg);
+            navigate("/404");
             return;
         }
         const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);

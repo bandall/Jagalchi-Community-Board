@@ -4,6 +4,7 @@ import CustomNavbar from "../Navbar/CustomNavbar";
 import Backimg from "../BackImage/Waveback"
 import { Card, Table } from "react-bootstrap";
 import TableWritings from "../Table/TableWritng";
+import Paginationbar from "../Table/Paginationbar";
 import defaultImg from "../../assets/default_profile.jpg";
 function UserInfo() {
     const [userData, setUserData] = useState();
@@ -179,13 +180,16 @@ function UserInfo() {
                                         date={date}
                                         view={post.views}
                                         recommand={post.recommand}
-                                        link={"post/" + post._id}
+                                        link={"/post/" + post._id}
                                         style={{"border-collapse":"inherit"}}
                                     />
                                 )
                             })}
                         </tbody>
                         </Table>
+                    </div>
+                    <div className={s.paginationbar}>
+                        <Paginationbar setPage={setPage} maxPage={maxPage} curPage={page}/>
                     </div>
                 </Card>
             </div>

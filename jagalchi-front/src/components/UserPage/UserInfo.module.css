@@ -1,6 +1,6 @@
 .wrap_userinfo {
     position: relative;
-    overflow: auto;
+    
 }
 
 .profile_card {
@@ -13,6 +13,7 @@
     padding-right: 30px;
     border: 1px solid rgba(0,0,0,0.125);
     box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+    overflow-y: auto;
 }
 
 .profile_image_box {
@@ -86,4 +87,10 @@
 .text {
     text-decoration: none;
     color:black;
+}
+
+.paginationbar {
+    display: flex;
+    margin: auto;
+    justify-content: center;
 }

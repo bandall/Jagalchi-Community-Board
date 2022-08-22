@@ -56,7 +56,7 @@ function MainTable() {
             <a href="/" className={s.table_header}>
                 <h2>자갈치 갤러리</h2>
             </a>
-                <Tabs
+            <Tabs
                     activeKey={key}
                     onSelect={(k) => setKey(k)}
                     id="uncontrolled-tab-example"
@@ -111,7 +111,7 @@ function MainTable() {
                                 date={date}
                                 view={post.views}
                                 recommand={post.recommand}
-                                link={"post/" + post._id}
+                                link={"/post/" + post._id}
                                 style={{"border-collapse":"inherit"}}
                             />
                         )

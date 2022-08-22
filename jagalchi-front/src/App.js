@@ -10,8 +10,10 @@ import EditorForm from './components/TextEditor/EditorForm.js';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
 import SearchTable from './components/Table/SearchTable.js';
-import UserInfo from './components/UserInfo/UserInfo.js';
-import EditUser from './components/UserInfo/EditUserInfo.js';
+import UserInfo from './components/UserPage/UserInfo.js';
+import EditUser from './components/UserPage/EditUserInfo.js';
+import NotFound from './components/Common/NotFound.js';
+import Forbidden from './components/Common/Forbidden.js';
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {
@@ -46,6 +48,8 @@ function App() {
             <Route path="/post/:id" element={<ViewPost/>} />
             <Route path="/post/edit/:id" element={<EditPost/>} />
             <Route path="/post/search" element={<SearchTable/>} />
+            <Route path="/404" element={<NotFound/>} />
+            <Route path="/403" element={<Forbidden/>} />
             <Route path="*" element={<Home/>} />
         </Routes>
     )

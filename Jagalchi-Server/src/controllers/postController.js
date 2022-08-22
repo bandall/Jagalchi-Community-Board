@@ -132,6 +132,7 @@ export const getPost = async (req, res) => {
         return res.send(retJSON);
     } catch(error) {
         const retJSON = {
+            status: false,
             errMsg: "게시물을 불러오지 못 했습니다."
         }
         console.log(error);
