@@ -1,0 +1,43 @@
+.wrap_edit_user {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.profile_card {
+    width: 400px;
+    border: 1px solid rgba(0,0,0,0.125);
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+
+.profile_image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    margin-top: 33px;
+    border-radius: 20%;
+}
+
+.profile_image_submit_txt {
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: small;
+    color: #6c757d;
+}
+
+.profile_submit_btn {
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.wrap_profile_info {
+    width: 700px;
+    margin-left: 20px
+}
+
+.profile_info_form {
+    padding: 15px;
+}

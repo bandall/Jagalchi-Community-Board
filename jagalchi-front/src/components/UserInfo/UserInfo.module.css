@@ -1,0 +1,89 @@
+.wrap_userinfo {
+    position: relative;
+    overflow: auto;
+}
+
+.profile_card {
+    margin: 0 auto;
+    width: 1200px;
+    height: 90vh;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border: 1px solid rgba(0,0,0,0.125);
+    box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 15%);
+}
+
+.profile_image_box {
+    margin: 0 auto;
+    display: block;
+}
+
+.profile_image {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    margin-top: 33px;
+    border-radius: 20%;
+}
+
+.profile_username {
+    margin-top: 10px
+}
+
+.divide_line {
+    border-bottom: 2px solid #3b4890;
+    width: 100%;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.wrap_table {
+    width: auto;
+    min-height: 60%;
+    background-color: aliceblue;
+}
+
+.table_header {
+    text-decoration: none;
+}
+
+.table {
+    text-align: center;
+}
+
+.table_number {
+    width: 80px;
+}
+
+.table_title {
+    width: 700px;
+    
+}
+
+.table_author {
+    width: 200px;
+}
+
+.table_date {
+    width: 120px;
+}
+
+.table_view {
+    width: 100px;
+}
+
+.table_suggest {
+    width: 100px;
+}
+
+.title_text {
+    text-align: left;
+}
+
+.text {
+    text-decoration: none;
+    color:black;
+}

@@ -88,8 +88,8 @@ function Join() {
                             placeholder="name@example.com"
                             onChange={emailChange}
                             required
-                            />
-                            <label htmlFor="floatingInputCustom">이메일</label>
+                        />
+                        <label htmlFor="floatingInputCustom">이메일</label>
                         </Form.Floating>
                     </div>
                     <div className="form-group mt-3">

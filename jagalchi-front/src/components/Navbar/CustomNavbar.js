@@ -26,22 +26,24 @@ function CustomNavbar(props) {
                             <Nav.Link href="/" style={{color: "red"}}>Alpha v0.1.0</Nav.Link>
                         </Nav>
                         <Nav>
-                            <NavDropdown title={"반갑습니다. " + localStorage.getItem("username")} id="collasible-nav-dropdown">
-                               <NavDropdown.Item href="#action/3.1">계정 정보</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">계정 정보 수정</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">비밀번호 변경</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-                            </NavDropdown>
+                            {!loggedIn ? null : 
+                                <NavDropdown title={"반갑습니다. " + localStorage.getItem("username")} id="collasible-nav-dropdown">
+                                    <NavDropdown.Item href={"/user/" + localStorage.getItem("userID")}>계정 정보</NavDropdown.Item>
+                                    <NavDropdown.Item href={"/user/edit/" + localStorage.getItem("userID")}>계정 정보 수정</NavDropdown.Item>
+                                    <NavDropdown.Item href="#action/3.3">비밀번호 변경</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
+                                </NavDropdown>
+                            }
                             {!loggedIn ? 
                                 <Nav>
-                                    <Nav.Link href="/join">Create Account</Nav.Link>
-                                    <a href='/login'><Button variant="primary" style={{}}> Sign In </Button>{' '}</a>
+                                    <Nav.Link href="/join" >Create Account</Nav.Link>
+                                    <a href='/login'><Button variant="primary" style={{marginLeft: "16px"}}> Sign In </Button>{' '}</a>
                                 </Nav>
                                 :
                                 <Nav>
-                                    <Nav.Link href={"/user/" + "id"}>My Account</Nav.Link>
-                                    <a href='/logout'><Button variant="primary" style={{}}> Logout </Button>{' '}</a>
+                                    {/* <Nav.Link href={"/user/" + "id"}>My Account</Nav.Link> */}
+                                    <a href='/logout'><Button variant="primary" style={{marginLeft: "16px"}}> Logout </Button>{' '}</a>
                                 </Nav>
                             }
                         </Nav>

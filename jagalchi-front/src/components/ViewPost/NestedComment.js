@@ -10,16 +10,29 @@ function NestedComment({data, comments, setComments}) {
     useEffect(() => {
         const createdTime = new Date(new Date(data.createdAt).getTime() + 60 * 60 * 9);
         const now = new Date();
-        let displayTime;
+        let displayTime = "";
         if(now.getFullYear() === createdTime.getFullYear()) {
-            displayTime = (createdTime.getMonth() + 1) + "." + createdTime.getDate() + " ";
+            if((createdTime.getMonth() + 1) < 10) displayTime += ("0" + (createdTime.getMonth() + 1) + ".");
+            else displayTime += ((createdTime.getMonth() + 1) + ".");
+
+            if(createdTime.getDate() < 10) displayTime += ("0" + + createdTime.getDate() + " ");
+            else displayTime += (createdTime.getDate() + " ");
         }
         else {
-            displayTime = createdTime.getFullYear() + "." + (createdTime.getMonth() + 1) + "." + createdTime.getDate() + " ";
+            displayTime = createdTime.getFullYear() + ".";
+            if((createdTime.getMonth() + 1) < 10) displayTime += ("0" + (createdTime.getMonth() + 1) + ".");
+            else displayTime += ((createdTime.getMonth() + 1) + ".");
+
+            if(createdTime.getDate() < 10) displayTime += ("0" + + createdTime.getDate() + " ");
+            else displayTime += (createdTime.getDate() + " ");
         }
-        displayTime = displayTime + createdTime.getHours() + ":" + createdTime.getMinutes();
+        if(createdTime.getHours() < 10) displayTime += ("0" + + createdTime.getHours() + ":");
+        else displayTime += (createdTime.getHours() + ":");
+
+        if(createdTime.getMinutes() < 10) displayTime += ("0" + + createdTime.getMinutes());
+        else displayTime += (createdTime.getMinutes());
         setTime(displayTime);
-    }, [])
+    }, [])  
 
     const onDelete = async () => {
         const retJSON = await deleteComment(data._id);
