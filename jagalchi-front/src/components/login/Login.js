@@ -93,7 +93,7 @@ function Login({loggedIn}) {
                         </button>
                     </div>
                     <p className="forgot-password text-right mt-2">
-                        Forgot <a href="/">password?</a>
+                        Forgot <a href="/find-password">password?</a>
                     </p>
                     </div>
                 </form>

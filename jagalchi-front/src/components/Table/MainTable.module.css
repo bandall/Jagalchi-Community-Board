@@ -8,6 +8,7 @@
     align-items: center;
     border-radius: 10px;
     overflow: auto;
+    font-family: "돋음";
 }
 
 .wrap_table {
@@ -15,6 +16,7 @@
     min-height: 60%;
     background-color: white;
     box-shadow: 0 0.15rem 1.75rem 0 rgb(33 40 50 / 25%);
+    font-family: "돋음";
 }
 
 .table_header {
@@ -83,5 +85,5 @@
 }
 .write_btn {
     position: relative;
-    margin-left: 27%;
+    margin-left: 23%;
 }

@@ -121,7 +121,7 @@ function MainTable() {
                 <div className={s.bottom_bar}>
                     <div className={s.search_bar}>
                         <input placeholder="검색" name="search" className={s.search_input} onChange={(e)=>setSearchKey(e.target.value)}></input>
-                        <Button variant="primary" onClick={onSearch}>
+                        <Button variant="primary" onClick={onSearch} style={{padding: "10px 10px 10px 10px"}}>
                             검색
                         </Button>{' '}
                     </div>

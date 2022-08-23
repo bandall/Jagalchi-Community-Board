@@ -1,5 +1,5 @@
 import User from "../models/User";
-import fs from "fs";
+import fs, { realpath } from "fs";
 import bycript from "bcrypt";
 export const getJoin = (req, res) => {
    
@@ -14,6 +14,13 @@ export const postJoin = async (req, res) => {
     }
     if(password !== password_confirm) {
         return res.status(409).send({ errMsg: "비밀번호를 확인하여 주십시오." });
+    }
+
+    const emailCheck = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    const dateCheck = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+
+    if(!emailCheck.test(email) || !dateCheck.test(birthDate)) {
+        return res.status(409).send({ errMsg: "잘못된 형식입니다." });
     }
     try {
         await User.create({
@@ -147,3 +154,41 @@ export const postChangePassword = async (req, res) => {
     user.save();
     return res.redirect("/user/logout");
 } 
+
+export const getUser = async (req, res) => {
+    const { userID } = req.params;
+    const retJSON = {
+        username: "",
+        posts: [],
+        status: false,
+        errMsg: "",
+    }
+    try {
+        const user = await User.findById(userID).populate("posts");
+        if(!user) {
+            retJSON.errMsg = "유저를 찾을 수 없습니다.";
+            return res.status(404).send(retJSON);
+        }
+        const retPosts = [];
+        user.posts.forEach(post => {
+            const retPost = {
+                _id: post._id,
+                ownerName: post.ownerName,
+                title: post.title,
+                views: post.views,
+                recommand: post.recommand,
+                createdAt: post.createdAt
+            }
+            retPosts.push(retPost);
+        });
+        
+        retJSON.username = user.username;
+        retJSON.posts = retPosts;
+        retJSON.status = true;
+        return res.send(retJSON);
+    } catch(error) {
+        console.log(error);
+        retJSON.errMsg = "오류가 발생했습니다.";
+        return res.status(404).send(retJSON);
+    }
+}

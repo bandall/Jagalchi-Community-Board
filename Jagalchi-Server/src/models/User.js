@@ -6,6 +6,8 @@ const userSchema = mongoose.Schema({
     email: { type:String, required:true, unique:true },
     birthDate: { type:Date },
     password: { type:String, required:true },
+    secondAuth: { type:Boolean, required: true, default: false },
+    loginIP: [{ type:String, required: true }],
     loginDates: [{ type:Date }],
     points: { type:Number, default: 0 },
     avatarUrl: { type:String },

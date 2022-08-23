@@ -4,6 +4,7 @@ import { SERVER_URL } from "../../gobal.js";
 import { useNavigate } from "react-router-dom";
 import Navbar1 from "../Navbar/CustomNavbar";
 import Waveback from "../BackImage/Waveback.js";
+import { checkEmail, checkBirth } from "../functions/validation.js";
 import s from "./Join.module.css"
 import { Form } from "react-bootstrap";
 function Join() {
@@ -34,13 +35,20 @@ function Join() {
         if(username.length === 0 || email.length === 0 || birthDate.length === 0) {
             return alert("입력칸을 모두 채워주세요.");
         }
+        if(!checkEmail(email)) {
+            return alert("잘못된 이메일 형식입니다.");
+        }
+        if(!checkBirth(birthDate)) {
+            return alert("잘못된 날짜입니다.");
+        }
         if(password.length < 8) {
-            return alert("비밀번호가 짧음");
+            return alert("비밀번호가 너무 짧습니다.(최소 8글자)");
         }
         if(password !== password_confirm) {
-           return alert("비밀번호 확인 실패");
+           return alert("비밀번호 확인을 실패했습니다.");
         }
-        const body = {
+        
+        const joinData = {
             username: username,
             email: email,
             birthDate:birthDate,
@@ -49,8 +57,8 @@ function Join() {
         }
         try {
             const url = SERVER_URL + "/join";
-            await axios.post(url, body);
-            navigate('/');
+            await axios.post(url, joinData);
+            navigate('/login');
         } catch (error) {
             alert(error.response.data.errMsg);
         }
@@ -136,7 +144,7 @@ function Join() {
                         </button>
                     </div>
                     <p className="forgot-password text-right mt-2">
-                        Forgot <a href="/">password?</a>
+                        Forgot <a href="/find-password">password?</a>
                     </p>
                     </div>
                 </form>

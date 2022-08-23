@@ -14,6 +14,9 @@ import UserInfo from './components/UserPage/UserInfo.js';
 import EditUser from './components/UserPage/EditUserInfo.js';
 import NotFound from './components/Common/NotFound.js';
 import Forbidden from './components/Common/Forbidden.js';
+import ChangePassword from './components/UserPage/ChangePassword.js';
+import FindPassword from './components/UserPage/FindPassword.js';
+import SecondAuth from './components/UserPage/SecondAuth.js';
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {
@@ -41,9 +44,12 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/join" element={<Join />} />
             <Route path="/logout" element={<Logout/>} />
+            <Route path="/find-password" element={<FindPassword/>}/>
             <Route path="/search" element={<Home />} />
+            <Route path="/email-auth" element={<SecondAuth/>}/>
             <Route path="/user/:id" element={<UserInfo/>} />
             <Route path="/user/edit/:id" element={<EditUser/>} />
+            <Route path="/user/change-password/:id" element={<ChangePassword/>}/>
             <Route path="/post/writeboard" element={<EditorForm />} />
             <Route path="/post/:id" element={<ViewPost/>} />
             <Route path="/post/edit/:id" element={<EditPost/>} />
