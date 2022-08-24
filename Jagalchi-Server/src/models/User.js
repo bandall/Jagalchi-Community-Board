@@ -5,12 +5,13 @@ const userSchema = mongoose.Schema({
     username: { type:String, required:true, unique:true },
     email: { type:String, required:true, unique:true },
     birthDate: { type:Date },
+    phoneNumber: { type:String },
     password: { type:String, required:true },
     secondAuth: { type:Boolean, required: true, default: false },
     loginIP: [{ type:String, required: true }],
     loginDates: [{ type:Date }],
     points: { type:Number, default: 0 },
-    avatarUrl: { type:String },
+    avatarUrl: { type:String, default: "" },
     tmpFiles: [{ type:String }],
     posts: [
         { type:mongoose.Schema.Types.ObjectId, required: true, ref:"Post" }

@@ -38,17 +38,44 @@ export const postJoin = async (req, res) => {
     return res.sendStatus(200);
 }
 
-export const getEdit = async (req, res) => {
-    
-} 
+export const getEditUser = async (req, res) => {
+    const { userID } = req.params;
+    const retJSON = {
+        status: false,
+        errMsg: "",
+        userInfo: {},
+    }
 
-export const postEdit = async (req, res) => {
+    try {
+        const user = await User.findById(userID);
+        if(!user) {
+            retJSON.errMsg = "유저를 찾을 수 없습니다.";
+            return res.send(retJSON);
+        }
+        const info = {
+            username: user.username, 
+            email: user.email,
+            birthDate: user.birthDate,
+            phonNumber: user.phonNumber
+        }
+        retJSON.status = true;
+        retJSON.userInfo = info;
+        return res.send(retJSON);
+    } catch (error) {
+        console.log(error);
+        retJSON.errMsg = "오류가 발생했습니다.";
+        return res.send(retJSON);
+    }
+}
+
+export const postEditUser = async (req, res) => {
     const {
         session: {
-            user: { _id, avatarUrl }
+            user: { _id }
         },
         body: { username, newAvatarUrl }
     } = req;
+
     const exist = User.exist({ username });
     if(exist) {
         return res.status(409).send({ errMsg: "이미 존재하는 닉네임입니다." });
@@ -187,6 +214,29 @@ export const getUser = async (req, res) => {
         retJSON.status = true;
         return res.send(retJSON);
     } catch(error) {
+        console.log(error);
+        retJSON.errMsg = "오류가 발생했습니다.";
+        return res.status(404).send(retJSON);
+    }
+}
+
+export const getAvatar = async (req, res) => {
+    const { userID } = req.params;
+    const retJSON = {
+        avatarUrl: "",
+        status: false,
+        errMsg: "",
+    }
+    try {
+        const user = await User.findById(userID);
+        if(!user) {
+            retJSON.errMsg = "유저를 찾을 수 없습니다.";
+            return res.status(404).send(retJSON);
+        }
+        retJSON.avatarUrl = user.avatarUrl;
+        retJSON.status = true;
+        return res.send(retJSON);
+    } catch (error) {
         console.log(error);
         retJSON.errMsg = "오류가 발생했습니다.";
         return res.status(404).send(retJSON);

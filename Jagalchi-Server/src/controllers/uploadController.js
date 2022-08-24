@@ -40,6 +40,20 @@ export const uploadImage = multer({
     fileFilter: imageFilter,
 });
 
+export const uploadAvatar = multer({
+    storage: multer.diskStorage({
+        destination(req, file, cb) {
+            cb(null, 'uploads/avatar')
+        },
+        filename(req, file, cb) {
+            const ext = path.extname(file.originalname);
+            cb(null, crypto.createHash('md5').update(path.basename(file.originalname, ext)).digest('hex') + new Date().valueOf() + Math.round(Math.random() * 10000000) + ext);
+        }
+    }),
+    limits: { fileSize: 5*1024*1024 },
+    fileFilter: imageFilter,
+});
+
 export const uploadVideo = multer({
     storage: multer.diskStorage({
         destination(req, file, cb){
@@ -96,4 +110,23 @@ export const postVideo = async (req, res) => {
     }
 
     return res.send(videoLink);
+}
+
+export const postAvatar = async (req, res) => {
+    const { avatar } = req.files;
+    const { _id } = req.session.user;
+
+    const avatarLink = {
+        url: avatar[0].destination + "/" + avatar[0].filename
+    }
+
+    try {
+        const user = await User.findById(_id);
+        user.avatarUrl = avatarLink.url;
+        await user.save();
+    } catch(error) {
+        fs.unlink(avatarLink.url, (err) => {
+            console.log("오류 발생으로 파일 삭제..");
+        })
+    }
 }

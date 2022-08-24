@@ -5,12 +5,11 @@ import Backimg from "../BackImage/Waveback"
 import { Card, Table } from "react-bootstrap";
 import TableWritings from "../Table/TableWritng";
 import Paginationbar from "../Table/Paginationbar";
-import defaultImg from "../../assets/default_profile.jpg";
-import { getUser } from "../functions/userAPI";
+import { getAvatarUrl, getUser } from "../functions/userAPI";
 import { useParams } from "react-router-dom";
 function UserInfo() {
     const [username, setUserName] = useState("");
-    const [userImg, setUserImg] = useState(defaultImg)
+    const [avatarUrl, setAvatarUrl] = useState("");
     const [page, setPage] = useState(1);
     const [posts, setPosts] = useState([]);
     const [startNum, setStartNum] = useState(0);
@@ -18,10 +17,16 @@ function UserInfo() {
     const [isLoaded, setLoaded] = useState(false);
     const { id } = useParams();
 
+    const setAvatar = async () => {
+        const url = await getAvatarUrl(id);
+        setAvatarUrl(url);
+    }
+
     const setUserData = async () => {
         const userData = await getUser(id);
         console.log(userData);
         setUserName(userData.username);
+        setAvatar();
         setPosts(userData.posts);
         setPage(1);
         setMaxPage(1);
@@ -42,7 +47,7 @@ function UserInfo() {
                     <Card className={s.profile_card}>
                         {/* <Card.Header>유저 정보</Card.Header> */}
                         <div className={s.profile_image_box}>
-                            <Card.Img variant="top" src={userImg} className={s.profile_image}/>
+                            <Card.Img variant="top" src={avatarUrl} className={s.profile_image}/>
                         </div>
                         <h1 className={s.profile_username}>{username}</h1>
                         <div className={s.divide_line}/>

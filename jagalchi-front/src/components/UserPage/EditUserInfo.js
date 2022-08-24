@@ -3,14 +3,27 @@ import CustomNavbar from "../Navbar/CustomNavbar";
 import s from "./EditUser.module.css";
 import defaultImg from "../../assets/default_profile.jpg";
 import BackImg from "../BackImage/Waveback";
-function EditUser(params) {
+import { useEffect, useState } from "react";
+import { getAvatarUrl } from "../functions/userAPI";
+import { useParams } from "react-router-dom";
 
+function EditUser(params) {
+    const [avatarUrl, setAvatarUrl] = useState("");
+    const { id } = useParams();
     const dummyUser = {
         username: "jsm5315",
         email: "jsm5315@gmail.com",
         birthDate: "2000-03-02",
         phoneNumber: "01082950663"
     }
+
+    const setAvatar = async () => {
+        const url = await getAvatarUrl(id);
+        setAvatarUrl(url);
+    }
+    useEffect(() => {
+        setAvatar();
+    }, [])
 
     return (
         <div>
@@ -19,7 +32,7 @@ function EditUser(params) {
             <div className={s.wrap_edit_user}>
                 <Card className={s.profile_card}>
                     <Card.Header>프로필 사진</Card.Header>
-                    <Card.Img variant="top" src={defaultImg} className={s.profile_image}/>
+                    <Card.Img variant="top" src={avatarUrl} className={s.profile_image}/>
                     <Card.Text className={s.profile_image_submit_txt}>5MB 이하의 이미지만 업로드 가능합니다.</Card.Text>
                     <Button variant="primary" className={s.profile_submit_btn}>프로필 사진 업로드</Button>
                 </Card>
