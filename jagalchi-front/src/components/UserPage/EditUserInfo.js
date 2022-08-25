@@ -6,6 +6,8 @@ import BackImg from "../BackImage/Waveback";
 import { useEffect, useState } from "react";
 import { getAvatarUrl } from "../functions/userAPI";
 import { useParams } from "react-router-dom";
+import axios from "axios";
+import { SERVER_URL } from "../../gobal";
 
 function EditUser(params) {
     const [avatarUrl, setAvatarUrl] = useState("");
@@ -21,6 +23,29 @@ function EditUser(params) {
         const url = await getAvatarUrl(id);
         setAvatarUrl(url);
     }
+
+    const imageHandler = () => {
+        const input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", "image/*");
+        input.click();
+
+        input.addEventListener("change", async () => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append("avatar", file);
+
+            try {
+                await axios.post(SERVER_URL + "/upload/avatar", formData);
+                const url = await getAvatarUrl(id);
+                setAvatarUrl(url);
+            } catch (error) {
+                console.log(error);
+                alert("프로필 사진을 업로드하지 못 했습니다.");
+            }
+        })
+    }
+
     useEffect(() => {
         setAvatar();
     }, [])
@@ -34,7 +59,7 @@ function EditUser(params) {
                     <Card.Header>프로필 사진</Card.Header>
                     <Card.Img variant="top" src={avatarUrl} className={s.profile_image}/>
                     <Card.Text className={s.profile_image_submit_txt}>5MB 이하의 이미지만 업로드 가능합니다.</Card.Text>
-                    <Button variant="primary" className={s.profile_submit_btn}>프로필 사진 업로드</Button>
+                    <Button variant="primary" className={s.profile_submit_btn} onClick={imageHandler}>프로필 사진 업로드</Button>
                 </Card>
                 <Card className={s.wrap_profile_info}>
                     <Card.Header>계정 정보 변경</Card.Header>

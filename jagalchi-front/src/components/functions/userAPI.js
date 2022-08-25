@@ -21,7 +21,7 @@ export const getAvatarUrl = async (userID) => {
         const retJSON = await axios.get(url);
         if(retJSON.data.status === false) return default_profile;
         else if(retJSON.data.avatarUrl === "") return default_profile;
-        else return retJSON.data.avatarUrl;
+        else return "http://localhost:4000/" + retJSON.data.avatarUrl;
     } catch(error) {
         console.log(error);
         return default_profile;

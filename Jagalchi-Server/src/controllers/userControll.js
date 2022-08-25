@@ -227,6 +227,7 @@ export const getAvatar = async (req, res) => {
         status: false,
         errMsg: "",
     }
+
     try {
         const user = await User.findById(userID);
         if(!user) {

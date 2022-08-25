@@ -122,11 +122,22 @@ export const postAvatar = async (req, res) => {
 
     try {
         const user = await User.findById(_id);
+        console.log(user.avatarLink);
+        if(user.avatarUrl !== "") {
+            fs.unlink(user.avatarUrl, (err) => {
+                if(err !== null) {
+                    console.log(null);
+                    console.log("기존 아바타 삭제중 오류 발생...");
+                }
+            })
+        }
         user.avatarUrl = avatarLink.url;
         await user.save();
     } catch(error) {
         fs.unlink(avatarLink.url, (err) => {
-            console.log("오류 발생으로 파일 삭제..");
+            console.log("아바타 업로드 오류로 인한 새 아바타 삭제 중 오류 발생");
         })
     }
+
+    return res.send(avatarLink);
 }
