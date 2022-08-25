@@ -1,7 +1,6 @@
 import { Card, Button, Form, Col, Row } from "react-bootstrap";
 import CustomNavbar from "../Navbar/CustomNavbar";
 import s from "./EditUser.module.css";
-import defaultImg from "../../assets/default_profile.jpg";
 import BackImg from "../BackImage/Waveback";
 import { useEffect, useState } from "react";
 import { getAvatarUrl } from "../functions/userAPI";
@@ -81,6 +80,7 @@ function EditUser(params) {
                                 type="email"
                                 defaultValue={dummyUser.email}
                                 placeholder="name@example.com"
+                                disabled
                                 required
                             />
                             </Form.Group>

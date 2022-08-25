@@ -73,13 +73,20 @@ export const postEditUser = async (req, res) => {
         session: {
             user: { _id }
         },
-        body: { username, newAvatarUrl }
+        body: { username, birthDate, phonNumber, comfirmPassword }
     } = req;
 
     const exist = User.exist({ username });
     if(exist) {
         return res.status(409).send({ errMsg: "이미 존재하는 닉네임입니다." });
     }
+    
+    const phonePattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
+    const birthPattern = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+    if(!phonePattern.test(phonNumber) || !birthPattern.test(birthDate)) {
+
+    }
+
     const user = User.findById(_id);
     if(!user) {
         return res.status(400).send({ errMsg: "존재하지 않는 유저입니다." });
