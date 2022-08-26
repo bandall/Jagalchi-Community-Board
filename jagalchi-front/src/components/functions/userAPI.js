@@ -5,10 +5,10 @@ export const getUser = async (userID) => {
     const url = SERVER_URL + "/user/" + userID;
     try {
         const userData = await axios.get(url);
-        if(userData.data.status === false) return null;
-        else return userData.data;
+        return userData.data;
     } catch(error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return null;
     }
 }
@@ -16,14 +16,43 @@ export const getUser = async (userID) => {
 export const getAvatarUrl = async (userID) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/user/avatar/" + userID;
-    const default_profile = "http://localhost:4000/uploads/avatar/default_profile.jpg";
+    const default_profile = SERVER_URL + "/uploads/avatar/default_profile.jpg";
     try {
         const retJSON = await axios.get(url);
-        if(retJSON.data.status === false) return default_profile;
-        else if(retJSON.data.avatarUrl === "") return default_profile;
-        else return "http://localhost:4000/" + retJSON.data.avatarUrl;
+        if(retJSON.data.avatarUrl === "") return default_profile;
+        else return SERVER_URL + "/" +  retJSON.data.avatarUrl;
     } catch(error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return default_profile;
+    }
+}
+
+export const getEditUser = async () => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/user/edit";
+    try {
+        const retJSON = await axios.get(url);
+        return retJSON.data;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return null;
+    }
+}
+
+export const postEditUser = async (userID, username, birthDate, phonenum, confirmPassword) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/user/edit";
+    const editInfo = {
+        username, birthDate, phonenum, confirmPassword
+    }
+    try {
+        await axios.post(url, editInfo);
+        return true;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
     }
 }

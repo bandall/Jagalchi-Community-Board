@@ -3,24 +3,29 @@ import CustomNavbar from "../Navbar/CustomNavbar";
 import s from "./EditUser.module.css";
 import BackImg from "../BackImage/Waveback";
 import { useEffect, useState } from "react";
-import { getAvatarUrl } from "../functions/userAPI";
+import { getAvatarUrl, getEditUser, postEditUser } from "../functions/userAPI";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { SERVER_URL } from "../../gobal";
 
 function EditUser(params) {
     const [avatarUrl, setAvatarUrl] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [birthDate, setBirthDate] = useState("");
+    const [phonenum, setPhonenum] = useState("");
+    const [password, setPassword] = useState("");
     const { id } = useParams();
-    const dummyUser = {
-        username: "jsm5315",
-        email: "jsm5315@gmail.com",
-        birthDate: "2000-03-02",
-        phoneNumber: "01082950663"
-    }
 
-    const setAvatar = async () => {
+    const setUserInfo = async () => {
         const url = await getAvatarUrl(id);
         setAvatarUrl(url);
+        const ret = await getEditUser();
+        if(!ret) return;
+        setUsername(ret.userInfo.username);
+        setEmail(ret.userInfo.email);
+        setBirthDate(ret.userInfo.birthDate.substr(0, 10));
+        setPhonenum(ret.userInfo.phoneNumber);
     }
 
     const imageHandler = () => {
@@ -45,8 +50,18 @@ function EditUser(params) {
         })
     }
 
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        const result = await postEditUser(id, username, birthDate, phonenum, password);
+        if(result) {
+            alert("회원정보 변경에 성공했습니다.");
+            localStorage.setItem("username", username);
+            window.location.reload();
+        }
+    }
+
     useEffect(() => {
-        setAvatar();
+        setUserInfo();
     }, [])
 
     return (
@@ -68,8 +83,9 @@ function EditUser(params) {
                             <Form.Label>유저 이름</Form.Label>
                             <Form.Control 
                                 type="username" 
-                                defaultValue={dummyUser.username} 
+                                defaultValue={username} 
                                 placeholder="유저 이름을 입력해 주세요." 
+                                onChange={e => setUsername(e.target.value)}
                                 required
                             />
                             </Form.Group>
@@ -78,7 +94,7 @@ function EditUser(params) {
                             <Form.Label>이메일</Form.Label>
                             <Form.Control
                                 type="email"
-                                defaultValue={dummyUser.email}
+                                defaultValue={email}
                                 placeholder="name@example.com"
                                 disabled
                                 required
@@ -92,7 +108,8 @@ function EditUser(params) {
                                 <Form.Control
                                     type="date"
                                     placeholder="YYYY-MM-DD"
-                                    defaultValue={dummyUser.birthDate}
+                                    defaultValue={birthDate}
+                                    onChange={e => setBirthDate(e.target.value)}
                                     required
                                     min="1920-01-01"
                                     max="2022-01-01"
@@ -103,7 +120,8 @@ function EditUser(params) {
                                 <Form.Control
                                     type="tel"
                                     placeholder="-없이 입력"
-                                    defaultValue={dummyUser.phoneNumber}
+                                    defaultValue={phonenum}
+                                    onChange={e => setPhonenum(e.target.value)}
                                     required
                                     pattern="[0-9]{11}"
                                 />
@@ -113,11 +131,12 @@ function EditUser(params) {
                             <Form.Label>비밀번호 확인</Form.Label>
                             <Form.Control
                                 type="password"
+                                onChange={e => setPassword(e.target.value)}
                                 required
                             />
                         </Form.Group>
 
-                        <Button variant="primary" type="submit" style={{float:"right"}}>
+                        <Button variant="primary" type="submit" style={{float:"right"}} onClick={onSubmit}>
                            계정 정보 변경
                         </Button>
                     </Form>

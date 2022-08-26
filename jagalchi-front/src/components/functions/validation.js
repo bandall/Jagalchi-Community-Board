@@ -6,8 +6,8 @@ export const checkEmail = (email) => {
 
 export const checkPhone = (number) => {
     if(number.length === 0) return false;
-    const pattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
-    return (number.match(pattern)!=null)
+    const pattern = /^[0-9]{2,3}[0-9]{3,4}[0-9]{4}/;
+    return pattern.test(number);
 }
 
 export const checkBirth = (day) => {

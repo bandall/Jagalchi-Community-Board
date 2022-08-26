@@ -39,32 +39,27 @@ export const postJoin = async (req, res) => {
 }
 
 export const getEditUser = async (req, res) => {
-    const { userID } = req.params;
+    const { _id } = req.session.user;
     const retJSON = {
-        status: false,
-        errMsg: "",
         userInfo: {},
     }
 
     try {
-        const user = await User.findById(userID);
+        const user = await User.findById(_id);
         if(!user) {
-            retJSON.errMsg = "유저를 찾을 수 없습니다.";
-            return res.send(retJSON);
+            return res.status(404).send({errMsg: "유저를 찾을 수 없습니다."});
         }
         const info = {
             username: user.username, 
             email: user.email,
             birthDate: user.birthDate,
-            phonNumber: user.phonNumber
+            phoneNumber: user.phoneNumber
         }
-        retJSON.status = true;
         retJSON.userInfo = info;
         return res.send(retJSON);
     } catch (error) {
         console.log(error);
-        retJSON.errMsg = "오류가 발생했습니다.";
-        return res.send(retJSON);
+        return res.status(404).send({errMsg: "오류가 발생했습니다."});
     }
 }
 
@@ -73,35 +68,55 @@ export const postEditUser = async (req, res) => {
         session: {
             user: { _id }
         },
-        body: { username, birthDate, phonNumber, comfirmPassword }
+        body: { username, birthDate, phonenum, confirmPassword }
     } = req;
+    //유저 검사
+    const user = await User.findById(_id);
+    if(!user) {
+        return res.status(404).send({ errMsg: "존재하지 않는 유저입니다." });
+    }
 
-    const exist = User.exist({ username });
-    if(exist) {
-        return res.status(409).send({ errMsg: "이미 존재하는 닉네임입니다." });
+    const check = await bycript.compare(confirmPassword, user.password);
+    if(!check) {
+        return res.status(400).send({ errMsg: "비밀번호를 잘못입력했습니다." });
+    }
+
+    if(user.username !== username) {
+        const exist = await User.exists({ username });
+        if(exist) {
+            return res.status(409).send({ errMsg: "이미 존재하는 닉네임입니다." });
+        }
     }
     
-    const phonePattern = /^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}/;
+    const phonePattern = /^[0-9]{2,3}[0-9]{3,4}[0-9]{4}/;
     const birthPattern = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-    if(!phonePattern.test(phonNumber) || !birthPattern.test(birthDate)) {
-
+    if(!phonePattern.test(phonenum) || !birthPattern.test(birthDate)) {
+        return res.status(409).send({ errMsg: "잘못된 번호 또는 생일 형식입니다." });
     }
 
-    const user = User.findById(_id);
-    if(!user) {
-        return res.status(400).send({ errMsg: "존재하지 않는 유저입니다." });
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            _id,
+            {
+                username: username,
+                birthDate: birthDate,
+                phoneNumber: phonenum
+            },
+            { new: true }
+        ).populate("posts");
+        req.session.user = updatedUser;
+
+        updatedUser.posts.forEach((post)=> {
+            console.log(post);
+            post.ownerName = updatedUser.username;
+            post.save();
+        });
+        await updatedUser.save();
+        return res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        return res.status(409).send({ errMsg: "예기치 못한 오류가 발생했습니다." });
     }
-    //remove past image
-    const updatedUser = await User.findByIdAndUpdate(
-        _id,
-        {
-            username: username,
-            avatarUrl: newAvatarUrl
-        },
-        { new: true }
-    );
-    req.session.user = updatedUser;
-    return res.redirect("/user/edit");
 } 
 
 export const logout = async (req, res) => {
@@ -194,14 +209,11 @@ export const getUser = async (req, res) => {
     const retJSON = {
         username: "",
         posts: [],
-        status: false,
-        errMsg: "",
     }
     try {
         const user = await User.findById(userID).populate("posts");
         if(!user) {
-            retJSON.errMsg = "유저를 찾을 수 없습니다.";
-            return res.status(404).send(retJSON);
+            return res.status(404).send({errMsg: "유저를 찾을 수 없습니다."});
         }
         const retPosts = [];
         user.posts.forEach(post => {
@@ -218,12 +230,9 @@ export const getUser = async (req, res) => {
         
         retJSON.username = user.username;
         retJSON.posts = retPosts;
-        retJSON.status = true;
         return res.send(retJSON);
     } catch(error) {
-        console.log(error);
-        retJSON.errMsg = "오류가 발생했습니다.";
-        return res.status(404).send(retJSON);
+        return res.status(400).send({errMsg: "오류가 발생했습니다."});
     }
 }
 
@@ -231,22 +240,17 @@ export const getAvatar = async (req, res) => {
     const { userID } = req.params;
     const retJSON = {
         avatarUrl: "",
-        status: false,
-        errMsg: "",
     }
 
     try {
         const user = await User.findById(userID);
         if(!user) {
-            retJSON.errMsg = "유저를 찾을 수 없습니다.";
-            return res.status(404).send(retJSON);
+            return res.status(404).send({errMsg: "유저를 찾을 수 없습니다."});
         }
         retJSON.avatarUrl = user.avatarUrl;
-        retJSON.status = true;
         return res.send(retJSON);
     } catch (error) {
         console.log(error);
-        retJSON.errMsg = "오류가 발생했습니다.";
-        return res.status(404).send(retJSON);
+        return res.status(400).send({errMsg: "오류가 발생했습니다."});
     }
 }
