@@ -1,7 +1,5 @@
 import { Card, Button, Form, Col, Row } from "react-bootstrap";
-import CustomNavbar from "../Navbar/CustomNavbar";
 import s from "./EditUser.module.css";
-import BackImg from "../BackImage/Waveback";
 import { useEffect, useState } from "react";
 import { getAvatarUrl, getEditUser, postEditUser } from "../functions/userAPI";
 import { useParams } from "react-router-dom";
@@ -52,7 +50,7 @@ function EditUser(params) {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        const result = await postEditUser(id, username, birthDate, phonenum, password);
+        const result = await postEditUser(username, birthDate, phonenum, password);
         if(result) {
             alert("회원정보 변경에 성공했습니다.");
             localStorage.setItem("username", username);
@@ -66,8 +64,6 @@ function EditUser(params) {
 
     return (
         <div>
-            <CustomNavbar/>
-            <BackImg/>
             <div className={s.wrap_edit_user}>
                 <Card className={s.profile_card}>
                     <Card.Header>프로필 사진</Card.Header>

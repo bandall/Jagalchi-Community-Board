@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import logo from "../../assets/logo.png";
-function CustomNavbar(props) {
-    const [loggedIn, setLoggedin] = useState(false);
+function CustomNavbar({loggedIn}) {
+    // const [loggedIn, setLoggedin] = useState(false);
     
-    useEffect(()=> {
-        if(localStorage.getItem("loggedIn") === "true") {
-            setLoggedin(true);
-        }
-        else {
-            setLoggedin(false);
-        }
-    }, []);
+    // useEffect(()=> {
+    //     if(localStorage.getItem("loggedIn") === "true") {
+    //         setLoggedin(true);
+    //     }
+    //     else {
+    //         setLoggedin(false);
+    //     }
+    // }, []);
     
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">

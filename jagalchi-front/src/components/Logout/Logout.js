@@ -3,11 +3,13 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SERVER_URL } from "../../gobal";
 
-function Logout() {
+function Logout({setLoggedIn}) {
     const navigate = useNavigate();
     const setLogin = async () => {
+        setLoggedIn(false);
         localStorage.clear();
     }
+
     const tryLogout = async () => {
         try {
             axios.defaults.withCredentials = true;
@@ -20,6 +22,7 @@ function Logout() {
             navigate('/');
         }
     }
+    
     useEffect(() => {
         tryLogout();
     }, []);

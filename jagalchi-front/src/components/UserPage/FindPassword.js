@@ -1,6 +1,4 @@
 import { Button, Card, Form } from "react-bootstrap";
-import CustomNavbar from "../Navbar/CustomNavbar";
-import BackImg from "../BackImage/Waveback";
 import s from "./FindPassword.module.css";
 import { checkEmail } from "../functions/validation";
 import { useState } from "react";
@@ -24,8 +22,6 @@ function FindPassword(params) {
 
     return (
         <div>
-            <CustomNavbar/>
-            <BackImg/>
             <Card className={s.wrap_card}>
                 <Card.Header className={s.card_title}>비밀번호 찾기</Card.Header>
                 {isSend ? null : 

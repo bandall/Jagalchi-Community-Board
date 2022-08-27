@@ -41,7 +41,7 @@ export const getEditUser = async () => {
     }
 }
 
-export const postEditUser = async (userID, username, birthDate, phonenum, confirmPassword) => {
+export const postEditUser = async (username, birthDate, phonenum, confirmPassword) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/user/edit";
     const editInfo = {
@@ -55,4 +55,21 @@ export const postEditUser = async (userID, username, birthDate, phonenum, confir
         else alert(error.response.data.errMsg);
         return false;
     }
+}
+
+export const postPasswordChange = async (curPassword, newPassword, newPasswordCheck) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/user/change-password";
+    const newPasswordInfo = {
+        curPassword, newPassword, newPasswordCheck
+    };
+    try {
+        await axios.post(url, newPasswordInfo);
+        return true;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
+    }
+
 }

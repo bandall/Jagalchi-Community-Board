@@ -3,8 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFishFins, faLink } from "@fortawesome/free-solid-svg-icons";
 import 'react-quill/dist/quill.bubble.css'
-import Navbar from "../Navbar/CustomNavbar";
-import Backimg from "../BackImage/Waveback";
 import ReactQuill from "react-quill";
 import Comment from "./CommentList";
 import { deletePost, getComment, getPost, postRecommand } from "../functions/postAPI";
@@ -103,8 +101,6 @@ function ViewPost() {
 
     return(
         <div>
-            <Navbar />
-            <Backimg />
             {!loaded ? null :
                 <div className={s.wrap_post}>
                     <div className={s.header}>

@@ -2,11 +2,9 @@ import { useState } from "react";
 import axios from "axios"
 import { SERVER_URL } from "../../gobal";
 import { useNavigate } from "react-router-dom";
-import Navbar1 from "../Navbar/CustomNavbar";
-import Waveback from "../BackImage/Waveback"
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
-function Login({loggedIn}) {
+function Login({setLoggedIn}) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
     const [email, setEmail] = useState("");
@@ -31,6 +29,7 @@ function Login({loggedIn}) {
                 axios.defaults.withCredentials = true;
                 const url = SERVER_URL + "/login";
                 const res = await axios.post(url, body);
+                setLoggedIn(true);
                 localStorage.setItem("username", res.data.username);
                 localStorage.setItem("userID", res.data.userID);
                 localStorage.setItem("loggedIn", "true");
@@ -43,8 +42,6 @@ function Login({loggedIn}) {
     }
     return(
         <div>
-            <Navbar1 loggedIn={loggedIn}/>
-            <Waveback />
             <div className={s.Auth_form_container}>
                 <ul>
                 {show ? <Alert className={s.Alert} style={{position: "fixed"}} variant="danger" onClose={() => setShow(false)} dismissible>
@@ -65,7 +62,7 @@ function Login({loggedIn}) {
                     <div className="form-group mt-3">
                         <Form.Floating className="mb-3">
                         <Form.Control
-                            id="floatingInputCustom"
+                            id="email"
                             type="email"
                             onChange={emailChange}
                             placeholder="name@example.com"
@@ -78,7 +75,7 @@ function Login({loggedIn}) {
                         {/* <label>Password</label> */}
                         <Form.Floating>
                             <Form.Control
-                            id="floatingPasswordCustom"
+                            id="current-password"
                             type="password"
                             onChange={pwdChange}
                             placeholder="Password"

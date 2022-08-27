@@ -5,12 +5,11 @@ export const getUserInfo = (req, res) => {
             loggedIn: false,
         }
     } else {
-        const user = req.session.loggedIn;
+        const user = req.session.user;
         retJSON = {
             loggedIn: true,
             username: user.username,
-            birthDate: user.birthDate,
-            points: user.points
+            userID: user._id,
         }
     }
     return res.send(retJSON);

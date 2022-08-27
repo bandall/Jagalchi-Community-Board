@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
 import s from "./UserInfo.module.css";
-import CustomNavbar from "../Navbar/CustomNavbar";
-import Backimg from "../BackImage/Waveback"
 import { Card, Table } from "react-bootstrap";
 import TableWritings from "../Table/TableWritng";
 import Paginationbar from "../Table/Paginationbar";
@@ -39,8 +37,6 @@ function UserInfo() {
 
     return (
         <div>
-            <Backimg/>
-            <CustomNavbar/>
             {
                 !isLoaded ? null :
                     <div className={s.wrap_userinfo}>

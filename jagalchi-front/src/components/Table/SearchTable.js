@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { Table, Tabs, Tab, Button } from "react-bootstrap"
 import Paginationbar from "./Paginationbar";
 import TableWritings from "./TableWritng";
-import Navbar from "../Navbar/CustomNavbar";
-import Backimg from "../BackImage/Waveback"
 import s from "./MainTable.module.css";
-import { getPosts, searchPost } from "../functions/postAPI";
-import { useNavigate, useParams } from "react-router-dom";
+import { searchPost } from "../functions/postAPI";
+import { useNavigate } from "react-router-dom";
 import qs from "qs";
 function SearchTable() {
     const navigate = useNavigate()
@@ -55,8 +53,6 @@ function SearchTable() {
     }
     return (
         <div>
-            <Backimg />
-            <Navbar/>
             <div className={s.wrap_inner}>
                 <a href="/" className={s.table_header}>
                     <h2>자갈치 갤러리</h2>
@@ -110,7 +106,7 @@ function SearchTable() {
                                     index={startNum - index}
                                     title={post.title}
                                     author={post.ownerName}
-                                    commentNum={post.commentNum}
+                                    commentNum={post.comments.length}
                                     date={date}
                                     view={post.views}
                                     recommand={post.recommand}

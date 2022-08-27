@@ -1,5 +1,3 @@
-import Navbar from "../Navbar/CustomNavbar";
-import Backimg from "../BackImage/Waveback"
 import { Button, Form } from "react-bootstrap";
 import { SERVER_URL } from "../../gobal";
 import s from "./EditorForm.module.css";
@@ -140,8 +138,6 @@ const EditorForm = () => {
       
     return (
         <div>
-			<Backimg />
-            <Navbar />
             <div className={s.wrap_inner}>
                 <Form.Control type="title" placeholder="제목" onChange={onChange}/>
                 <div>

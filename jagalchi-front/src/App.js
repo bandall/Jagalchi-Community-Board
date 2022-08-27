@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
 import { useEffect, useState } from 'react';
 import { getUserInfo } from './components/functions/loginCheck.js';
+import Backimg from "./components/BackImage/Waveback"
 import SearchTable from './components/Table/SearchTable.js';
 import UserInfo from './components/UserPage/UserInfo.js';
 import EditUser from './components/UserPage/EditUserInfo.js';
@@ -17,6 +18,7 @@ import Forbidden from './components/Common/Forbidden.js';
 import ChangePassword from './components/UserPage/ChangePassword.js';
 import FindPassword from './components/UserPage/FindPassword.js';
 import SecondAuth from './components/UserPage/SecondAuth.js';
+import CustomNavbar from './components/Navbar/CustomNavbar.js';
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {
@@ -28,6 +30,8 @@ function App() {
         if(userData.data.loggedIn) {
             setLoggedIn(true);
             localStorage.setItem("loggedIn", "true");
+            localStorage.setItem("username", userData.data.username);
+            localStorage.setItem("userID", userData.data.userID);
         } else {
             setLoggedIn(false);
             localStorage.clear();
@@ -39,25 +43,29 @@ function App() {
     }, []);
 
     return (
-        <Routes>
-            <Route path="/" element={<Home/> } />
-            <Route path="/login" element={<Login />} />
-            <Route path="/join" element={<Join />} />
-            <Route path="/logout" element={<Logout/>} />
-            <Route path="/find-password" element={<FindPassword/>}/>
-            <Route path="/search" element={<Home />} />
-            <Route path="/email-auth" element={<SecondAuth/>}/>
-            <Route path="/user/:id" element={<UserInfo/>} />
-            <Route path="/user/edit/:id" element={<EditUser/>} />
-            <Route path="/user/change-password/:id" element={<ChangePassword/>}/>
-            <Route path="/post/writeboard" element={<EditorForm />} />
-            <Route path="/post/:id" element={<ViewPost/>} />
-            <Route path="/post/edit/:id" element={<EditPost/>} />
-            <Route path="/post/search" element={<SearchTable/>} />
-            <Route path="/404" element={<NotFound/>} />
-            <Route path="/403" element={<Forbidden/>} />
-            <Route path="*" element={<Home/>} />
-        </Routes>
+        <div>
+            <CustomNavbar loggedIn={loggedIn}/>
+            <Backimg/>
+            <Routes>
+                <Route path="/" element={<Home/> } />
+                <Route path="/login" element={<Login setLoggedIn={setLoggedIn}/>} />
+                <Route path="/join" element={<Join />} />
+                <Route path="/logout" element={<Logout setLoggedIn={setLoggedIn}/>} />
+                <Route path="/find-password" element={<FindPassword/>}/>
+                <Route path="/search" element={<Home />} />
+                <Route path="/email-auth" element={<SecondAuth/>}/>
+                <Route path="/user/:id" element={<UserInfo/>} />
+                <Route path="/user/edit/:id" element={<EditUser/>} />
+                <Route path="/user/change-password/:id" element={<ChangePassword setLoggedIn={setLoggedIn}/>}/>
+                <Route path="/post/writeboard" element={<EditorForm />} />
+                <Route path="/post/:id" element={<ViewPost/>} />
+                <Route path="/post/edit/:id" element={<EditPost/>} />
+                <Route path="/post/search" element={<SearchTable/>} />
+                <Route path="/404" element={<NotFound/>} />
+                <Route path="/403" element={<Forbidden/>} />
+                <Route path="*" element={<Home/>} />
+            </Routes>
+        </div>
     )
 }
 

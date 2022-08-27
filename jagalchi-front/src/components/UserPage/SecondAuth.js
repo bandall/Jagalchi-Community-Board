@@ -1,6 +1,4 @@
 import { Card } from "react-bootstrap";
-import CustomNavbar from "../Navbar/CustomNavbar";
-import BackImg from "../BackImage/Waveback";
 import s from "./SecondAuth.module.css";
 
 function SecondAuth(params) {
@@ -11,8 +9,6 @@ function SecondAuth(params) {
 
     return (
         <div>
-            <CustomNavbar/>
-            <BackImg/>
             <Card className={s.wrap_card}>
                 <Card.Header className={s.card_title}>이메일 인증하기</Card.Header>
                 <div className={s.card_text_wrap}>

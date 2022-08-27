@@ -189,19 +189,26 @@ export const postChangePassword = async (req, res) => {
         session: { 
             user: { _id }
           },
-        body: { oldPassword ,newPassword, newPasswordConfirm }
+        body: { curPassword , newPassword, newPasswordCheck }
     } = req;
-    if(newPassword !== newPasswordConfirm) {
+    if(newPassword !== newPasswordCheck) {
         return res.status(400).send({ errMsg: "새 비밀번호 확인에 실패하였습니다." });
     }
-    const user = await User.findById(_id);
-    const valid = await bycript.compare(user.password, oldPassword);
-    if(!valid) {
-        return res.status(400).send({ errMsg: "기존 비밀번호 확인에 실패하였습니다." });
+    try {
+        const user = await User.findById(_id);
+        const valid = await bycript.compare(curPassword, user.password);
+        if(!valid) {
+            return res.status(400).send({ errMsg: "기존 비밀번호 확인에 실패하였습니다." });
+        }
+        user.password = newPassword;
+        await user.save();
+        await req.session.destroy(() => {
+            res.clearCookie('connect.sid').sendStatus(200);
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({ errMsg: "예상치 못한 오류가 발생했습니다." });
     }
-    user.password = newPassword;
-    user.save();
-    return res.redirect("/user/logout");
 } 
 
 export const getUser = async (req, res) => {

@@ -2,8 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { SERVER_URL } from "../../gobal.js";
 import { useNavigate } from "react-router-dom";
-import Navbar1 from "../Navbar/CustomNavbar";
-import Waveback from "../BackImage/Waveback.js";
 import { checkEmail, checkBirth } from "../functions/validation.js";
 import s from "./Join.module.css"
 import { Form } from "react-bootstrap";
@@ -65,8 +63,6 @@ function Join() {
     }
     return(
         <div>
-            <Navbar1 />
-            <Waveback />
             <div className={s.Auth_form_container}>
                 <form className={s.Auth_form}>
                     <div className={s.Auth_form_content}>

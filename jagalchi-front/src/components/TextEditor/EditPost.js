@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { editPost, getPost } from "../functions/postAPI";
-import Navbar from "../Navbar/CustomNavbar";
-import Backimg from "../BackImage/Waveback";
 import ReactQuill, { Quill } from "react-quill";
 import { Button, Form } from "react-bootstrap";
 import s from "./EditorForm.module.css";
@@ -162,8 +160,6 @@ function EditPost(params) {
 
       return (
         <div>
-			<Backimg />
-            <Navbar />
             {loaded ? 
                 <div>
                     <div className={s.wrap_inner}>
