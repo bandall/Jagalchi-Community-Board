@@ -73,3 +73,18 @@ export const postPasswordChange = async (curPassword, newPassword, newPasswordCh
     }
 
 }
+
+export const getAuthString = async (email) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/api/user/auth";
+    try {
+        await axios.get(url, {
+            params: {email:email}
+        });
+        return true;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
+    }
+}
