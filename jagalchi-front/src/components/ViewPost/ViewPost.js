@@ -22,14 +22,7 @@ function ViewPost() {
 
     const setData = async () => {
         const json = (await getPost(id)).data;
-        console.log(json);
-        if(json === null) {
-            alert("게시글을 불러오지 못 했습니다.");
-            navigate("/404");
-            return;
-        }
-        if(json.status === false) {
-            alert(json.errMsg);
+        if(!json) {
             navigate("/404");
             return;
         }
@@ -39,11 +32,14 @@ function ViewPost() {
         setRecommand(json.recommanded);
         setPostData(json.postData);
         setRecomCnt(json.postData.recommand);
+
         const commentJson = await getComment(id);
-        setComments(commentJson.data);
-        if(comments === null) {
+        if(!commentJson) {
             alert("댓글을 불러오지 못 했습니다.");
+        } else {
+            setComments(commentJson.data);
         }
+        
         setLoaded(true);
     }
 
@@ -70,7 +66,6 @@ function ViewPost() {
         }
         const result = await postRecommand(id);
         if(!result) {
-            alert("추천하지 못 했습니다.");
             return;
         }
         setRecommand(true);
@@ -82,17 +77,10 @@ function ViewPost() {
 			return;
 		}
         const result = await deletePost(id);
-        console.log(result);
-        if(!result) {
-            alert("게시글을 삭제하지 못 했습니다.");
-            return;
-        } 
-        if(result.data.code === false) {
-            alert(result.data.errMsg);
-            return;
+        if(result) {
+            alert("게시글을 삭제했습니다.");
+            navigate('/');
         }
-        alert("게시글을 삭제했습니다.");
-        navigate('/');
     }
 
     const onEdit = () => {

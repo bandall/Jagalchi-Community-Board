@@ -7,21 +7,26 @@ export const getJoin = (req, res) => {
 
 export const postJoin = async (req, res) => {
     const { username, email, birthDate, password, password_confirm } = req.body;
-    const exist = await User.exists({$or: [{username}, {email}]});
-    //check validation
-    if(exist) {
-        return res.status(409).send({ errMsg: "중복된 이름 또는 이메일입니다." });
+    try {
+        const exist = await User.exists({$or: [{username}, {email}]});
+        //check validation
+        if(exist) {
+            return res.status(409).send({ errMsg: "중복된 이름 또는 이메일입니다." });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(409).send({ errMsg: "계정 생성중 오류가 발생했습니다." });
     }
+    
     if(password !== password_confirm) {
         return res.status(409).send({ errMsg: "비밀번호를 확인하여 주십시오." });
     }
-
     const emailCheck = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     const dateCheck = /^(19[0-9][0-9]|20\d{2})-(0[0-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-
     if(!emailCheck.test(email) || !dateCheck.test(birthDate)) {
         return res.status(409).send({ errMsg: "잘못된 형식입니다." });
     }
+
     try {
         await User.create({
             username: username,
@@ -34,7 +39,6 @@ export const postJoin = async (req, res) => {
         console.log(error);
         return res.status(409).send({ errMsg: "계정 생성중 오류가 발생했습니다." });
     }
-    
     return res.sendStatus(200);
 }
 
@@ -131,13 +135,13 @@ export const logout = async (req, res) => {
         });
         user.tmpFiles = [];
         await user.save();
+        await req.session.destroy(() => {
+            res.clearCookie('connect.sid');
+            res.redirect("/");
+        });
     } catch (error) {
         console.log(error);
     }
-    await req.session.destroy(() => {
-        res.clearCookie('connect.sid');
-        res.redirect("/");
-    });
 }
 
 export const getLogin = (req, res) => {
@@ -167,6 +171,7 @@ export const postLogin = async (req, res) => {
         user.tmpFiles = [];
         await user.save();
     } catch (error) {
+        return res.status(400).send({ errMsg: "예기치 못한 오류가 발생했습니다." });
         console.log(error);
     }
     

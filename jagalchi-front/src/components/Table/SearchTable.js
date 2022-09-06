@@ -33,11 +33,7 @@ function SearchTable() {
     const getSearchPost = async () => {
         const query = qs.parse(window.location.search, {ignoreQueryPrefix: true});
         const json = await searchPost(query.keyword, page);
-        if(json === null) {
-            alert("게시글을 불러오지 못 했습니다.");
-            return;
-        }
-        console.log(json.data);
+        if(!json) return;
         setPosts(json.data.posts);
         setMaxPage(json.data.maxPage);
         setStartNum(json.data.startNum);

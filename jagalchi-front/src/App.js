@@ -1,14 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Home from "./components/Home/Home.js";
 import Login from "./components/Login/Login.js";
 import Join from "./components/Join/Join.js";
 import ViewPost from "./components/ViewPost/ViewPost"
 import Logout from './components/Logout/Logout';
 import EditPost from "./components/TextEditor/EditPost";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import EditorForm from './components/TextEditor/EditorForm.js';
-import { useEffect, useState } from 'react';
-import { getUserInfo } from './components/functions/loginCheck.js';
 import Backimg from "./components/BackImage/Waveback"
 import SearchTable from './components/Table/SearchTable.js';
 import UserInfo from './components/UserPage/UserInfo.js';
@@ -19,6 +17,9 @@ import ChangePassword from './components/UserPage/ChangePassword.js';
 import FindPassword from './components/UserPage/FindPassword.js';
 import SecondAuth from './components/UserPage/SecondAuth.js';
 import CustomNavbar from './components/Navbar/CustomNavbar.js';
+import { getUserInfo } from './components/functions/loginCheck.js';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const isLoggedIn = async () => {

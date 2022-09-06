@@ -32,6 +32,12 @@ function EditPost(params) {
 
     const setData = async () => {
         const json = (await getPost(id)).data;
+        console.log(json);
+        if(!json) {
+            navigate("/");
+            return;
+        }
+
         const createdTime = new Date(new Date(json.postData.date).getTime() + 60 * 60 * 9);
         json.postData.date = createdTime.toLocaleDateString() + " " + createdTime.toLocaleTimeString();
         if(json.modify === false) {
@@ -71,9 +77,6 @@ function EditPost(params) {
         //서버에서는 파일 목록 확인하고 사라진 파일 삭제
         if(await editPost(id, data)) {
             navigate("/post/" + id);
-        }
-        else {
-            alert("글쓰기 오류 발생");
         }
     }
 

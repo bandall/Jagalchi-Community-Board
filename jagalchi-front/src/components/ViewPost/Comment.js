@@ -43,8 +43,8 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
         }
     }
     const onDelete = async () => {
-        const retJSON = await deleteComment(data._id);
-        if(retJSON.status){
+        const result = await deleteComment(data._id);
+        if(result){
             const delIdx = comments.findIndex((comment) => String(comment._id) === String(data._id));
             if(delIdx !== -1) {
                 comments[delIdx].commentText = "삭제된 게시글입니다.";
@@ -52,9 +52,7 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
             }
             setComments([...comments]);
             alert("댓글을 삭제했습니다.");
-        } else {
-            alert(retJSON.errMsg);
-        }
+        } 
     }
 
     return (

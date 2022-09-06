@@ -21,7 +21,9 @@ export const getPost = async (postID) => {
         const page = await axios.get(url);
         return page;
     } catch(error) {
-        return null;
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
     }
 }
 
@@ -32,6 +34,8 @@ export const postRecommand = async (postID) => {
         await axios.post(url);
         return true;
     } catch(error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return false;
     }
 }
@@ -40,9 +44,11 @@ export const deletePost = async (postID) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/api/post/delete/" + postID;
     try {
-        const result = await axios.post(url);
-        return result;
+        await axios.post(url);
+        return true;
     } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return false;
     }
 }
@@ -54,7 +60,8 @@ export const editPost = async (postID, data) => {
         await axios.post(url, data);
         return true;
     } catch (error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return false;
     }
 }
@@ -68,7 +75,9 @@ export const searchPost = async (keyword, page) => {
         );
         return pageInfo;
     } catch (error) {
-        return null;
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
     }
 } 
 
@@ -84,7 +93,8 @@ export const submitComment = async (postID, commentText, parentComment) => {
         const retJSON = await axios.post(url, data);
         return retJSON.data;
     } catch (error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return null;
     }
 }
@@ -96,7 +106,8 @@ export const getComment = async (postID) => {
         const comments = await axios.get(url);
         return comments;
     } catch (error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return null;
     }
 }
@@ -105,10 +116,11 @@ export const deleteComment = async (commentID) => {
     axios.defaults.withCredentials = true;
     const url = SERVER_URL + "/api/post/comment/delete/" + commentID;
     try {
-        const retJSON = await axios.post(url);
-        return retJSON.data;
+        await axios.post(url);
+        return true;
     } catch (error) {
-        console.log(error);
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
         return false;
     }
 }

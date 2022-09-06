@@ -1,18 +1,6 @@
-import { useEffect, useState } from 'react';
 import { Button, Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import logo from "../../assets/logo.png";
-function CustomNavbar({loggedIn}) {
-    // const [loggedIn, setLoggedin] = useState(false);
-    
-    // useEffect(()=> {
-    //     if(localStorage.getItem("loggedIn") === "true") {
-    //         setLoggedin(true);
-    //     }
-    //     else {
-    //         setLoggedin(false);
-    //     }
-    // }, []);
-    
+function CustomNavbar({loggedIn}) {   
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" sticky="top">
             <Container>

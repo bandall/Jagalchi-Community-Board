@@ -99,6 +99,9 @@ export const getPost = async (req, res) => {
     const { postID } = req.params;
     try {
         const post = await Post.findById(postID);
+        if(!post) {
+            return res.status(404).send({errMsg : "존재하지 않는 게시물입니다."});
+        }
         post.views = post.views + 1;
         const postData = {
             ownerName: post.ownerName,
@@ -131,12 +134,8 @@ export const getPost = async (req, res) => {
         await post.save();
         return res.send(retJSON);
     } catch(error) {
-        const retJSON = {
-            status: false,
-            errMsg: "게시물을 불러오지 못 했습니다."
-        }
         console.log(error);
-        return res.send(retJSON);
+        return res.status(404).send({errMsg: "게시글을 불러오지 못 했습니다."});
     }
 }
 //게시글 추천
@@ -163,24 +162,17 @@ export const recommandPost = async (req, res) => {
 export const deletePost = async (req, res) => {
     const { postID } = req.params;
     const userID = req.session.user._id;
-    const retJSON = {
-        code: false,
-        errMsg: "",
-    };
     try {
         const post = await Post.findById(postID);
         const user = await User.findById(userID);
         if(!post) {
-            retJSON.errMsg = "존재하지 않는 게시물입니다.";
-            return res.send(retJSON);
+            return res.status(404).send({errMsg : "존재하지 않는 게시물입니다."});
         }
         if(!user) {
-            retJSON.errMsg = "존재하지 않는 유저입니다.";
-            return res.send(retJSON);
+            return res.status(404).send({errMsg : "존재하지 않는 유저입니다."});
         }
         if(String(post.owner) !== String(userID)) {
-            retJSON.errMsg = "파일 삭제 권한이 없습니다.";
-            return res.send(retJSON);
+            return res.status(404).send({errMsg : "파일 삭제 권한이 없습니다."});
         }
         //post, comment 기록을 삭제하는 것이 맞는 행동인가?
         // const userPostIdx = user.posts.findIndex((post) => {
@@ -191,7 +183,7 @@ export const deletePost = async (req, res) => {
         //     user.post.splice(userPostIdx, 1);
         // }
         for(let i = 0; i < post.comments.length; i++) {
-            await Comment.findOneAndDelete(String(post.comments[i]));
+            await Comment.findByIdAndDelete(String(post.comments[i]._id));
         }
         post.attachedFile.forEach(file => {
             fs.unlink(file, (err)=> {
@@ -200,13 +192,11 @@ export const deletePost = async (req, res) => {
         });
         await user.save();
         await Post.findByIdAndDelete(postID);
-        retJSON.code = true;
-        return res.send(retJSON);
+        return res.sendStatus(200);
 
     } catch(error) {
         console.log(error);
-        retJSON.errMsg = "파일 삭제 중 오류가 발생했습니다.";
-        return res.send(retJSON);
+        return res.status(400).send({errMsg : "파일 삭제 중 오류가 발생했습니다."});
     }
 }
 
@@ -238,22 +228,17 @@ const deleteLeavedFiles = async (HTMLText, fileList) => {
 export const editPost = async (req, res) => {
     const { title, text, fileList, postID } = req.body;
     const { _id } = req.session.user;
-    const retJSON = {
-        status: false,
-        errMsg: ""
-    }
+
     try {
         const post = await Post.findById(postID);
         const user = await User.findById(_id);
-        if(post === null) {
-            retJSON.errMsg = "게시글이 존재하지 않습니다.";
-            return res.send(retJSON);
+        if(!post) {
+            return res.status(404).send({errMsg : "게시글이 존재하지 않습니다."});
         }
         
         //유저검사
         if(String(_id) !== String(post.owner)) {
-            retJSON.errMsg = "게시글 수젇 권한이 없습니다.";
-            return res.send(retJSON);
+            return res.status(403).send({errMsg : "게시글 수젇 권한이 없습니다."});
         }
         
         const finalFiles = await deleteLeavedFiles(text, fileList);
@@ -271,67 +256,70 @@ export const editPost = async (req, res) => {
         user.tmpFiles = tmpFiles;
         await post.save();
         await user.save();
-
-        retJSON.status = true;
-        return res.send(retJSON);
+        return res.sendStatus(200);
     } catch (error) {
-        retJSON.errMsg = "게시글을 수정하지 못 했습니다.";
-        return res.send(retJSON);
+        return res.status(400).send({errMsg : "예기치 못한 오류가 발생했습니다."});
     }
     
 }
 
+//제목 + 본문으로 게시글 검색
 export const getSearch = async (req, res) => {
     let { page, offset, keyword } = req.query;
     if(offset < 1 || offset > 20 || offset === null || offset === undefined) {
         offset = 10;
     }
 
-    const searchPosts = await Post.find({
-        $or: [
-            {
-                title: {
-                    $regex: new RegExp(`${keyword}`, "i")
-                }
-            },
-            {
-                textHTML: {
-                    $regex: new RegExp(`${keyword}`, "i")
-                }
-            },
-        ]
-    }).sort({ _id: -1 });
-    const postCount = searchPosts.length;
-    const maxPage = Math.ceil(postCount / offset);
-
-    if(page < 1 || page > maxPage || page === null || page === undefined) {
-        page = 1;
+    try {
+        const searchPosts = await Post.find({
+            $or: [
+                {
+                    title: {
+                        $regex: new RegExp(`${keyword}`, "i")
+                    }
+                },
+                {
+                    textHTML: {
+                        $regex: new RegExp(`${keyword}`, "i")
+                    }
+                },
+            ]
+        }).sort({ _id: -1 });
+        const postCount = searchPosts.length;
+        const maxPage = Math.ceil(postCount / offset);
+    
+        if(page < 1 || page > maxPage || page === null || page === undefined) {
+            page = 1;
+        }
+        const slicedPosts = searchPosts.slice((page - 1)*offset, (page - 1)*offset + offset);
+        for(let i = 0; i < slicedPosts.length; i++) {
+            slicedPosts[i].owner = undefined;
+            slicedPosts[i].__v = undefined;
+            slicedPosts[i].recommandUsers = undefined;
+            slicedPosts[i].textHTML = undefined;
+            slicedPosts[i].attachedFile = undefined;
+        }
+        const retJSON = {
+            posts: slicedPosts,
+            maxPage: maxPage,
+            curPage: page,
+            startNum: postCount - (page - 1) * offset,
+        }
+    
+        return res.send(retJSON);
+    } catch (error) {
+        return res.status(400).send({errMsg : "예기치 못한 오류가 발생했습니다."});
     }
-    const slicedPosts = searchPosts.slice((page - 1)*offset, (page - 1)*offset + offset);
-    for(let i = 0; i < slicedPosts.length; i++) {
-        slicedPosts[i].owner = undefined;
-        slicedPosts[i].__v = undefined;
-        slicedPosts[i].recommandUsers = undefined;
-        slicedPosts[i].comment = undefined;
-        slicedPosts[i].textHTML = undefined;
-        slicedPosts[i].attachedFile = undefined;
-    }
-    const retJSON = {
-        posts: slicedPosts,
-        maxPage: maxPage,
-        curPage: page,
-        startNum: postCount - (page - 1) * offset,
-    }
-
-    return res.send(retJSON);
 }
 
+//댓글 등록
+//부모 댓글이 있을 경우 배열 중간을 찾아 삽입, 없을 경우 배열 맨 끝에 삽입
 export const submitComment = async (req, res) => {
     const { postID, commentText, parentComment } = req.body;
     const { _id, username } = req.session.user;
     const retJSON = {
         username: username,
-        _id: "tmpComment",
+        _id: "",
     }
 
     try {
@@ -383,10 +371,11 @@ export const submitComment = async (req, res) => {
         return res.send(retJSON);
     } catch (error) {
         console.log(error);
-        return res.sendStatus(400);
+        return res.status(400).send({errMsg : "예기치 못한 오류가 발생했습니다."});
     }
 }
 
+//댓글 불러오기
 export const getComment = async (req, res) => {
     const { postID } = req.params;
     // const dummyComment = {
@@ -397,7 +386,7 @@ export const getComment = async (req, res) => {
     // }
     try {
         const post = await Post.findById(postID).populate("comments");
-        if(!post) return res.sendStatus(404);
+        if(!post) return res.Status(404).send({errMsg : "댓글이 존재하지 않습니다."});
         post.comments.forEach(comment => {
             if(comment.isDeleted) {
                 comment.commentText = "삭제된 게시글입니다.";
@@ -420,26 +409,23 @@ export const getComment = async (req, res) => {
         res.send(post.comments);
     } catch (error) {
         console.log(error);
-        return res.sendStatus(404);
+        return res.Status(400).send({errMsg : "예기치 못한 오류가 발생했습니다."});
     }   
 }
 
+//댓글 삭제
+//댓글은 게시글이 삭제될때 DB에서 한꺼번에 제거됨, 일단 isDeleted만 true로 설정
 export const deleteComment = async (req, res) => {
     const { commentID } = req.params;
     const { _id } = req.session.user;
-    const retJSON = {
-        status: false,
-        errMsg: ""
-    }
+
     try {
         const comment = await Comment.findById(commentID);
         if(!comment) {
-            retJSON.errMsg = "존재하지 않는 댓글입니다.";
-            return res.send(retJSON);
+            return res.status(404).send({errMsg : "존재하지 않는 댓글입니다."});
         }
         if(String(comment.owner) !== String(_id)) {
-            retJSON.errMsg = "댓글 삭제 권한이 없습니다.";
-            return res.send(retJSON);
+            return res.status(403).send({errMsg : "댓글 삭제 권한이 없습니다."});
         }
         comment.isDeleted = true;
         await comment.save();
@@ -454,11 +440,9 @@ export const deleteComment = async (req, res) => {
         // }
         // await Comment.findByIdAndDelete(commentID);
         // await post.save();
-        retJSON.status = true;
-        return res.send(retJSON);
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error);
-        retJSON.errMsg = "댓글 삭제중 오류가 발생했습니다.";
-        return res.send(retJSON);
+        return res.status(400).send({errMsg : "예기치 못한 오류가 발생했습니다."});
     }
 }

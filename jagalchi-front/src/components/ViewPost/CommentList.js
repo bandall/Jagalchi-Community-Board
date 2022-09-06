@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Comment from "./Comment";
 import s from "./Comment.module.css"
 import CommentWriter from "./CommentWriter";
 import NestedComment from "./NestedComment";
 function CommentList({postID, comments, setComments}) {
     const [commentFocus , setCommnetFocus] = useState("");
-
-    useEffect(() => {
-        console.log(commentFocus);
-    }, [commentFocus]);
 
     return (
         <div className={s.view_comment}>
