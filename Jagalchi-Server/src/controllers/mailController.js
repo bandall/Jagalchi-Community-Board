@@ -1,7 +1,19 @@
-import smtpTransport from "../config/email";
+import nodemailer from "nodemailer";
 import "dotenv/config"
 import crypto from "crypto";
 
+const smtpTransport = nodemailer.createTransport({
+    service: 'naver',
+    host: 'smtp.naver.com',
+    port: 587,
+    auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PWD,
+    },
+    tls: {
+        rejectUnauthorized: false
+    }
+});
 
 const getSecureRandom = () => {
     const random = crypto.randomBytes(4).toString("hex").toUpperCase();
@@ -10,8 +22,7 @@ const getSecureRandom = () => {
 
 export const sendAuthEmail = async (req, res) => {
     const { email } = req.query;
-    console.log(process.env.SMTP_USER);
-    console.log(process.env.SMTP_PWD);
+    console.log(smtpTransport);
     const mailOptions = {
         from: process.env.SMTP_USER,
         to: email,
@@ -21,6 +32,7 @@ export const sendAuthEmail = async (req, res) => {
     }
     smtpTransport.sendMail(mailOptions, (err, response) => {
         console.log(err);
+        console.log(response);
         smtpTransport.close();
     })
     return res.send("a");
