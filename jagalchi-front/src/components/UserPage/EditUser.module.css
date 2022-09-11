@@ -17,7 +17,7 @@
     height: 200px;
     margin: 0 auto;
     margin-top: 33px;
-    border-radius: 20%;
+    border-radius: 20% !important;
 }
 
 .profile_image_submit_txt {

@@ -22,11 +22,11 @@
 }
 
 .profile_image {
-    width: 200px;
+    width: 200px !important;
     height: 200px;
     margin: 0 auto;
     margin-top: 33px;
-    border-radius: 20%;
+    border-radius: 20% !important;
 }
 
 .profile_username {
