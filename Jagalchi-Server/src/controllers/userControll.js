@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fs, { realpath } from "fs";
 import bycript from "bcrypt";
+import { sendEmail } from "./mailController";
 export const getJoin = (req, res) => {
    
 }
@@ -171,8 +172,8 @@ export const postLogin = async (req, res) => {
         user.tmpFiles = [];
         await user.save();
     } catch (error) {
-        return res.status(400).send({ errMsg: "예기치 못한 오류가 발생했습니다." });
         console.log(error);
+        return res.status(400).send({ errMsg: "예기치 못한 오류가 발생했습니다." });
     }
     
     req.session.loggedIn = true;
@@ -264,5 +265,50 @@ export const getAvatar = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(400).send({errMsg: "오류가 발생했습니다."});
+    }
+}
+
+export const getFindPassword = async (req, res) => {
+    const { email } = req.query;
+    try {
+        const user = await User.findOne({email, email});
+        if(!user) {
+            return res.status(404).send({errMsg: "존재하지 않는 이메일입니다."});
+        }
+
+        const authString = crypto.randomBytes(4).toString("hex").toUpperCase();
+        user.authString = authString;
+        const status = sendEmail(email, "[자갈치 시장] 비밀번호 변경 인증코드", `인증코드는 ${authString}입니다.`, "");
+        if(!status) {
+            return res.status(404).send({errMsg: "이메일 전송에 실패했습니다."});
+        }
+        await user.save();
+    } catch(error) {
+        console.log(error);
+        return res.status(400).send({errMsg: "예상치 못한 오류가 발생했습니다."});
+    }
+}
+
+export const postFindPassword = async (req, res) => {
+    const { email, authString } = req.body;
+    try {
+        const user = await User.findOne({email: email});
+        if(!user) {
+            return res.status(404).send({errMsg: "존재하지 않는 이메일입니다."});
+        }
+        if(user.authString !== authString) {
+            return res.status(403).send({errMsg: "인증번호 인증에 실패했습니다."});
+        }
+        user.authString = "";
+        const tmpPassword = crypto.randomBytes(4).toString("hex").toUpperCase();
+        user.password = tmpPassword;
+        const status = sendEmail(email, "[자갈치 시장] 임시 비밀번호 발급", `임시비밀번호는 ${tmpPassword}입니다.`, "");
+        if(!status) {
+            return res.status(404).send({errMsg: "이메일 전송에 실패했습니다."});
+        }
+        await user.save();
+    } catch (error) {
+        console.log(error);
+        return res.status(400).send({errMsg: "예상치 못한 오류가 발생했습니다."});
     }
 }

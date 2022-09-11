@@ -41,7 +41,6 @@ function UserInfo() {
                 !isLoaded ? null :
                     <div className={s.wrap_userinfo}>
                     <Card className={s.profile_card}>
-                        {/* <Card.Header>유저 정보</Card.Header> */}
                         <div className={s.profile_image_box}>
                             <Card.Img variant="top" src={avatarUrl} className={s.profile_image}/>
                         </div>

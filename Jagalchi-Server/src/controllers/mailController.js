@@ -37,3 +37,22 @@ export const sendAuthEmail = async (req, res) => {
     })
     return res.send("a");
 }
+
+export const sendEmail = async (email, subject, text, html) => {
+    const mailOptions = {
+        from: process.env.SMTP_USER,
+        to: email,
+        subject: subject,
+        text: text,
+        html: html
+    }
+    const status = true;
+    smtpTransport.sendMail(mailOptions, (err, response) => {
+        if(err) {
+            console.log(err);
+            status = false;
+        }
+        smtpTransport.close();
+    })
+    return status;
+}
