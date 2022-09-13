@@ -4,6 +4,7 @@ import { SERVER_URL } from "../../gobal";
 import { useNavigate } from "react-router-dom";
 import { Form, Alert } from "react-bootstrap";
 import s from "./Login.module.css";
+import { getSecondAuth } from "../functions/userAPI";
 function Login({setLoggedIn}) {
     const navigate = useNavigate();
     const [show, setShow] = useState(false);
@@ -21,22 +22,32 @@ function Login({setLoggedIn}) {
             alert("이메일과 비밀번호를 입력해주세요.");
         }
         else {
-            const body = {
-                email: email,
-                password: password
-            }
             try {
                 axios.defaults.withCredentials = true;
                 const url = SERVER_URL + "/login";
-                const res = await axios.post(url, body);
+                const res = await axios.post(url, {
+                    email: email,
+                    password: password
+                });
                 setLoggedIn(true);
                 localStorage.setItem("username", res.data.username);
                 localStorage.setItem("userID", res.data.userID);
                 localStorage.setItem("loggedIn", "true");
                 navigate('/');
             } catch (error) {
-                console.log(error.response.data.errMsg);
-                alert(error.response.data.errMsg);
+                if(error.response.status === 302) {
+                    alert(error.response.data.msg);
+                    const result = await getSecondAuth(email);
+                    if(!result) {
+                        alert("2차 인증 메일 발송에 실패했습니다.");
+                        navigate("/");
+                        return;
+                    }
+                    navigate("/second-auth");
+                } else {
+                    console.log(error.response.data.errMsg);
+                    alert(error.response.data.errMsg);
+                }
             }
         }
     }

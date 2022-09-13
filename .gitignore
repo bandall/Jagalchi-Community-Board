@@ -2,3 +2,5 @@
 /Jagalchi-Server/node_modules
 /Jagalchi-Server/uploads
 /Jagalchi-Server/.env
+/Jagalchi-Server/assets
+/jagalchi-front/build

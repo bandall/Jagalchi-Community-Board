@@ -16,7 +16,7 @@ function CustomNavbar({loggedIn}) {
                         <Nav>
                             {!loggedIn ? null : 
                                 <NavDropdown title={"반갑습니다. " + localStorage.getItem("username")} id="collasible-nav-dropdown">
-                                    <NavDropdown.Item href={"/user/" + localStorage.getItem("userID")}>계정 정보</NavDropdown.Item>
+                                    <NavDropdown.Item href={"/userinfo/" + localStorage.getItem("userID")}>계정 정보</NavDropdown.Item>
                                     <NavDropdown.Item href={"/user/edit/" + localStorage.getItem("userID")}>계정 정보 수정</NavDropdown.Item>
                                     <NavDropdown.Item href={"/user/change-password/" + localStorage.getItem("userID")}>비밀번호 변경</NavDropdown.Item>
                                     <NavDropdown.Divider />

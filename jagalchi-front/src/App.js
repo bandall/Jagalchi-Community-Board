@@ -51,11 +51,12 @@ function App() {
                 <Route path="/" element={<Home/> } />
                 <Route path="/login" element={<Login setLoggedIn={setLoggedIn}/>} />
                 <Route path="/join" element={<Join />} />
+                <Route path="/second-auth" element={<SecondAuth setLoggedIn={setLoggedIn}/>} />
                 <Route path="/logout" element={<Logout setLoggedIn={setLoggedIn}/>} />
                 <Route path="/find-password" element={<FindPassword/>}/>
                 <Route path="/search" element={<Home />} />
                 <Route path="/email-auth" element={<SecondAuth/>}/>
-                <Route path="/user/:id" element={<UserInfo/>} />
+                <Route path="/userinfo/:id" element={<UserInfo/>} />
                 <Route path="/user/edit/:id" element={<EditUser/>} />
                 <Route path="/user/change-password/:id" element={<ChangePassword setLoggedIn={setLoggedIn}/>}/>
                 <Route path="/post/writeboard" element={<EditorForm />} />

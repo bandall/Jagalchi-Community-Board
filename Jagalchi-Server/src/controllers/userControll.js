@@ -1,6 +1,7 @@
 import User from "../models/User";
-import fs, { realpath } from "fs";
+import fs from "fs";
 import bycript from "bcrypt";
+import IP from "request-ip";
 
 export const getJoin = (req, res) => {
    
@@ -154,13 +155,21 @@ export const postLogin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
     if(!user) {
-        return res.status(400).send({ errMsg: "존재하지 않는 이메일입니다." });
+        return res.status(404).send({ errMsg: "존재하지 않는 이메일입니다." });
     }
     const check = await bycript.compare(password, user.password);
     if(!check) {
-        return res.status(400).send({ errMsg: "비밀번호를 잘못입력했습니다." });
+        return res.status(403).send({ errMsg: "비밀번호를 잘못입력했습니다." });
     }
-
+    console.log(user.authedIPs);
+    if(!user.isAuthed) {
+        req.session.user = user;
+        return res.status(302).send({ msg: "최초 로그인 시 2차 인증이 필요합니다." });
+    }
+    if(!user.authedIPs.includes(String(IP.getClientIp(req)))) {
+        req.session.user = user;
+        return res.status(302).send({ msg: "새로운 IP에서 로그인하여 2차 인증이 필요합니다." });
+    }
     try {
         user.loginDates.unshift(new Date());
         const tmpList = user.tmpFiles;

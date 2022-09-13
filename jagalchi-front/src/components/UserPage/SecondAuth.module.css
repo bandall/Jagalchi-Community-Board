@@ -1,6 +1,6 @@
 .wrap_card {
-    width: 700px;
-    height: 400px;
+    width: 500px;
+    height: 350px;
     margin: 0 auto;
     margin-top: 100px;
     border: 1px solid rgba(0,0,0,0.125);
@@ -12,7 +12,7 @@
 }
 
 .card_text_wrap {
-    margin-top: 13%;
+    margin-top: 8%;
     margin-left: 40px;
 }
 
@@ -20,13 +20,12 @@
     font-size: 20px;
 }
 
-.login_link {
+.submit_auth {
+    width: 90%;
     margin-top: 20px;
-    margin-left: 75%;
 }
 
-.resend_txt {
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
+.submit_btn {
+    margin-top: 20px;
+    margin-left: 69%;
 }

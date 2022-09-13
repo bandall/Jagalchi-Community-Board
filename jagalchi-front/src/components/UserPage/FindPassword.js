@@ -59,7 +59,7 @@ function FindPassword() {
                     <div>
                         <div className={s.submit_email}>
                             <Form.Group controlId="inputemail">
-                                <Form.Label>인증문자</Form.Label>
+                                <Form.Label>인증코드</Form.Label>
                                 <Form.Control
                                     type="text"
                                     value={authString}

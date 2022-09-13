@@ -104,3 +104,33 @@ export const postFindPassword = async (email, authString) => {
         return false;
     }
 }
+
+export const getSecondAuth = async (email) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/user/secondauth";
+    try {
+        await axios.get(url, {
+            params: {email:email}
+        });
+        return true;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
+    }
+}
+
+export const postSecondAuth = async (authCode) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/user/secondauth";
+    try {
+        const result = await axios.post(url, {
+            authCode: authCode
+        });
+        return result;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
+    }
+}
