@@ -1,29 +1,39 @@
 import { Button, Card, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import s from "./FindPassword.module.css";
 import { checkEmail } from "../functions/validation";
 import { useState } from "react";
-import { getAuthString } from "../functions/userAPI";
+import { getFindPassword, postFindPassword } from "../functions/userAPI";
 
-function FindPassword(params) {
+function FindPassword() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [authString, setAuthString] = useState("");
     const [isSend, setSend] = useState(false);
 
-    const onClick = () => {
-        alert("재전송");
-    }
-
     const onEmailSubmit = async (event) => {
         event.preventDefault();
-        if(checkEmail(email)) {
-            await getAuthString(email);
-            //setSend(true);
-        } else {
-            alert("잘못된 이메일입니다.");
+        if(!checkEmail(email)) {
+            return alert("잘못된 이메일 형식입니다.");
         }
+        const result = await getFindPassword(email);
+        if(result) {
+            alert(`인증코드를 ${email}로 발송했습니다.`);
+            setSend(true);
+        } 
     }
-    const onAuthSubmit = (event) => {
-        alert("제출 " + authString);
+
+    const onAuthSubmit = async (event) => {
+        event.preventDefault();
+        if(authString === "") {
+            alert("인증 코드를 입력해 주십시오.");
+            return;
+        }
+        const result = await postFindPassword(email, authString);
+        if(result) {
+            alert(`[인증 성공] 임시 비밀번호는 ${email}로 전송되었습니다.`);
+            navigate("/login");
+        } 
     }
 
     return (

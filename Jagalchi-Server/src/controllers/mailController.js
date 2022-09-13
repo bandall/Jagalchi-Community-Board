@@ -22,12 +22,11 @@ export const sendAuthEmail = async (req, res) => {
         <div>
             <div style="display: flex;">
                 <img src="http://localhost:4000/static/favicon.ico" style="width: 50px; height: 50px; margin-top: 21px; margin-bottom: 21px;">
-                <h1>자갈치 시장</h1>
+                <h1>[자갈치 시장]</h1>
             </div>
-
             <div>
-                <h2>안녕하세요 {}님.</h2>
-                <h2>{}님의 인증번호는 ${random}입니다.</h2>
+            <h2>안녕하세요 ${random}님.</h2>
+                <h2>${random}님의 인증번호는 ${random}입니다.</h2>
             </div>
         </div>
     `;
@@ -47,11 +46,8 @@ export const sendAuthEmail = async (req, res) => {
         }
         smtpTransport.close();
     })
-<<<<<<< HEAD
 
     return res.sendStatus(200);
-=======
-    return res.send("a");
 }
 
 export const sendEmail = async (email, subject, text, html) => {
@@ -62,14 +58,12 @@ export const sendEmail = async (email, subject, text, html) => {
         text: text,
         html: html
     }
-    const status = true;
-    smtpTransport.sendMail(mailOptions, (err, response) => {
-        if(err) {
-            console.log(err);
-            status = false;
-        }
-        smtpTransport.close();
-    })
+    let status = true;
+    try {
+        await smtpTransport.sendMail(mailOptions);
+    } catch (error) {
+        console.log(error);
+        status = false;
+    }
     return status;
->>>>>>> 3cfc911fd08fb03f666345cf30446a48e54e9dbe
 }

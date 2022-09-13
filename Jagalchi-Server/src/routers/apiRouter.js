@@ -14,5 +14,4 @@ apiRouter.route("/post/edit/:postID([0-9a-f]{24})").all(loginOnlyMiddleWare).pos
 apiRouter.route("/post/comment/:postID([0-9a-f]{24})").get(getComment);
 apiRouter.route("/post/comment/submit").all(loginOnlyMiddleWare).post(submitComment);
 apiRouter.route("/post/comment/delete/:commentID([0-9a-f]{24})").all(loginOnlyMiddleWare).post(deleteComment);
-apiRouter.route("/user/auth").get(sendAuthEmail);
 export default apiRouter;

@@ -58,4 +58,4 @@ app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
 
 app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
-app.listen(PORT , () => console.log(`Server Listening on Port http://localhost:${PORT}`));
+app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));

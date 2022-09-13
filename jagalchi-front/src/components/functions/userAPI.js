@@ -74,12 +74,28 @@ export const postPasswordChange = async (curPassword, newPassword, newPasswordCh
 
 }
 
-export const getAuthString = async (email) => {
+export const getFindPassword = async (email) => {
     axios.defaults.withCredentials = true;
-    const url = SERVER_URL + "/api/user/auth";
+    const url = SERVER_URL + "/findpassword";
     try {
         await axios.get(url, {
             params: {email:email}
+        });
+        return true;
+    } catch (error) {
+        if(error.code === "ERR_NETWORK") alert("예기치 못한 오류가 발생했습니다.");
+        else alert(error.response.data.errMsg);
+        return false;
+    }
+}
+
+export const postFindPassword = async (email, authString) => {
+    axios.defaults.withCredentials = true;
+    const url = SERVER_URL + "/findpassword";
+    try {
+        await axios.post(url, {
+            email: email,
+            authString: authString
         });
         return true;
     } catch (error) {
