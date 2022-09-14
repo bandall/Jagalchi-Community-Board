@@ -115,7 +115,7 @@ function SearchTable() {
                     </Table>
                     <div className={s.bottom_bar}>
                         <div className={s.search_bar}>
-                            <input placeholder="검색" name="search" className={s.search_input} onChange={(e)=>setSearchKey(e.target.value)}></input>
+                            <input placeholder="제목+내용 검색" name="search" className={s.search_input} onChange={(e)=>setSearchKey(e.target.value)}></input>
                             <Button variant="primary" onClick={onSearch}>
                                 검색
                             </Button>{' '}

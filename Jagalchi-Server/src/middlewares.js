@@ -14,3 +14,16 @@ export const publicOnlyMiddleWare = (req, res, next) => {
         return res.redirect("/");
     }
 }
+
+export const authProcessOnlyMiddleWare = (req, res, next) => {
+    console.log("auth" + " " + String(req.session));
+    if(req.session.loggedIn) {
+        return res.redirect("/");
+    } 
+    if(req.session.user) {
+        return next();
+    }
+    else {
+        return res.redirect("/");
+    }
+}

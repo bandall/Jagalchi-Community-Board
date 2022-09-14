@@ -78,7 +78,6 @@ export const getPostList = async (req, res) => {
     }
 
     for(let i = 0; i < curPagePost.length; i++) {
-        curPagePost[i].owner = undefined;
         curPagePost[i].__v = undefined;
         curPagePost[i].recommandUsers = undefined;
         curPagePost[i].comment = undefined;
@@ -104,6 +103,7 @@ export const getPost = async (req, res) => {
         }
         post.views = post.views + 1;
         const postData = {
+            owner_id: post.owner,
             ownerName: post.ownerName,
             title: post.title,
             date: post.createdAt,
@@ -364,7 +364,7 @@ export const submitComment = async (req, res) => {
             }
             post.comments.splice(idx + cnt + 1, 0, newComment);
         }
-        user.posts.unshift(newComment);
+        user.comments.unshift(newComment);
         await user.save();
         await post.save();
         retJSON._id = String(newComment._id);

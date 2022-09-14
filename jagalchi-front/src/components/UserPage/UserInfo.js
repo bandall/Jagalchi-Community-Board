@@ -10,6 +10,7 @@ function UserInfo() {
     const [avatarUrl, setAvatarUrl] = useState("");
     const [page, setPage] = useState(1);
     const [posts, setPosts] = useState([]);
+    const [offest, setOffset] = useState(10);
     const [startNum, setStartNum] = useState(0);
     const [maxPage, setMaxPage] = useState(1);
     const [isLoaded, setLoaded] = useState(false);
@@ -22,15 +23,18 @@ function UserInfo() {
 
     const setUserData = async () => {
         const userData = await getUser(id);
-        console.log(userData);
         setUserName(userData.username);
         setAvatar();
         setPosts(userData.posts);
         setPage(1);
-        setMaxPage(1);
-        setStartNum(userData.posts.length);
-        setLoaded(true);
     }
+
+    useEffect(() => {
+        setMaxPage(Math.ceil(posts.length / offest));
+        setStartNum(posts.length - (page - 1) * offest);
+        setLoaded(true);
+    }, [posts, page])
+
     useEffect(() => {
         setUserData();
     }, []);
@@ -60,7 +64,7 @@ function UserInfo() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {posts.map((post, index) => {
+                                {posts.slice((page - 1) * offest , page  * offest).map((post, index) => {
                                     const curDate = new Date(new Date().toLocaleDateString());
                                     const createDate = new Date(new Date(post.createdAt).toLocaleDateString());
                                     let date;

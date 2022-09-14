@@ -31,7 +31,6 @@ function MainTable() {
 
     const getPost = async () => {
         const json = await getPosts(page, 10, key);
-        console.log(json);
         if(json === null) {
             alert("게시글을 불러오지 못 했습니다.");
             return;
@@ -107,6 +106,7 @@ function MainTable() {
                                 index={startNum - index}
                                 title={post.title}
                                 author={post.ownerName}
+                                authorInfo={"/userinfo/" + post.owner}
                                 commentNum={post.comments.length}
                                 date={date}
                                 view={post.views}

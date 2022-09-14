@@ -14,6 +14,7 @@ function ViewPost() {
     const [modify, setModify] = useState(false);
     const [recommandCnt, setRecomCnt] = useState(0);
     const [recommanded, setRecommand] = useState(false);
+    const [ownerInfo, setOwnerInfo] = useState("/");
     const [postData, setPostData] = useState({});
     const [comments, setComments] = useState([]);
     const [loaded, setLoaded] = useState(false);
@@ -32,14 +33,13 @@ function ViewPost() {
         setRecommand(json.recommanded);
         setPostData(json.postData);
         setRecomCnt(json.postData.recommand);
-
+        setOwnerInfo("/userinfo/" + json.postData.owner_id);
         const commentJson = await getComment(id);
         if(!commentJson) {
             alert("댓글을 불러오지 못 했습니다.");
         } else {
             setComments(commentJson.data);
         }
-        
         setLoaded(true);
     }
 
@@ -94,7 +94,7 @@ function ViewPost() {
                     <div className={s.header}>
                         <h1 className={s.post_title}>{postData.title}</h1>
                         <div style={{display: "flex"}}>
-                            <p className={s.description_left}>{postData.ownerName} | {postData.date}</p>
+                            <p className={s.description_left}><a href={ownerInfo} className={s.link}>{postData.ownerName}</a> | {postData.date}</p>
                             <p className={s.description_rigth}>조회 : {postData.view} | 추천 : {recommandCnt} | 댓글 : {postData.comment ? postData.comment.length : 0}</p>
                         </div>
                     </div>

@@ -6,6 +6,7 @@ import { deleteComment } from "../functions/postAPI";
 
 function NestedComment({data, comments, setComments}) {
     const [time, setTime] = useState("");
+    const [ownerInfo, setOwnerInfo] = useState("");
 
     useEffect(() => {
         const createdTime = new Date(new Date(data.createdAt).getTime() + 60 * 60 * 9);
@@ -32,6 +33,7 @@ function NestedComment({data, comments, setComments}) {
         if(createdTime.getMinutes() < 10) displayTime += ("0" + + createdTime.getMinutes());
         else displayTime += (createdTime.getMinutes());
         setTime(displayTime);
+        setOwnerInfo("/userinfo/" + data.owner);
     }, [])  
 
     const onDelete = async () => {
@@ -53,7 +55,7 @@ function NestedComment({data, comments, setComments}) {
         <div>
             <li className={s.comment}>
                 <span className={s.cmt_nickbox}>
-                    <em className={s.cmt_nickname}>{data.ownerName}</em>
+                    <em className={s.cmt_nickname}><a href={ownerInfo}>{data.ownerName}</a></em>
                 </span>
                 <div style={{"float":"left"}}>
                     <p className={s.cmt_text}>» {data.commentText}</p>

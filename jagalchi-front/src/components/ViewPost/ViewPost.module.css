@@ -37,6 +37,11 @@
     border-radius: 4px;
 }
 
+.link {
+    text-decoration: none;
+    color: blue;
+}
+
 .icon {
     margin: auto;
     font-size: 20px;
@@ -70,3 +75,4 @@
     width: 90%;
     margin: 0 auto;
 }
+

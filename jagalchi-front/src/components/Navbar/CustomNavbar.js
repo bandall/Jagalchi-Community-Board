@@ -19,8 +19,6 @@ function CustomNavbar({loggedIn}) {
                                     <NavDropdown.Item href={"/userinfo/" + localStorage.getItem("userID")}>계정 정보</NavDropdown.Item>
                                     <NavDropdown.Item href={"/user/edit/" + localStorage.getItem("userID")}>계정 정보 수정</NavDropdown.Item>
                                     <NavDropdown.Item href={"/user/change-password/" + localStorage.getItem("userID")}>비밀번호 변경</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                                 </NavDropdown>
                             }
                             {!loggedIn ? 

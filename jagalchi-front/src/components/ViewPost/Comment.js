@@ -7,6 +7,7 @@ import NestedCommentWriter from "./NestedCommentWriter";
 
 function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) {
     const [time, setTime] = useState("");
+    const [ownerInfo, setOwnerInfo] = useState("");
 
     useEffect(() => {
         const createdTime = new Date(new Date(data.createdAt).getTime() + 60 * 60 * 9);
@@ -33,6 +34,7 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
         if(createdTime.getMinutes() < 10) displayTime += ("0" + + createdTime.getMinutes());
         else displayTime += (createdTime.getMinutes());
         setTime(displayTime);
+        setOwnerInfo("/userinfo/" + data.owner);
     }, [])
 
     const onClick = () => {
@@ -59,7 +61,7 @@ function Comment({data, comments, setComments, setCommnetFocus, focus, postID}) 
         <div>
             <li className={s.comment}>
                 <span className={s.cmt_nickbox}>
-                    <em className={s.cmt_nickname}>{data.ownerName}</em>
+                    <em className={s.cmt_nickname}><a href={ownerInfo}>{data.ownerName}</a></em>
                 </span>
                 <div style={{"float":"left"}}>
                     <p className={s.cmt_text} onClick={onClick}>{data.commentText}</p>

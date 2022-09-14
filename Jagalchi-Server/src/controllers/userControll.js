@@ -161,7 +161,7 @@ export const postLogin = async (req, res) => {
     if(!check) {
         return res.status(403).send({ errMsg: "비밀번호를 잘못입력했습니다." });
     }
-    console.log(user.authedIPs);
+
     if(!user.isAuthed) {
         req.session.user = user;
         return res.status(302).send({ msg: "최초 로그인 시 2차 인증이 필요합니다." });
