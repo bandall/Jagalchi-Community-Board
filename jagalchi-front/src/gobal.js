@@ -1,1 +1,1 @@
-export const SERVER_URL = "https:\\\\bandallgom.com:8080";
+export const SERVER_URL = "https:\\\\bandallgom.com";

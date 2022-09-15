@@ -1,5 +1,6 @@
 import express  from "express";
 import https from "https"
+import http from "http"; 
 import morgan from "morgan";
 import "dotenv/config";
 import "./db";
@@ -14,9 +15,10 @@ import apiRouter from "./routers/apiRouter";
 import uploadRouter from "./routers/uploadRouter";
 import postRouter from "./routers/postRouter";
 
-const app = express();
-const PORT = 8080;
+const HTTP_PORT = 8000;
+const HTTPS_PORT = 8080;
 
+const app = express();
 app.use(morgan("common"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
@@ -30,6 +32,7 @@ app.use(session({
     },
     store: MongoStore.create({ mongoUrl: process.env.DB_URL })
 }));
+
 app.use((req, res, next) => {
     req.sessionStore.all((error, sessions) => {
         next();
@@ -44,10 +47,10 @@ app.use((req, res, next) => {
 //     next();
 // });
 
-app.use(cors({ 
-    origin: ['http://bandallgom.com:3000'],
-    credentials: true,
-}));
+// app.use(cors({ 
+//     origin: ['http://bandallgom.com:3000'],
+//     credentials: true,
+// }));
 
 //라우팅
 //app.use(express.static(path.join(__dirname, 'react-project/build')));
@@ -58,13 +61,22 @@ app.use("/api", apiRouter);
 app.use("/upload", uploadRouter);
 app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
-app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
+console.log(__dirname);
 
+//docker의 경우 상대 경로 이용해야됨!
+//app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
+app.get("*", (req, res) => res.sendFile("/home/node/app/Jagalchi-Server/assets/index.html"));
+//인증서 자동 갱신되도록 시놀로지 NAS 내부 경로로 설정 필요
 const https_options = {
     ca: fs.readFileSync(__dirname + "/../cert/chain.pem"),
     key: fs.readFileSync(__dirname + "/../cert/privkey.pem"),
     cert: fs.readFileSync(__dirname + "/../cert/cert.pem")
 }
 
-https.createServer(https_options, app).listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
+//http -> https redirect
+http.createServer((req, res) => {
+    res.writeHead(301, {Location: `https://${req.headers.host}${req.url}`});
+    res.end();
+}).listen(HTTP_PORT, "0.0.0.0");
+https.createServer(https_options, app).listen(HTTPS_PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${HTTPS_PORT}`));
 //app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
