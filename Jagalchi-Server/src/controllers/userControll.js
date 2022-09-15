@@ -153,6 +153,7 @@ export const getLogin = (req, res) => {
 
 export const postLogin = async (req, res) => {
     const { email, password } = req.body;
+    console.log(email + " " + password);
     const user = await User.findOne({ email: email });
     if(!user) {
         return res.status(404).send({ errMsg: "존재하지 않는 이메일입니다." });

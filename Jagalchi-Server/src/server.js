@@ -13,9 +13,9 @@ import uploadRouter from "./routers/uploadRouter";
 import postRouter from "./routers/postRouter";
 
 const app = express();
-const PORT = 4000;
+const PORT = 8080;
 
-app.use(morgan("dev"));
+app.use(morgan("common"));
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(session({
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 // });
 
 app.use(cors({ 
-    origin: ['http://localhost:3000'],
+    origin: ['http://bandallgom.com:3000'],
     credentials: true,
 }));
 
