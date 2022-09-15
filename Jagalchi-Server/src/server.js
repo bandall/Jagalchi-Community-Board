@@ -1,8 +1,10 @@
 import express  from "express";
+import https from "https"
 import morgan from "morgan";
 import "dotenv/config";
 import "./db";
 import "./models/User";
+import fs from "fs";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
@@ -56,6 +58,13 @@ app.use("/api", apiRouter);
 app.use("/upload", uploadRouter);
 app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
-
 app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
-app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
+
+const https_options = {
+    ca: fs.readFileSync(__dirname + "/../cert/chain.pem"),
+    key: fs.readFileSync(__dirname + "/../cert/privkey.pem"),
+    cert: fs.readFileSync(__dirname + "/../cert/cert.pem")
+}
+
+https.createServer(https_options, app).listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
+//app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
