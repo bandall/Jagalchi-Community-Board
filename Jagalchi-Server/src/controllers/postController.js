@@ -101,7 +101,16 @@ export const getPost = async (req, res) => {
         if(!post) {
             return res.status(404).send({errMsg : "존재하지 않는 게시물입니다."});
         }
-        post.views = post.views + 1;
+        
+        if(!req.session.view_list) {
+            req.session.view_list = [];
+        } 
+        
+        if(!req.session.view_list.includes(String(postID))) {
+            req.session.view_list.push(String(postID));
+            post.views = post.views + 1;
+        }
+        
         const postData = {
             owner_id: post.owner,
             ownerName: post.ownerName,

@@ -10,6 +10,8 @@ import "./db";
 import "./models/User";
 import session from "express-session";
 import MongoStore from "connect-mongo";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import cors from "cors";
 import rootRouter from "./routers/rootRouter";
 import userRouter from "./routers/userRouter";
@@ -21,7 +23,8 @@ const HTTP_PORT = 8000;
 const HTTPS_PORT = 8080;
 
 const app = express();
-app.use(morgan("common"));
+app.use(morgan("combined"));
+app.use(helmet());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 app.use(session({
@@ -30,7 +33,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         maxAge: 60 * 60 * 1000 * 24,
-        httpOnly: true
+        httpOnly: true,
+        secure: true
     },
     store: MongoStore.create({ mongoUrl: process.env.DB_URL })
 }));
@@ -40,14 +44,6 @@ app.use((req, res, next) => {
         next();
     })
 });
-
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Credentials", true);
-//     res.header("Cross-Origin-Opener-Policy","same-origin");
-//     res.header("Cross-Origin-Embedder-Policy", "require-corp");
-//     next();
-// });
 
 // app.use(cors({ 
 //     origin: ['http://bandallgom.com:3000'],
@@ -64,15 +60,25 @@ app.use("/upload", uploadRouter);
 app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
 app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
 =======
 console.log(__dirname);
+=======
+>>>>>>> 7915d0b... 서버 핫 픽스
 
-//docker의 경우 상대 경로 이용해야됨!
+//Request Limit
+app.use("/login", rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 100
+}));
+
+//docker의 경우 가상 경로 사용
 //app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
 app.get("*", (req, res) => res.sendFile("/home/node/app/Jagalchi-Server/assets/index.html"));
+
 //인증서 자동 갱신되도록 시놀로지 NAS 내부 경로로 설정 필요
 const https_options = {
     ca: fs.readFileSync(__dirname + "/../cert/chain.pem"),
