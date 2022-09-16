@@ -72,7 +72,7 @@ console.log(__dirname);
 //Request Limit
 app.use("/login", rateLimit({
     windowMs: 10 * 60 * 1000,
-    max: 100
+    max: 20
 }));
 
 //docker의 경우 가상 경로 사용
