@@ -99,7 +99,7 @@ function EditPost(params) {
 			
 			try {
 				const result = await axios.post(SERVER_URL + "/upload/image", formData);
-				const IMG_URL = SERVER_URL + "/" + result.data.url;
+				const IMG_URL = "/" + result.data.url;
 				addFileList.push(result.data.url);
 				const editor = quillRef.current.getEditor();
 				const range = editor.getSelection();
@@ -122,7 +122,7 @@ function EditPost(params) {
 			formData.append("video", file);
 			try {
 				const result = await axios.post(SERVER_URL + "/upload/video", formData);
-				const VIDEO_URL = SERVER_URL + "/" + result.data.url;
+				const VIDEO_URL = "/" + result.data.url;
 				addFileList.push(result.data.url);
 				const editor = quillRef.current.getEditor();
 				const range = editor.getSelection();
