@@ -1,29 +1,10 @@
 build시
 "proxy": "http://localhost:4000"
 
-
-//게시판 url
-게시판 메인 
-/post
-
-게시글 보기
-/post/:id
-
-게시글 작성
-/post/write
-
-게시글 수정
-/post/edit
-
-게시글 삭제
-/post/delete
-
-게시글 api
-추천
-/post/recommand/:id
-읽음
-/post/view/:id
-
+[Live Test Server]
+- 몽고 보안 접속 사용, 내부 접속만 가능하도록 수정?
+- helmet 쓰기
+- 인증서 갱신 문제 처리
 
 [버그 목록]
 + retJSON 코드 전부 수정

@@ -1,5 +1,5 @@
 export const home = (req, res) => {
-    res.sendFile(process.env.ASSET_PATH + "/index.html");
+    res.sendFile("/home/node/app/Jagalchi-Server/assets/index.html");
 }
 
 export const attendance = (req, res) => {

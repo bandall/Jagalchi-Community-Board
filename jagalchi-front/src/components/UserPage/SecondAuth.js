@@ -40,7 +40,7 @@ function SecondAuth({setLoggedIn}) {
                                     onChange={e => setAuthCode(e.target.value)}
                                     required
                                 />
-                                <Button onClick={onAuthSubmit} className={s.submit_btn}>비밀번호 인증</Button>
+                                <Button onClick={onAuthSubmit} className={s.submit_btn}>인증코드 제출</Button>
                             </Form.Group>
                         </div>
                 </div>
