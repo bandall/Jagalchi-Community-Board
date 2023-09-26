@@ -38,7 +38,7 @@ function NestedComment({data, comments, setComments}) {
 
     const onDelete = async () => {
         const retJSON = await deleteComment(data._id);
-        if(retJSON.status){
+        if(retJSON){
             const delIdx = comments.findIndex((comment) => String(comment._id) === String(data._id));
             if(delIdx !== -1) {
                 comments[delIdx].commentText = "삭제된 게시글입니다.";
@@ -46,9 +46,7 @@ function NestedComment({data, comments, setComments}) {
             }
             setComments([...comments]);
             alert("댓글을 삭제했습니다.");
-        } else {
-            alert(retJSON.errMsg);
-        }
+        } 
     }
 
     return (
