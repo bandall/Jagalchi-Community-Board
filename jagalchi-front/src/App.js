@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Home from "./components/Home/Home.js";
-import Login from "./components/Login/Login.js";
 import Join from "./components/Join/Join.js";
 import ViewPost from "./components/ViewPost/ViewPost"
+import Login from './components/login/Login.js';
 import Logout from './components/Logout/Logout';
 import EditPost from "./components/TextEditor/EditPost";
 import EditorForm from './components/TextEditor/EditorForm.js';
