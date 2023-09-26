@@ -4,7 +4,8 @@
   "description": "Fisrt Jagalchi Server",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon src/server.js --exec babel-node"
+    "start": "nodemon src/server.js --exec babel-node",
+    "build": "rimraf ./build && mkdirp ./build && babel -d ./build ./src"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.6",
     "@babel/node": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-env": "^7.22.20",
     "nodemon": "^2.0.18"
   },
   "nodemonConfig": {
