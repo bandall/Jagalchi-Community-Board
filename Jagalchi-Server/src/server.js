@@ -17,7 +17,7 @@ import apiRouter from "./routers/apiRouter";
 import uploadRouter from "./routers/uploadRouter";
 import postRouter from "./routers/postRouter";
 
-const HTTP_PORT = 8000;
+const HTTP_PORT = 8800;
 const HTTPS_PORT = 8080;
 
 const app = express();
