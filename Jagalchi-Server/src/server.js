@@ -79,6 +79,6 @@ const https_options = {
 http.createServer((req, res) => {
     res.writeHead(301, {Location: `https://${req.headers.host}${req.url}`});
     res.end();
-}).listen(HTTP_PORT, "0.0.0.0");
+}).listen(HTTP_PORT, "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${HTTP_PORT}`));
 https.createServer(https_options, app).listen(HTTPS_PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${HTTPS_PORT}`));
 //app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));

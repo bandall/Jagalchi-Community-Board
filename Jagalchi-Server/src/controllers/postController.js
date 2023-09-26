@@ -330,11 +330,11 @@ export const submitComment = async (req, res) => {
         username: username,
         _id: "",
     }
-
+    if(commentText === "") return res.status(400).send({errMsg : "댓글을 작성해주세요."});
     try {
         const user = await User.findById(_id);
         const post = await Post.findById(postID).populate("comments");
-        if(!user || !post) return res.sendStatus(400);
+        if(!user || !post) return res.status(400).send({errMsg : "잘못된 접근입니다."});
         let newComment;
         if(!parentComment) {
             newComment = await Comment.create({
