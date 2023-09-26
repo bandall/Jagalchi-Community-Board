@@ -101,7 +101,16 @@ export const getPost = async (req, res) => {
         if(!post) {
             return res.status(404).send({errMsg : "존재하지 않는 게시물입니다."});
         }
-        post.views = post.views + 1;
+        
+        if(!req.session.view_list) {
+            req.session.view_list = [];
+        } 
+        
+        if(!req.session.view_list.includes(String(postID))) {
+            req.session.view_list.push(String(postID));
+            post.views = post.views + 1;
+        }
+        
         const postData = {
             owner_id: post.owner,
             ownerName: post.ownerName,
@@ -321,11 +330,11 @@ export const submitComment = async (req, res) => {
         username: username,
         _id: "",
     }
-
+    if(commentText === "") return res.status(400).send({errMsg : "댓글을 작성해주세요."});
     try {
         const user = await User.findById(_id);
         const post = await Post.findById(postID).populate("comments");
-        if(!user || !post) return res.sendStatus(400);
+        if(!user || !post) return res.status(400).send({errMsg : "잘못된 접근입니다."});
         let newComment;
         if(!parentComment) {
             newComment = await Comment.create({
