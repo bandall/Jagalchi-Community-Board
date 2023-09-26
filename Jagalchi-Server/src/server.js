@@ -1,14 +1,6 @@
 import express  from "express";
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 import https from "https"
 import http from "http"; 
->>>>>>> 6ecbc70... 도커용 서버 코드 수정
-=======
-import https from "https"
-import http from "http"; 
->>>>>>> d784c721fb2759f5d03c23a290f2095efe5a9db5
 import morgan from "morgan";
 import "dotenv/config";
 import "./db";
@@ -65,19 +57,7 @@ app.use("/api", apiRouter);
 app.use("/upload", uploadRouter);
 app.use("/post", postRouter);
 app.use("/uploads", express.static("uploads"));
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-app.get("*", (req, res) => res.sendFile(process.env.ASSET_PATH + "/index.html"));
-app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
-=======
-console.log(__dirname);
-=======
->>>>>>> 7915d0b... 서버 핫 픽스
-
-=======
->>>>>>> d784c721fb2759f5d03c23a290f2095efe5a9db5
 //Request Limit
 app.use("/login", rateLimit({
     windowMs: 10 * 60 * 1000,
@@ -101,9 +81,4 @@ http.createServer((req, res) => {
     res.end();
 }).listen(HTTP_PORT, "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${HTTP_PORT}`));
 https.createServer(https_options, app).listen(HTTPS_PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${HTTPS_PORT}`));
-<<<<<<< HEAD
 //app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
->>>>>>> 6ecbc70... 도커용 서버 코드 수정
-=======
-//app.listen(PORT , "0.0.0.0", () => console.log(`Server Listening on Port http://localhost:${PORT}`));
->>>>>>> d784c721fb2759f5d03c23a290f2095efe5a9db5

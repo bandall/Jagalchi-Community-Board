@@ -1,51 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.d50343ee.css",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "main.js": "/static/js/main.aac615b9.js",
-=======
-    "main.js": "/static/js/main.a90a6ac6.js",
->>>>>>> 6ecbc70... 도커용 서버 코드 수정
-=======
-    "main.js": "/static/js/main.509a43a1.js",
->>>>>>> 7915d0b... 서버 핫 픽스
-=======
-    "main.js": "/static/js/main.509a43a1.js",
->>>>>>> d784c721fb2759f5d03c23a290f2095efe5a9db5
+    "main.css": "/static/css/main.d71389be.css",
+    "main.js": "/static/js/main.b2d36fe2.js",
     "static/media/NotFoundSoba.jpg": "/static/media/NotFoundSoba.ef890b4d239c4a9e3a8a.jpg",
     "index.html": "/index.html",
     "static/media/wave.svg": "/static/media/wave.3e6494c40e9581744416.svg",
-    "main.d50343ee.css.map": "/static/css/main.d50343ee.css.map",
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "main.aac615b9.js.map": "/static/js/main.aac615b9.js.map"
+    "main.d71389be.css.map": "/static/css/main.d71389be.css.map",
+    "main.b2d36fe2.js.map": "/static/js/main.b2d36fe2.js.map"
   },
   "entrypoints": [
-    "static/css/main.d50343ee.css",
-    "static/js/main.aac615b9.js"
-=======
-    "main.a90a6ac6.js.map": "/static/js/main.a90a6ac6.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.d50343ee.css",
-    "static/js/main.a90a6ac6.js"
->>>>>>> 6ecbc70... 도커용 서버 코드 수정
-=======
-    "main.509a43a1.js.map": "/static/js/main.509a43a1.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.d50343ee.css",
-    "static/js/main.509a43a1.js"
->>>>>>> 7915d0b... 서버 핫 픽스
-=======
-    "main.509a43a1.js.map": "/static/js/main.509a43a1.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.d50343ee.css",
-    "static/js/main.509a43a1.js"
->>>>>>> d784c721fb2759f5d03c23a290f2095efe5a9db5
+    "static/css/main.d71389be.css",
+    "static/js/main.b2d36fe2.js"
   ]
 }
