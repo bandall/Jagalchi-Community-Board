@@ -4,8 +4,11 @@
 
 <div align="center">
     <h3>🌟 Node.js, Express, React를 사용해 만든 게시판 🌟</h3>
-    <a herf="https://bandallgom.com/"> 🚩 자갈치 게시판 바로가기  🚩</a>
 </div>
+
+<p align="center">
+  <a href="https://bandallgom.com/"><strong>🚩 자갈치 게시판 바로가기 🚩</strong></a>
+</p>
 
 ## 🛠️ 기술 스택 🛠️
 
